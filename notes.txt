@@ -1,0 +1,2 @@
+Packets should follow a pattern that allows for old versions, either a struct inside a struct
+Or enough fields for backwards compatibility.
