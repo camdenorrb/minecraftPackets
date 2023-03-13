@@ -151,19 +151,12 @@ type CloseContainer struct {
 	WindowID uint8
 }
 
-type Slot struct {
-	IsPresent bool
-	ItemID    types.VarInt
-	ItemCount byte
-	NBTData   NBT // TODO: NBT
-}
-
 type SetContainerContent struct {
 	WindowID    uint8
 	StateID     types.VarInt
 	Count       types.VarInt
-	SlotData    []Slot
-	CarriedItem Slot
+	SlotData    []types.Slot
+	CarriedItem types.Slot
 }
 
 type SetContainerProperty struct {
@@ -176,7 +169,7 @@ type SetContainerSlot struct {
 	WindowID uint8
 	StateID  types.VarInt
 	Slot     int16
-	SlotData Slot
+	SlotData types.Slot
 }
 
 type SetCooldown struct {
@@ -365,9 +358,9 @@ type MapData struct {
 }
 
 type Trade struct {
-	InputItem1      Slot
-	OutputItem      Slot
-	InputItem2      Slot
+	InputItem1      types.Slot
+	OutputItem      types.Slot
+	InputItem2      types.Slot
 	IsDisabled      bool
 	NumOfTradeUses  int32
 	MaxTradeUses    int32
@@ -533,4 +526,303 @@ type UpdateRecipeBook struct {
 	RecipeIDs1                   []types.Identifier
 	RecipeIDSize2                types.VarInt
 	RecipeIDs2                   []types.Identifier
+}
+
+type RemoveEntities struct {
+	NumOfEntities types.VarInt
+	Entities      []types.VarInt
+}
+
+type RemoveEntityEffect struct {
+	EntityID types.VarInt
+	EffectID types.VarInt // TODO: Enum
+}
+
+type ResourcePack struct {
+	URL              string
+	Hash             string
+	Forced           bool
+	HasPromptMessage bool
+	PromptMessage    *types.Chat
+}
+
+type Respawn struct {
+	DimensionType      types.Identifier
+	DimensionName      types.Identifier
+	HashedSeed         int64
+	GameMode           uint8 // TODO: Enum GameMode
+	PreviousGameMode   byte
+	IsDebug            bool
+	IsFlat             bool
+	CopyMetadata       bool
+	HasDeathLocation   bool
+	DeathDimensionName *types.Identifier
+	DeathLocation      *types.BlockPosition
+}
+
+type SetHeadRotation struct {
+	EntityID types.VarInt
+	HeadYaw  types.Angle
+}
+
+type UpdateSectionBlocks struct {
+	ChunkSectionPosition int64
+	SuppressLightUpdates bool
+	BlockArraySize       types.VarInt
+	Blocks               []types.VarLong
+}
+
+type SelectAdvancementTab struct {
+	HasID bool
+	ID    *types.Identifier
+}
+
+type ServerData struct {
+	HasMOTD            bool
+	MOTD               *types.Chat
+	HasIcon            bool
+	Icon               *string
+	EnforcesSecureChat bool
+}
+
+type SetActionBarText struct {
+	Text types.Chat
+}
+
+type SetBorderCenter struct {
+	X float64
+	Z float64
+}
+
+type SetBorderLerpSize struct {
+	OldDiameter float64
+	NewDiameter float64
+	Speed       types.VarLong
+}
+
+type SetBorderSize struct {
+	Diameter float64
+}
+
+type SetBorderWarningDelay struct {
+	WarningTime types.VarInt
+}
+
+type SetBorderWarningDistance struct {
+	// WarningBlocks in meters
+	WarningBlocks types.VarInt
+}
+
+type SetCamera struct {
+	CameraID types.VarInt
+}
+
+type SetHeldItem struct {
+	Slot byte
+}
+
+type SetCenterChunk struct {
+	ChunkX int32
+	ChunkZ int32
+}
+
+type SetRenderDistance struct {
+	ViewDistance types.VarInt
+}
+
+type SetDefaultSpawnPosition struct {
+	Location types.BlockPosition
+	Angle    float32
+}
+
+type DisplayObjective struct {
+	Position types.BlockPosition
+	Angle    float32
+}
+
+type SetEntityMetadata struct {
+	EntityID types.VarInt
+	Metadata []types.EntityMetadata // TODO: EntityMetadata
+}
+
+type LinkEntities struct {
+	AttachedEntityID int32
+	HoldingEntityID  int32
+}
+
+type SetEntityVelocity struct {
+	EntityID  types.VarInt
+	VelocityX int16
+	VelocityY int16
+	VelocityZ int16
+}
+
+type SetEquipment struct {
+	EntityID  types.VarInt
+	Equipment types.Equipment // TODO: Equipment
+}
+
+type SetExperience struct {
+	ExperienceBar   float32
+	TotalExperience types.VarInt
+	Level           types.VarInt
+}
+
+type SetHealth struct {
+	Health         float32
+	Food           types.VarInt
+	FoodSaturation float32
+}
+
+type UpdateObjectives struct {
+	ObjectiveName  string
+	Mode           byte
+	ObjectiveValue *types.Chat
+	Type           *types.VarInt // TODO: Enum
+}
+
+type SetPassengers struct {
+	EntityID       types.VarInt
+	PassengerCount types.VarInt
+	Passengers     []types.VarInt
+}
+
+type UpdateTeams struct {
+	TeamName string
+	Mode     byte
+	// TODO: Complete
+}
+
+type UpdateScore struct {
+	EntityName    string
+	Action        types.VarInt // TODO: Enum
+	ObjectiveName string
+	Value         *types.VarInt
+}
+
+type SetSimulationDistance struct {
+	SimulationDistance types.VarInt
+}
+
+type SetSubtitleText struct {
+	SubtitleText types.Chat
+}
+
+type UpdateTime struct {
+	WorldAge  int64
+	TimeOfDay int64
+}
+
+type SetTitleText struct {
+	TitleText types.Chat
+}
+
+type SetTitleAnimationTimes struct {
+	FadeIn  int32
+	Stay    int32
+	FadeOut int32
+}
+
+type EntitySoundEffect struct {
+	SoundID       types.VarInt // TODO: Enum
+	SoundName     *types.Identifier
+	HasFixedRange *bool
+	Range         *float32
+	SoundCategory types.VarInt // TODO: Enum
+	EntityID      types.VarInt
+	Volume        float32
+	Pitch         float32
+	Seed          int64
+}
+
+type SoundEffect struct {
+	SoundID         types.VarInt
+	SoundName       *types.Identifier
+	HasFixedRange   *bool
+	Range           *float32
+	SoundCategory   types.VarInt // TODO: Enum
+	EntityPositionX int32
+	EntityPositionY int32
+	EntityPositionZ int32
+	Volume          float32
+	Pitch           float32
+	Seed            int64
+}
+
+type StopSound struct {
+	Flags  byte
+	Source *types.VarInt // TODO: Enum
+	Sound  *types.Identifier
+}
+
+type SystemChatMessage struct {
+	Content types.Chat
+	Overlay bool
+}
+
+type SetTabListHeaderAndFooter struct {
+	Header types.Chat
+	Footer types.Chat
+}
+
+type TagQueryResponse struct {
+	TransactionID types.VarInt
+	NBT           types.NBT // TODO: NBT
+}
+
+type PickupItem struct {
+	CollectedEntityID types.VarInt
+	CollectorEntityID types.VarInt
+	PickupItemCount   types.VarInt
+}
+
+type TeleportEntity struct {
+	EntityID types.VarInt
+	X        float64
+	Y        float64
+	Z        float64
+	Yaw      types.Angle
+	Pitch    types.Angle
+	OnGround bool
+}
+
+type UpdateAdvancements struct {
+	ResetOrClear       bool
+	MappingSize        types.VarInt
+	AdvancementMapping map[types.Identifier]Advancement // TODO: Advancement
+	ListSize           types.VarInt
+	Identifiers        []types.Identifier
+	ProgressSize       types.VarInt
+	ProgressMapping    map[types.Identifier]AdvancementProgress // TODO: AdvancementProgress
+}
+
+type UpdateAttributes struct {
+	EntityID        types.VarInt
+	NumOfProperties types.VarInt
+	Properties      []AttributeProperty // TODO: AttributeProperty
+}
+
+type FeatureFlags struct {
+	TotalFeatures types.VarInt
+	FeatureFlags  []types.Identifier
+}
+
+type EntityEffect struct {
+	EntityID      types.VarInt
+	EffectID      types.VarInt // TODO: Enum
+	Amplifier     byte
+	Duration      types.VarInt
+	Flags         byte
+	HasFactorData bool
+	FactorCodec   NBT // TODO: NBT
+}
+
+type UpdateRecipes struct {
+	RecipeCount types.VarInt
+	Recipes     []Recipe // TODO: Recipe
+}
+
+type UpdateTags struct {
+	TagCount types.VarInt
+	Tags     []Tag // TODO: Tag
 }
