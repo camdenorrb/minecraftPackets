@@ -3,6 +3,7 @@ package play
 import (
 	"github.com/google/uuid"
 	"minecraftPackets/javaEdition/types"
+	"minecraftPackets/nbt"
 )
 
 type SpawnEntity struct {
@@ -65,7 +66,7 @@ type SetBlockDestroyStage struct {
 type BlockEntityData struct {
 	Location types.BlockPosition
 	Type     types.VarInt
-	NBTData  NBTTag // TODO: NBT
+	NBTData  nbt.NBT
 }
 
 type BlockAction struct {
@@ -142,8 +143,8 @@ type CommandSuggestionsResponse struct {
 }
 
 type Commands struct {
-	Count     types.VarInt
-	Nodes     []CommandNode // TODO: Command Node
+	Count types.VarInt
+	//Nodes     []CommandNode // TODO: Command Node
 	RootIndex types.VarInt
 }
 
@@ -257,22 +258,22 @@ type BlockEntity struct {
 	PackedXZ byte
 	Y        int16
 	Type     types.VarInt
-	Data     NBT // TODO: NBT
+	Data     nbt.NBT
 }
 
 type ChunkDataAndUpdateLight struct {
 	ChunkX              int32
 	ChunkZ              int32
-	Heightmaps          NBT
+	Heightmaps          nbt.NBT
 	Size                types.VarInt
 	Data                []byte
 	NumOfBlockEntities  types.VarInt
 	BlockEntities       []BlockEntity
 	TrustEdges          bool
-	SkyLightMask        BitSet // TODO: BitSet
-	BlockLightMask      BitSet // TODO: BitSet
-	EmptySkyLightMask   BitSet // TODO: BitSet
-	EmptyBlockLightMask BitSet // TODO: BitSet
+	SkyLightMask        types.BitSet
+	BlockLightMask      types.BitSet
+	EmptySkyLightMask   types.BitSet
+	EmptyBlockLightMask types.BitSet
 	SkyLightArrayCount  types.VarInt
 	// TODO: Complete
 }
@@ -302,10 +303,10 @@ type UpdateLight struct {
 	ChunkX              types.VarInt
 	ChunkZ              types.VarInt
 	TrustEdges          bool
-	SkyLightMask        BitSet // TODO: BitSet
-	BlockLightMask      BitSet // TODO: BitSet
-	EmptySkyLightMask   BitSet // TODO: BitSet
-	EmptyBlockLightMask BitSet // TODO: BitSet
+	SkyLightMask        types.BitSet
+	BlockLightMask      types.BitSet
+	EmptySkyLightMask   types.BitSet
+	EmptyBlockLightMask types.BitSet
 	SkyLightArrayCount  types.VarInt
 	// TODO: Complete
 }
@@ -317,7 +318,7 @@ type Login struct {
 	PreviousGameMode    uint8 // TODO: Enum GameMode
 	DimensionCount      types.VarInt
 	DimensionNames      []types.Identifier
-	RegistryCodec       NBT // TODO: NBT
+	RegistryCodec       nbt.NBT
 	DimensionType       types.Identifier
 	DimensionName       types.Identifier
 	HashedSeed          int64
@@ -460,7 +461,7 @@ type PlayerChatMessage struct {
 	UnsignedContentPresent     bool
 	UnsignedContent            *types.Chat
 	FilterType                 types.VarInt // TODO: Enum
-	FilterTypeBits             *BitSet      // TODO: BitSet
+	FilterTypeBits             *types.BitSet
 	ChatType                   types.VarInt // TODO: Enum
 	NetworkName                types.Chat
 	IsNetworkTargetNamePresent bool
@@ -642,7 +643,7 @@ type DisplayObjective struct {
 
 type SetEntityMetadata struct {
 	EntityID types.VarInt
-	Metadata []types.EntityMetadata // TODO: EntityMetadata
+	//Metadata []types.EntityMetadata // TODO: EntityMetadata
 }
 
 type LinkEntities struct {
@@ -658,8 +659,8 @@ type SetEntityVelocity struct {
 }
 
 type SetEquipment struct {
-	EntityID  types.VarInt
-	Equipment types.Equipment // TODO: Equipment
+	EntityID types.VarInt
+	//Equipment types.Equipment // TODO: Equipment
 }
 
 type SetExperience struct {
@@ -767,7 +768,7 @@ type SetTabListHeaderAndFooter struct {
 
 type TagQueryResponse struct {
 	TransactionID types.VarInt
-	NBT           types.NBT // TODO: NBT
+	NBT           nbt.NBT
 }
 
 type PickupItem struct {
@@ -787,19 +788,19 @@ type TeleportEntity struct {
 }
 
 type UpdateAdvancements struct {
-	ResetOrClear       bool
-	MappingSize        types.VarInt
-	AdvancementMapping map[types.Identifier]Advancement // TODO: Advancement
-	ListSize           types.VarInt
-	Identifiers        []types.Identifier
-	ProgressSize       types.VarInt
-	ProgressMapping    map[types.Identifier]AdvancementProgress // TODO: AdvancementProgress
+	ResetOrClear bool
+	MappingSize  types.VarInt
+	//AdvancementMapping map[types.Identifier]Advancement // TODO: Advancement
+	ListSize     types.VarInt
+	Identifiers  []types.Identifier
+	ProgressSize types.VarInt
+	//ProgressMapping    map[types.Identifier]AdvancementProgress // TODO: AdvancementProgress
 }
 
 type UpdateAttributes struct {
 	EntityID        types.VarInt
 	NumOfProperties types.VarInt
-	Properties      []AttributeProperty // TODO: AttributeProperty
+	//Properties      []AttributeProperty // TODO: AttributeProperty
 }
 
 type FeatureFlags struct {
@@ -814,15 +815,15 @@ type EntityEffect struct {
 	Duration      types.VarInt
 	Flags         byte
 	HasFactorData bool
-	FactorCodec   NBT // TODO: NBT
+	FactorCodec   nbt.NBT
 }
 
 type UpdateRecipes struct {
 	RecipeCount types.VarInt
-	Recipes     []Recipe // TODO: Recipe
+	//Recipes     []Recipe // TODO: Recipe
 }
 
 type UpdateTags struct {
 	TagCount types.VarInt
-	Tags     []Tag // TODO: Tag
+	//Tags     []Tag // TODO: Tag
 }

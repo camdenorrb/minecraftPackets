@@ -27,9 +27,9 @@ type ChatCommand struct {
 	Timestamp      int64
 	Salt           int64
 	SignatureCount types.VarInt
-	Signatures     []ChatCommandSignature // TODO: Signature
-	MessageCount   types.VarInt
-	Acknowledged   BitSet // TODO: BitSet
+	//Signatures     []ChatCommandSignature // TODO: Signature
+	MessageCount types.VarInt
+	Acknowledged types.BitSet
 }
 
 type ChatMessage struct {
@@ -39,7 +39,7 @@ type ChatMessage struct {
 	HasSignature bool
 	Signature    []byte
 	MessageCount types.VarInt
-	Acknowledged BitSet // TODO: BitSet
+	Acknowledged types.BitSet
 }
 
 type ClientCommand struct {
@@ -74,8 +74,8 @@ type ClickContainer struct {
 	Button      byte
 	Mode        types.VarInt // TODO: Enum
 	SlotCount   types.VarInt
-	Slots       []types.Slot // TODO: Slot
-	CarriedItem types.Slot   // TODO: Slot
+	Slots       []types.Slot
+	CarriedItem types.Slot
 }
 
 type CloseContainer struct {
@@ -198,7 +198,7 @@ type Pong struct {
 
 type PlayerSession struct {
 	SessionID uuid.UUID
-	PublicKey types.PublicKey // TODO: PublicKey
+	//PublicKey types.PublicKey // TODO: PublicKey
 }
 
 type ChangeRecipeBookSettings struct {
@@ -254,7 +254,7 @@ type ProgramCommandBlockMinecart struct {
 
 type SetCreativeModeSlot struct {
 	Slot        int16
-	ClickedItem types.Slot // TODO: Slot
+	ClickedItem types.Slot
 }
 
 type ProgramJigsawBlock struct {
