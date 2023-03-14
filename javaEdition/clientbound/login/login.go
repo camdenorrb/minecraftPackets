@@ -2,11 +2,11 @@ package login
 
 import (
 	"github.com/google/uuid"
-	"minecraftPackets/javaEdition/types"
+	"minecraftPackets/javaEdition/common"
 )
 
 type Disconnect struct {
-	Reason types.Chat
+	Reason common.Chat
 }
 
 type EncryptionRequest struct {
@@ -18,7 +18,7 @@ type EncryptionRequest struct {
 type Success struct {
 	UUID            uuid.UUID
 	UserName        string
-	NumOfProperties types.VarInt
+	NumOfProperties common.VarInt
 	Properties      []SuccessProperty
 }
 
@@ -30,11 +30,11 @@ type SuccessProperty struct {
 }
 
 type SetCompression struct {
-	Threshold types.VarInt
+	Threshold common.VarInt
 }
 
 type PluginRequest struct {
-	MessageID types.VarInt
+	MessageID common.VarInt
 	Channel   string
 	Data      []byte
 }

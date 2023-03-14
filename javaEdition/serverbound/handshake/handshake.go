@@ -1,12 +1,12 @@
 package handshake
 
-import "minecraftPackets/javaEdition/types"
+import "minecraftPackets/javaEdition/common"
 
 type Handshake struct {
-	ProtocolVersion types.VarInt
+	ProtocolVersion common.VarInt
 	ServerAddress   string
 	ServerPort      uint16
-	NextState       types.VarInt
+	NextState       common.VarInt
 }
 
 type LegacyServerListPing struct {

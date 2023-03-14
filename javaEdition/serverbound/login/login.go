@@ -2,7 +2,7 @@ package login
 
 import (
 	"github.com/google/uuid"
-	"minecraftPackets/javaEdition/types"
+	"minecraftPackets/javaEdition/common"
 )
 
 type Start struct {
@@ -17,7 +17,7 @@ type EncryptionResponse struct {
 }
 
 type PluginResponse struct {
-	MessageID  types.VarInt
+	MessageID  common.VarInt
 	Successful bool
 	Data       []byte
 }

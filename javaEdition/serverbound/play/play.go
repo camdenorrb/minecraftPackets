@@ -2,16 +2,16 @@ package play
 
 import (
 	"github.com/google/uuid"
-	"minecraftPackets/javaEdition/types"
+	"minecraftPackets/javaEdition/common"
 )
 
 type ConfirmTeleportation struct {
-	TeleportID types.VarInt
+	TeleportID common.VarInt
 }
 
 type QueryBlockEntityTag struct {
-	TransactionID types.VarInt
-	Location      types.BlockPosition
+	TransactionID common.VarInt
+	Location      common.BlockPosition
 }
 
 type ChangeDifficulty struct {
@@ -19,17 +19,17 @@ type ChangeDifficulty struct {
 }
 
 type MessageAcknowledgement struct {
-	MessageCount types.VarInt
+	MessageCount common.VarInt
 }
 
 type ChatCommand struct {
 	Command        string
 	Timestamp      int64
 	Salt           int64
-	SignatureCount types.VarInt
-	//Signatures     []ChatCommandSignature // TODO: Signature
-	MessageCount types.VarInt
-	Acknowledged types.BitSet
+	SignatureCount common.VarInt
+	Signatures     []common.ChatCommandSignature
+	MessageCount   common.VarInt
+	Acknowledged   common.BitSet
 }
 
 type ChatMessage struct {
@@ -38,27 +38,27 @@ type ChatMessage struct {
 	Salt         int64
 	HasSignature bool
 	Signature    []byte
-	MessageCount types.VarInt
-	Acknowledged types.BitSet
+	MessageCount common.VarInt
+	Acknowledged common.BitSet
 }
 
 type ClientCommand struct {
-	ActionID types.VarInt // TODO: Enum
+	ActionID common.VarInt // TODO: Enum
 }
 
 type ClientInformation struct {
 	Locale              string
 	ViewDistance        byte
-	ChatMode            types.VarInt // TODO: Enum
+	ChatMode            common.VarInt // TODO: Enum
 	ChatColors          bool
-	DisplayedSkinParts  uint8        // TODO: Enum
-	MainHand            types.VarInt // TODO: Enum
+	DisplayedSkinParts  uint8         // TODO: Enum
+	MainHand            common.VarInt // TODO: Enum
 	EnableTextFiltering bool
 	AllowServerListings bool
 }
 
 type CommandSuggestionsRequest struct {
-	TransactionID types.VarInt
+	TransactionID common.VarInt
 	Text          string
 }
 
@@ -69,13 +69,13 @@ type ClickContainerButton struct {
 
 type ClickContainer struct {
 	WindowID    uint8
-	StateID     types.VarInt
+	StateID     common.VarInt
 	Slot        int16
 	Button      byte
-	Mode        types.VarInt // TODO: Enum
-	SlotCount   types.VarInt
-	Slots       []types.Slot
-	CarriedItem types.Slot
+	Mode        common.VarInt // TODO: Enum
+	SlotCount   common.VarInt
+	Slots       []common.Slot
+	CarriedItem common.Slot
 }
 
 type CloseContainer struct {
@@ -83,36 +83,36 @@ type CloseContainer struct {
 }
 
 type PluginMessage struct {
-	Channel types.Identifier
+	Channel common.Identifier
 	Data    []byte
 }
 
 type EditBook struct {
-	Slot     types.VarInt
-	Count    types.VarInt
+	Slot     common.VarInt
+	Count    common.VarInt
 	Entries  []string
 	HasTitle bool
 	Title    *string
 }
 
 type QueryEntityTag struct {
-	TransactionID types.VarInt
-	EntityID      types.VarInt
+	TransactionID common.VarInt
+	EntityID      common.VarInt
 }
 
 type InteractEntity struct {
-	EntityID types.VarInt
-	Type     types.VarInt // TODO: Enum
+	EntityID common.VarInt
+	Type     common.VarInt // TODO: Enum
 	TargetX  float32
 	TargetY  float32
 	TargetZ  float32
-	Hand     types.VarInt // TODO: Enum
+	Hand     common.VarInt // TODO: Enum
 	Sneaking bool
 }
 
 type JigsawGenerate struct {
-	Location    types.BlockPosition
-	Levels      types.VarInt
+	Location    common.BlockPosition
+	Levels      common.VarInt
 	KeepJigsaws bool
 }
 
@@ -166,7 +166,7 @@ type PaddleBoat struct {
 }
 
 type PickItem struct {
-	Slot types.VarInt
+	Slot common.VarInt
 }
 
 type PlayerAbilities struct {
@@ -174,16 +174,16 @@ type PlayerAbilities struct {
 }
 
 type PlayerAction struct {
-	Status   types.VarInt // TODO: Enum
-	Location types.BlockPosition
+	Status   common.VarInt // TODO: Enum
+	Location common.BlockPosition
 	Face     byte // TODO: Enum
-	Sequence types.VarInt
+	Sequence common.VarInt
 }
 
 type PlayerCommand struct {
-	EntityID  types.VarInt
-	ActionID  types.VarInt // TODO: Enum
-	JumpBoost types.VarInt
+	EntityID  common.VarInt
+	ActionID  common.VarInt // TODO: Enum
+	JumpBoost common.VarInt
 }
 
 type PlayerInput struct {
@@ -198,17 +198,17 @@ type Pong struct {
 
 type PlayerSession struct {
 	SessionID uuid.UUID
-	//PublicKey types.PublicKey // TODO: PublicKey
+	PublicKey common.PublicKey
 }
 
 type ChangeRecipeBookSettings struct {
-	BookID       types.VarInt // TODO: Enum
+	BookID       common.VarInt // TODO: Enum
 	BookOpen     bool
 	FilterActive bool
 }
 
 type SetSeenRecipe struct {
-	RecipeID types.Identifier
+	RecipeID common.Identifier
 }
 
 type RenameItem struct {
@@ -216,23 +216,23 @@ type RenameItem struct {
 }
 
 type ResourcePack struct {
-	Result types.VarInt // TODO: Enum
+	Result common.VarInt // TODO: Enum
 }
 
 type SeenAdvancements struct {
-	Action types.VarInt // TODO: Enum
-	TabID  *types.Identifier
+	Action common.VarInt // TODO: Enum
+	TabID  *common.Identifier
 }
 
 type SelectTrade struct {
-	SelectedSlot types.VarInt
+	SelectedSlot common.VarInt
 }
 
 type SetBeaconEffect struct {
 	HasPrimaryEffect   bool
-	PrimaryEffect      types.VarInt // TODO: Enum
+	PrimaryEffect      common.VarInt // TODO: Enum
 	HasSecondaryEffect bool
-	SecondaryEffect    types.VarInt // TODO: Enum
+	SecondaryEffect    common.VarInt // TODO: Enum
 }
 
 type SetHeldItem struct {
@@ -240,36 +240,36 @@ type SetHeldItem struct {
 }
 
 type ProgramCommandBlock struct {
-	Location types.BlockPosition
+	Location common.BlockPosition
 	Command  string
-	Mode     types.VarInt // TODO: Enum
-	Flags    byte         // TODO: Enum
+	Mode     common.VarInt // TODO: Enum
+	Flags    byte          // TODO: Enum
 }
 
 type ProgramCommandBlockMinecart struct {
-	EntityID    types.VarInt
+	EntityID    common.VarInt
 	Command     string
 	TrackOutput bool
 }
 
 type SetCreativeModeSlot struct {
 	Slot        int16
-	ClickedItem types.Slot
+	ClickedItem common.Slot
 }
 
 type ProgramJigsawBlock struct {
-	Location   types.BlockPosition
-	Name       types.Identifier
-	Target     types.Identifier
-	Pool       types.Identifier
+	Location   common.BlockPosition
+	Name       common.Identifier
+	Target     common.Identifier
+	Pool       common.Identifier
 	FinalState string
 	JointType  string
 }
 
 type ProgramStructureBlock struct {
-	Location  types.BlockPosition
-	Action    types.VarInt // TODO: Enum
-	Mode      types.VarInt // TODO: Enum
+	Location  common.BlockPosition
+	Action    common.VarInt // TODO: Enum
+	Mode      common.VarInt // TODO: Enum
 	Name      string
 	OffsetX   byte
 	OffsetY   byte
@@ -277,16 +277,16 @@ type ProgramStructureBlock struct {
 	SizeX     byte
 	SizeY     byte
 	SizeZ     byte
-	Mirror    types.VarInt // TODO: Enum
-	Rotation  types.VarInt // TODO: Enum
+	Mirror    common.VarInt // TODO: Enum
+	Rotation  common.VarInt // TODO: Enum
 	Metadata  string
 	Integrity float32
-	Seed      types.VarLong
+	Seed      common.VarLong
 	Flags     byte // TODO: Enum
 }
 
 type UpdateSign struct {
-	Location types.BlockPosition
+	Location common.BlockPosition
 	Line1    string
 	Line2    string
 	Line3    string
@@ -294,7 +294,7 @@ type UpdateSign struct {
 }
 
 type SwingArm struct {
-	Hand types.VarInt // TODO: Enum
+	Hand common.VarInt // TODO: Enum
 }
 
 type TeleportToEntity struct {
@@ -302,17 +302,17 @@ type TeleportToEntity struct {
 }
 
 type UseItemOn struct {
-	Hand        types.VarInt // TODO: Enum
-	Location    types.BlockPosition
-	Face        types.VarInt // TODO: Enum
+	Hand        common.VarInt // TODO: Enum
+	Location    common.BlockPosition
+	Face        common.VarInt // TODO: Enum
 	CursorX     float32
 	CursorY     float32
 	CursorZ     float32
 	InsideBlock bool
-	Sequence    types.VarInt
+	Sequence    common.VarInt
 }
 
 type UseItem struct {
-	Hand     types.VarInt // TODO: Enum
-	Sequence types.VarInt
+	Hand     common.VarInt // TODO: Enum
+	Sequence common.VarInt
 }

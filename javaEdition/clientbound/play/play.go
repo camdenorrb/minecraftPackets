@@ -2,28 +2,28 @@ package play
 
 import (
 	"github.com/google/uuid"
-	"minecraftPackets/javaEdition/types"
+	"minecraftPackets/javaEdition/common"
 	"minecraftPackets/nbt"
 )
 
 type SpawnEntity struct {
-	EntityID   types.VarInt
+	EntityID   common.VarInt
 	ObjectUUID string
-	Type       types.VarInt
+	Type       common.VarInt
 	X          float64
 	Y          float64
 	Z          float64
-	Pitch      types.Angle
-	Yaw        types.Angle
-	HeadYaw    types.Angle
-	Data       types.VarInt
+	Pitch      common.Angle
+	Yaw        common.Angle
+	HeadYaw    common.Angle
+	Data       common.VarInt
 	VelocityX  int16
 	VelocityY  int16
 	VelocityZ  int16
 }
 
 type SpawnExperienceOrb struct {
-	EntityID types.VarInt
+	EntityID common.VarInt
 	X        float64
 	Y        float64
 	Z        float64
@@ -31,62 +31,62 @@ type SpawnExperienceOrb struct {
 }
 
 type SpawnPlayer struct {
-	EntityID   types.VarInt
+	EntityID   common.VarInt
 	PlayerUUID uuid.UUID
 	X          float64
 	Y          float64
 	Z          float64
-	Yaw        types.Angle
-	Pitch      types.Angle
+	Yaw        common.Angle
+	Pitch      common.Angle
 }
 
 type EntityAnimation struct {
-	EntityID  types.VarInt
+	EntityID  common.VarInt
 	Animation uint8 // TODO: Enum
 }
 
 type AwardStatistic struct {
-	CategoryID  types.VarInt
-	StatisticID types.VarInt
-	Value       types.VarInt
+	CategoryID  common.VarInt
+	StatisticID common.VarInt
+	Value       common.VarInt
 }
 
 type AwardStatistics []AwardStatistic
 
 type AcknowledgeBlockChange struct {
-	SequenceID types.VarInt
+	SequenceID common.VarInt
 }
 
 type SetBlockDestroyStage struct {
-	EntityID types.VarInt
-	Location types.BlockPosition
+	EntityID common.VarInt
+	Location common.BlockPosition
 	Stage    byte // TODO: Enum
 }
 
 type BlockEntityData struct {
-	Location types.BlockPosition
-	Type     types.VarInt
+	Location common.BlockPosition
+	Type     common.VarInt
 	NBTData  nbt.NBT
 }
 
 type BlockAction struct {
-	Location    types.BlockPosition
+	Location    common.BlockPosition
 	ActionID    uint8
 	ActionParam uint8
-	BlockType   types.VarInt
+	BlockType   common.VarInt
 }
 
 type BlockUpdate struct {
-	Location types.BlockPosition
-	BlockID  types.VarInt
+	Location common.BlockPosition
+	BlockID  common.VarInt
 }
 
 type BossBarActionAdd struct {
-	Title    types.Chat
+	Title    common.Chat
 	Health   float32
-	Color    types.VarInt // TODO: Enum
-	Division types.VarInt // TODO: Enum
-	Flags    uint8        // TODO: Enum
+	Color    common.VarInt // TODO: Enum
+	Division common.VarInt // TODO: Enum
+	Flags    uint8         // TODO: Enum
 }
 
 type BossBarActionRemove struct{}
@@ -96,12 +96,12 @@ type BossBarActionUpdateHealth struct {
 }
 
 type BossBarActionUpdateTitle struct {
-	Title types.Chat
+	Title common.Chat
 }
 
 type BossBarActionUpdateStyle struct {
-	Color    types.VarInt // TODO: Enum
-	Division types.VarInt // TODO: Enum
+	Color    common.VarInt // TODO: Enum
+	Division common.VarInt // TODO: Enum
 }
 
 type BossBarActionUpdateFlags struct {
@@ -110,7 +110,7 @@ type BossBarActionUpdateFlags struct {
 
 type BossBar struct {
 	UUID         uuid.UUID
-	Action       types.VarInt // TODO: Enum
+	Action       common.VarInt // TODO: Enum
 	Add          *BossBarActionAdd
 	Remove       *BossBarActionRemove
 	UpdateHealth *BossBarActionUpdateHealth
@@ -131,21 +131,21 @@ type ClearTitles struct {
 type CommandSuggestionsMatch struct {
 	Match      string
 	HasToolTip bool
-	Tooltip    *types.Chat
+	Tooltip    *common.Chat
 }
 
 type CommandSuggestionsResponse struct {
-	ID      types.VarInt
-	Start   types.VarInt
-	Length  types.VarInt
-	Count   types.VarInt
+	ID      common.VarInt
+	Start   common.VarInt
+	Length  common.VarInt
+	Count   common.VarInt
 	Matches []CommandSuggestionsMatch
 }
 
 type Commands struct {
-	Count types.VarInt
-	//Nodes     []CommandNode // TODO: Command Node
-	RootIndex types.VarInt
+	Count     common.VarInt
+	Nodes     []common.CommandNode
+	RootIndex common.VarInt
 }
 
 type CloseContainer struct {
@@ -154,10 +154,10 @@ type CloseContainer struct {
 
 type SetContainerContent struct {
 	WindowID    uint8
-	StateID     types.VarInt
-	Count       types.VarInt
-	SlotData    []types.Slot
-	CarriedItem types.Slot
+	StateID     common.VarInt
+	Count       common.VarInt
+	SlotData    []common.Slot
+	CarriedItem common.Slot
 }
 
 type SetContainerProperty struct {
@@ -168,42 +168,42 @@ type SetContainerProperty struct {
 
 type SetContainerSlot struct {
 	WindowID uint8
-	StateID  types.VarInt
+	StateID  common.VarInt
 	Slot     int16
-	SlotData types.Slot
+	SlotData common.Slot
 }
 
 type SetCooldown struct {
-	ItemID types.VarInt
-	Ticks  types.VarInt
+	ItemID common.VarInt
+	Ticks  common.VarInt
 }
 
 type ChatSuggestions struct {
-	Action  types.VarInt // TODO: Enum
-	Count   types.VarInt
+	Action  common.VarInt // TODO: Enum
+	Count   common.VarInt
 	Entries []string
 }
 
 type PluginMessage struct {
-	Channel types.Identifier
+	Channel common.Identifier
 	Data    []byte
 }
 
 type DeleteMessage struct {
-	SignatureLength types.VarInt
+	SignatureLength common.VarInt
 	Signature       []byte
 }
 
 type Disconnect struct {
-	Reason types.Chat
+	Reason common.Chat
 }
 
 type DisguisedChatMessage struct {
-	Message       types.Chat
-	ChatType      types.VarInt // TODO: Enum
-	ChatTypeName  types.Chat
+	Message       common.Chat
+	ChatType      common.VarInt // TODO: Enum
+	ChatTypeName  common.Chat
 	HasTargetName bool
-	TargetName    types.Chat
+	TargetName    common.Chat
 }
 
 type EntityEvent struct {
@@ -216,7 +216,7 @@ type Explosion struct {
 	Y             float64
 	Z             float64
 	Strength      float32
-	RecordCount   types.VarInt
+	RecordCount   common.VarInt
 	Records       [][]byte
 	PlayerMotionX float32
 	PlayerMotionY float32
@@ -235,7 +235,7 @@ type GameEvent struct {
 
 type OpenHorseScreen struct {
 	WindowID  uint8
-	SlotCount types.VarInt
+	SlotCount common.VarInt
 	EntityID  int32
 }
 
@@ -244,49 +244,44 @@ type InitializeWorldBorder struct {
 	Z                      float64
 	OldDiameter            float64
 	NewDiameter            float64
-	Speed                  types.VarLong
-	PortalTeleportBoundary types.VarInt
-	WarningBlocks          types.VarInt
-	WarningTime            types.VarInt
+	Speed                  common.VarLong
+	PortalTeleportBoundary common.VarInt
+	WarningBlocks          common.VarInt
+	WarningTime            common.VarInt
 }
 
 type KeepAlive struct {
 	ID int64
 }
 
-type BlockEntity struct {
-	PackedXZ byte
-	Y        int16
-	Type     types.VarInt
-	Data     nbt.NBT
-}
-
 type ChunkDataAndUpdateLight struct {
-	ChunkX              int32
-	ChunkZ              int32
-	Heightmaps          nbt.NBT
-	Size                types.VarInt
-	Data                []byte
-	NumOfBlockEntities  types.VarInt
-	BlockEntities       []BlockEntity
-	TrustEdges          bool
-	SkyLightMask        types.BitSet
-	BlockLightMask      types.BitSet
-	EmptySkyLightMask   types.BitSet
-	EmptyBlockLightMask types.BitSet
-	SkyLightArrayCount  types.VarInt
-	// TODO: Complete
+	ChunkX               int32
+	ChunkZ               int32
+	Heightmaps           nbt.NBT
+	Size                 common.VarInt
+	Data                 []byte
+	NumOfBlockEntities   common.VarInt
+	BlockEntities        []common.BlockEntity
+	TrustEdges           bool
+	SkyLightMask         common.BitSet
+	BlockLightMask       common.BitSet
+	EmptySkyLightMask    common.BitSet
+	EmptyBlockLightMask  common.BitSet
+	SkyLightArrayCount   common.VarInt
+	SkyLightArrays       []common.SkyLightArray
+	BlockLightArrayCount common.VarInt
+	BlockLightArrays     []common.BlockLightArray
 }
 
 type WorldEvent struct {
 	Event                 int32
-	Location              types.BlockPosition
+	Location              common.BlockPosition
 	Data                  int32 // TODO: Enum
 	DisableRelativeVolume bool
 }
 
 type Particle struct {
-	ParticleID     types.VarInt
+	ParticleID     common.VarInt
 	IsLongDistance bool
 	X              float64
 	Y              float64
@@ -296,19 +291,21 @@ type Particle struct {
 	OffsetZ        float32
 	MaxSpeed       float32
 	ParticleCount  int32
-	Data           interface{} // TODO: Complete data types
+	Data           interface{} // TODO: Complete data common
 }
 
 type UpdateLight struct {
-	ChunkX              types.VarInt
-	ChunkZ              types.VarInt
-	TrustEdges          bool
-	SkyLightMask        types.BitSet
-	BlockLightMask      types.BitSet
-	EmptySkyLightMask   types.BitSet
-	EmptyBlockLightMask types.BitSet
-	SkyLightArrayCount  types.VarInt
-	// TODO: Complete
+	ChunkX               common.VarInt
+	ChunkZ               common.VarInt
+	TrustEdges           bool
+	SkyLightMask         common.BitSet
+	BlockLightMask       common.BitSet
+	EmptySkyLightMask    common.BitSet
+	EmptyBlockLightMask  common.BitSet
+	SkyLightArrayCount   common.VarInt
+	SkyLightArrays       []common.SkyLightArray
+	BlockLightArrayCount common.VarInt
+	BlockLightArrays     []common.BlockLightArray
 }
 
 type Login struct {
@@ -316,52 +313,52 @@ type Login struct {
 	IsHardcore          bool
 	GameMode            uint8 // TODO: Enum GameMode
 	PreviousGameMode    uint8 // TODO: Enum GameMode
-	DimensionCount      types.VarInt
-	DimensionNames      []types.Identifier
+	DimensionCount      common.VarInt
+	DimensionNames      []common.Identifier
 	RegistryCodec       nbt.NBT
-	DimensionType       types.Identifier
-	DimensionName       types.Identifier
+	DimensionType       common.Identifier
+	DimensionName       common.Identifier
 	HashedSeed          int64
-	MaxPlayers          types.VarInt
-	ViewDistance        types.VarInt
-	SimulationDistance  types.VarInt
+	MaxPlayers          common.VarInt
+	ViewDistance        common.VarInt
+	SimulationDistance  common.VarInt
 	ReducedDebugInfo    bool
 	EnableRespawnScreen bool
 	IsDebug             bool
 	IsFlat              bool
 	HasDeathLocation    bool
-	DeathDimension      *types.Identifier
-	DeathLocation       *types.BlockPosition
+	DeathDimension      *common.Identifier
+	DeathLocation       *common.BlockPosition
 }
 
 type Icon struct {
-	Type           types.VarInt // TODO: Enum
+	Type           common.VarInt // TODO: Enum
 	X              byte
 	Z              byte
 	Direction      byte
 	HasDisplayName bool
-	DisplayName    *types.Chat
+	DisplayName    *common.Chat
 }
 
 type MapData struct {
-	MapID     types.VarInt
+	MapID     common.VarInt
 	Scale     uint8
 	IsLocked  bool
 	HasIcons  bool
-	ItemCount *types.VarInt
+	ItemCount *common.VarInt
 	Icons     []Icon
 	Columns   uint8
 	Rows      *uint8
 	X         *byte
 	Z         *byte
-	Length    *types.VarInt
+	Length    *common.VarInt
 	Data      []byte
 }
 
 type Trade struct {
-	InputItem1      types.Slot
-	OutputItem      types.Slot
-	InputItem2      types.Slot
+	InputItem1      common.Slot
+	OutputItem      common.Slot
+	InputItem2      common.Slot
 	IsDisabled      bool
 	NumOfTradeUses  int32
 	MaxTradeUses    int32
@@ -372,17 +369,17 @@ type Trade struct {
 }
 
 type MerchantOffers struct {
-	WindowID          types.VarInt
-	Size              types.VarInt
+	WindowID          common.VarInt
+	Size              common.VarInt
 	Trades            []Trade
-	VillagerLevel     types.VarInt
-	Experience        types.VarInt
+	VillagerLevel     common.VarInt
+	Experience        common.VarInt
 	IsRegularVillager bool
 	CanRestock        bool
 }
 
 type UpdateEntityPosition struct {
-	EntityID types.VarInt
+	EntityID common.VarInt
 	DeltaX   int16
 	DeltaY   int16
 	DeltaZ   int16
@@ -390,19 +387,19 @@ type UpdateEntityPosition struct {
 }
 
 type UpdateEntityPositionAndRotation struct {
-	EntityID types.VarInt
+	EntityID common.VarInt
 	DeltaX   int16
 	DeltaY   int16
 	DeltaZ   int16
-	Yaw      types.Angle
-	Pitch    types.Angle
+	Yaw      common.Angle
+	Pitch    common.Angle
 	OnGround bool
 }
 
 type UpdateEntityRotation struct {
-	EntityID types.VarInt
-	Yaw      types.Angle
-	Pitch    types.Angle
+	EntityID common.VarInt
+	Yaw      common.Angle
+	Pitch    common.Angle
 	OnGround bool
 }
 
@@ -415,17 +412,17 @@ type MoveVehicle struct {
 }
 
 type OpenBook struct {
-	Hand types.VarInt // TODO: Enum
+	Hand common.VarInt // TODO: Enum
 }
 
 type OpenWindow struct {
-	WindowID    types.VarInt
-	WindowType  types.VarInt // TODO: Enum
-	WindowTitle types.Chat
+	WindowID    common.VarInt
+	WindowType  common.VarInt // TODO: Enum
+	WindowTitle common.Chat
 }
 
 type OpenSignEditor struct {
-	Location types.BlockPosition
+	Location common.BlockPosition
 }
 
 type Ping struct {
@@ -434,7 +431,7 @@ type Ping struct {
 
 type PlaceGhostRecipe struct {
 	WindowID byte
-	RecipeID types.Identifier
+	RecipeID common.Identifier
 }
 
 type PlayerAbilities struct {
@@ -444,33 +441,33 @@ type PlayerAbilities struct {
 }
 
 type PreviousMessage struct {
-	MessageID types.VarInt
+	MessageID common.VarInt
 	Signature []byte
 }
 
 type PlayerChatMessage struct {
 	Sender                     uuid.UUID
-	Index                      types.VarInt
+	Index                      common.VarInt
 	MessageSignaturePresent    bool
 	MessageSignature           []byte
 	Message                    string
 	Timestamp                  int64
 	Salt                       int64
-	TotalPreviousMessages      types.VarInt
+	TotalPreviousMessages      common.VarInt
 	PreviousMessages           []PreviousMessage
 	UnsignedContentPresent     bool
-	UnsignedContent            *types.Chat
-	FilterType                 types.VarInt // TODO: Enum
-	FilterTypeBits             *types.BitSet
-	ChatType                   types.VarInt // TODO: Enum
-	NetworkName                types.Chat
+	UnsignedContent            *common.Chat
+	FilterType                 common.VarInt // TODO: Enum
+	FilterTypeBits             *common.BitSet
+	ChatType                   common.VarInt // TODO: Enum
+	NetworkName                common.Chat
 	IsNetworkTargetNamePresent bool
-	NetworkTargetName          *types.Chat
+	NetworkTargetName          *common.Chat
 }
 
 // EndCombat "Unused by the Notchian client. This data was once used for twitch.tv metadata circa 1.8.f"
 type EndCombat struct {
-	Duration types.VarInt
+	Duration common.VarInt
 	EntityID int32
 }
 
@@ -478,28 +475,30 @@ type EndCombat struct {
 type EnterCombat struct{}
 
 type CombatDeath struct {
-	PlayerID types.VarInt
+	PlayerID common.VarInt
 	EntityID int32
-	Message  types.Chat
+	Message  common.Chat
 }
 
 type PlayerInfoRemove struct {
-	NumOfPlayers types.VarInt
+	NumOfPlayers common.VarInt
 	Players      []uuid.UUID
 }
 
 type PlayerInfoUpdate struct {
-	// TODO: Complete
+	Action       byte // TODO: Enum
+	NumOfActions common.VarInt
+	Actions      []common.PlayerInfoAction
 }
 
 type LookAt struct {
-	FeetOrEyes       types.VarInt // TODO: Enum
+	FeetOrEyes       common.VarInt // TODO: Enum
 	TargetX          float64
 	TargetY          float64
 	TargetZ          float64
 	IsEntity         bool
-	EntityID         *types.VarInt
-	EntityFeetOrEyes *types.VarInt // TODO: Enum
+	EntityID         *common.VarInt
+	EntityFeetOrEyes *common.VarInt // TODO: Enum
 }
 
 type SynchronizePlayerPosition struct {
@@ -509,12 +508,12 @@ type SynchronizePlayerPosition struct {
 	Yaw             float32
 	Pitch           float32
 	Flags           byte // TODO: Enum
-	TeleportID      types.VarInt
+	TeleportID      common.VarInt
 	DismountVehicle bool
 }
 
 type UpdateRecipeBook struct {
-	Action                       types.VarInt // TODO: Enum
+	Action                       common.VarInt // TODO: Enum
 	CraftingBookOpen             bool
 	CraftingBookFilterActive     bool
 	SmeltingBookOpen             bool
@@ -523,20 +522,20 @@ type UpdateRecipeBook struct {
 	BlastFurnaceBookFilterActive bool
 	SmokerBookOpen               bool
 	SmokerBookFilterActive       bool
-	RecipeIDSize1                types.VarInt
-	RecipeIDs1                   []types.Identifier
-	RecipeIDSize2                types.VarInt
-	RecipeIDs2                   []types.Identifier
+	RecipeIDSize1                common.VarInt
+	RecipeIDs1                   []common.Identifier
+	RecipeIDSize2                common.VarInt
+	RecipeIDs2                   []common.Identifier
 }
 
 type RemoveEntities struct {
-	NumOfEntities types.VarInt
-	Entities      []types.VarInt
+	NumOfEntities common.VarInt
+	Entities      []common.VarInt
 }
 
 type RemoveEntityEffect struct {
-	EntityID types.VarInt
-	EffectID types.VarInt // TODO: Enum
+	EntityID common.VarInt
+	EffectID common.VarInt // TODO: Enum
 }
 
 type ResourcePack struct {
@@ -544,12 +543,12 @@ type ResourcePack struct {
 	Hash             string
 	Forced           bool
 	HasPromptMessage bool
-	PromptMessage    *types.Chat
+	PromptMessage    *common.Chat
 }
 
 type Respawn struct {
-	DimensionType      types.Identifier
-	DimensionName      types.Identifier
+	DimensionType      common.Identifier
+	DimensionName      common.Identifier
 	HashedSeed         int64
 	GameMode           uint8 // TODO: Enum GameMode
 	PreviousGameMode   byte
@@ -557,37 +556,37 @@ type Respawn struct {
 	IsFlat             bool
 	CopyMetadata       bool
 	HasDeathLocation   bool
-	DeathDimensionName *types.Identifier
-	DeathLocation      *types.BlockPosition
+	DeathDimensionName *common.Identifier
+	DeathLocation      *common.BlockPosition
 }
 
 type SetHeadRotation struct {
-	EntityID types.VarInt
-	HeadYaw  types.Angle
+	EntityID common.VarInt
+	HeadYaw  common.Angle
 }
 
 type UpdateSectionBlocks struct {
 	ChunkSectionPosition int64
 	SuppressLightUpdates bool
-	BlockArraySize       types.VarInt
-	Blocks               []types.VarLong
+	BlockArraySize       common.VarInt
+	Blocks               []common.VarLong
 }
 
 type SelectAdvancementTab struct {
 	HasID bool
-	ID    *types.Identifier
+	ID    *common.Identifier
 }
 
 type ServerData struct {
 	HasMOTD            bool
-	MOTD               *types.Chat
+	MOTD               *common.Chat
 	HasIcon            bool
 	Icon               *string
 	EnforcesSecureChat bool
 }
 
 type SetActionBarText struct {
-	Text types.Chat
+	Text common.Chat
 }
 
 type SetBorderCenter struct {
@@ -598,7 +597,7 @@ type SetBorderCenter struct {
 type SetBorderLerpSize struct {
 	OldDiameter float64
 	NewDiameter float64
-	Speed       types.VarLong
+	Speed       common.VarLong
 }
 
 type SetBorderSize struct {
@@ -606,16 +605,16 @@ type SetBorderSize struct {
 }
 
 type SetBorderWarningDelay struct {
-	WarningTime types.VarInt
+	WarningTime common.VarInt
 }
 
 type SetBorderWarningDistance struct {
 	// WarningBlocks in meters
-	WarningBlocks types.VarInt
+	WarningBlocks common.VarInt
 }
 
 type SetCamera struct {
-	CameraID types.VarInt
+	CameraID common.VarInt
 }
 
 type SetHeldItem struct {
@@ -628,22 +627,22 @@ type SetCenterChunk struct {
 }
 
 type SetRenderDistance struct {
-	ViewDistance types.VarInt
+	ViewDistance common.VarInt
 }
 
 type SetDefaultSpawnPosition struct {
-	Location types.BlockPosition
+	Location common.BlockPosition
 	Angle    float32
 }
 
 type DisplayObjective struct {
-	Position types.BlockPosition
+	Position common.BlockPosition
 	Angle    float32
 }
 
 type SetEntityMetadata struct {
-	EntityID types.VarInt
-	//Metadata []types.EntityMetadata // TODO: EntityMetadata
+	EntityID common.VarInt
+	//Metadata []common.EntityMetadata // TODO: EntityMetadata
 }
 
 type LinkEntities struct {
@@ -652,40 +651,40 @@ type LinkEntities struct {
 }
 
 type SetEntityVelocity struct {
-	EntityID  types.VarInt
+	EntityID  common.VarInt
 	VelocityX int16
 	VelocityY int16
 	VelocityZ int16
 }
 
 type SetEquipment struct {
-	EntityID types.VarInt
-	//Equipment types.Equipment // TODO: Equipment
+	EntityID common.VarInt
+	//Equipment common.Equipment // TODO: Equipment
 }
 
 type SetExperience struct {
 	ExperienceBar   float32
-	TotalExperience types.VarInt
-	Level           types.VarInt
+	TotalExperience common.VarInt
+	Level           common.VarInt
 }
 
 type SetHealth struct {
 	Health         float32
-	Food           types.VarInt
+	Food           common.VarInt
 	FoodSaturation float32
 }
 
 type UpdateObjectives struct {
 	ObjectiveName  string
 	Mode           byte
-	ObjectiveValue *types.Chat
-	Type           *types.VarInt // TODO: Enum
+	ObjectiveValue *common.Chat
+	Type           *common.VarInt // TODO: Enum
 }
 
 type SetPassengers struct {
-	EntityID       types.VarInt
-	PassengerCount types.VarInt
-	Passengers     []types.VarInt
+	EntityID       common.VarInt
+	PassengerCount common.VarInt
+	Passengers     []common.VarInt
 }
 
 type UpdateTeams struct {
@@ -696,17 +695,17 @@ type UpdateTeams struct {
 
 type UpdateScore struct {
 	EntityName    string
-	Action        types.VarInt // TODO: Enum
+	Action        common.VarInt // TODO: Enum
 	ObjectiveName string
-	Value         *types.VarInt
+	Value         *common.VarInt
 }
 
 type SetSimulationDistance struct {
-	SimulationDistance types.VarInt
+	SimulationDistance common.VarInt
 }
 
 type SetSubtitleText struct {
-	SubtitleText types.Chat
+	SubtitleText common.Chat
 }
 
 type UpdateTime struct {
@@ -715,7 +714,7 @@ type UpdateTime struct {
 }
 
 type SetTitleText struct {
-	TitleText types.Chat
+	TitleText common.Chat
 }
 
 type SetTitleAnimationTimes struct {
@@ -725,23 +724,23 @@ type SetTitleAnimationTimes struct {
 }
 
 type EntitySoundEffect struct {
-	SoundID       types.VarInt // TODO: Enum
-	SoundName     *types.Identifier
+	SoundID       common.VarInt // TODO: Enum
+	SoundName     *common.Identifier
 	HasFixedRange *bool
 	Range         *float32
-	SoundCategory types.VarInt // TODO: Enum
-	EntityID      types.VarInt
+	SoundCategory common.VarInt // TODO: Enum
+	EntityID      common.VarInt
 	Volume        float32
 	Pitch         float32
 	Seed          int64
 }
 
 type SoundEffect struct {
-	SoundID         types.VarInt
-	SoundName       *types.Identifier
+	SoundID         common.VarInt
+	SoundName       *common.Identifier
 	HasFixedRange   *bool
 	Range           *float32
-	SoundCategory   types.VarInt // TODO: Enum
+	SoundCategory   common.VarInt // TODO: Enum
 	EntityPositionX int32
 	EntityPositionY int32
 	EntityPositionZ int32
@@ -752,78 +751,78 @@ type SoundEffect struct {
 
 type StopSound struct {
 	Flags  byte
-	Source *types.VarInt // TODO: Enum
-	Sound  *types.Identifier
+	Source *common.VarInt // TODO: Enum
+	Sound  *common.Identifier
 }
 
 type SystemChatMessage struct {
-	Content types.Chat
+	Content common.Chat
 	Overlay bool
 }
 
 type SetTabListHeaderAndFooter struct {
-	Header types.Chat
-	Footer types.Chat
+	Header common.Chat
+	Footer common.Chat
 }
 
 type TagQueryResponse struct {
-	TransactionID types.VarInt
+	TransactionID common.VarInt
 	NBT           nbt.NBT
 }
 
 type PickupItem struct {
-	CollectedEntityID types.VarInt
-	CollectorEntityID types.VarInt
-	PickupItemCount   types.VarInt
+	CollectedEntityID common.VarInt
+	CollectorEntityID common.VarInt
+	PickupItemCount   common.VarInt
 }
 
 type TeleportEntity struct {
-	EntityID types.VarInt
+	EntityID common.VarInt
 	X        float64
 	Y        float64
 	Z        float64
-	Yaw      types.Angle
-	Pitch    types.Angle
+	Yaw      common.Angle
+	Pitch    common.Angle
 	OnGround bool
 }
 
 type UpdateAdvancements struct {
 	ResetOrClear bool
-	MappingSize  types.VarInt
-	//AdvancementMapping map[types.Identifier]Advancement // TODO: Advancement
-	ListSize     types.VarInt
-	Identifiers  []types.Identifier
-	ProgressSize types.VarInt
-	//ProgressMapping    map[types.Identifier]AdvancementProgress // TODO: AdvancementProgress
+	MappingSize  common.VarInt
+	//AdvancementMapping map[common.Identifier]Advancement // TODO: Advancement
+	ListSize     common.VarInt
+	Identifiers  []common.Identifier
+	ProgressSize common.VarInt
+	//ProgressMapping    map[common.Identifier]AdvancementProgress // TODO: AdvancementProgress
 }
 
 type UpdateAttributes struct {
-	EntityID        types.VarInt
-	NumOfProperties types.VarInt
+	EntityID        common.VarInt
+	NumOfProperties common.VarInt
 	//Properties      []AttributeProperty // TODO: AttributeProperty
 }
 
 type FeatureFlags struct {
-	TotalFeatures types.VarInt
-	FeatureFlags  []types.Identifier
+	TotalFeatures common.VarInt
+	FeatureFlags  []common.Identifier
 }
 
 type EntityEffect struct {
-	EntityID      types.VarInt
-	EffectID      types.VarInt // TODO: Enum
+	EntityID      common.VarInt
+	EffectID      common.VarInt // TODO: Enum
 	Amplifier     byte
-	Duration      types.VarInt
+	Duration      common.VarInt
 	Flags         byte
 	HasFactorData bool
 	FactorCodec   nbt.NBT
 }
 
 type UpdateRecipes struct {
-	RecipeCount types.VarInt
+	RecipeCount common.VarInt
 	//Recipes     []Recipe // TODO: Recipe
 }
 
 type UpdateTags struct {
-	TagCount types.VarInt
+	TagCount common.VarInt
 	//Tags     []Tag // TODO: Tag
 }
