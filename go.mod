@@ -1,4 +1,4 @@
-module minecraftPackets
+module github.com/camdenorrb/minecraftPackets
 
 go 1.20
 

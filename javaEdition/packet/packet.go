@@ -1,6 +1,6 @@
 package packet
 
-import "minecraftPackets/javaEdition/common"
+import "github.com/camdenorrb/minecraftPackets/javaEdition/common"
 
 type CompressedPacket struct {
 	PacketLength common.VarInt

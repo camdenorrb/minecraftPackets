@@ -1,6 +1,6 @@
 package common
 
-import "minecraftPackets/nbt"
+import "github.com/camdenorrb/minecraftPackets/nbt"
 
 type Slot struct {
 	IsPresent bool

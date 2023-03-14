@@ -1,9 +1,9 @@
 package play
 
 import (
+	"github.com/camdenorrb/minecraftPackets/javaEdition/common"
+	"github.com/camdenorrb/minecraftPackets/nbt"
 	"github.com/google/uuid"
-	"minecraftPackets/javaEdition/common"
-	"minecraftPackets/nbt"
 )
 
 type SpawnEntity struct {
