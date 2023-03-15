@@ -2,6 +2,13 @@ package common
 
 import "github.com/google/uuid"
 
+type Hand VarInt
+
+const (
+	MainHand Hand = iota
+	OffHand
+)
+
 // PlayerInfoAction is a player action.
 // Refer to https://wiki.vg/Protocol#Player_Info_Update
 type PlayerInfoAction struct {

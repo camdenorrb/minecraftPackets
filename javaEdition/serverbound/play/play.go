@@ -51,8 +51,8 @@ type ClientInformation struct {
 	ViewDistance        byte
 	ChatMode            common.VarInt // TODO: Enum
 	ChatColors          bool
-	DisplayedSkinParts  uint8         // TODO: Enum
-	MainHand            common.VarInt // TODO: Enum
+	DisplayedSkinParts  uint8 // TODO: Enum
+	MainHand            common.Hand
 	EnableTextFiltering bool
 	AllowServerListings bool
 }
@@ -106,7 +106,7 @@ type InteractEntity struct {
 	TargetX  float32
 	TargetY  float32
 	TargetZ  float32
-	Hand     common.VarInt // TODO: Enum
+	Hand     common.Hand
 	Sneaking bool
 }
 
@@ -300,7 +300,7 @@ type UpdateSign struct {
 }
 
 type SwingArm struct {
-	Hand common.VarInt // TODO: Enum
+	Hand common.Hand
 }
 
 type TeleportToEntity struct {
@@ -308,7 +308,7 @@ type TeleportToEntity struct {
 }
 
 type UseItemOn struct {
-	Hand        common.VarInt // TODO: Enum
+	Hand        common.Hand
 	Location    common.BlockPosition
 	Face        common.VarInt // TODO: Enum
 	CursorX     float32
@@ -319,6 +319,6 @@ type UseItemOn struct {
 }
 
 type UseItem struct {
-	Hand     common.VarInt // TODO: Enum
+	Hand     common.Hand
 	Sequence common.VarInt
 }

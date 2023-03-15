@@ -409,7 +409,7 @@ type MoveVehicle struct {
 }
 
 type OpenBook struct {
-	Hand common.VarInt // TODO: Enum
+	Hand common.Hand
 }
 
 type OpenWindow struct {
