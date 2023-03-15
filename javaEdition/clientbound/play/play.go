@@ -2,6 +2,7 @@ package play
 
 import (
 	"github.com/camdenorrb/minecraftPackets/javaEdition/common"
+	"github.com/camdenorrb/minecraftPackets/nbt"
 	"github.com/google/uuid"
 )
 
