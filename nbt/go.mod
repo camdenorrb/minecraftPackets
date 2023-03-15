@@ -1,4 +1,4 @@
-module github.com/camdenorrb/minecraftPackets
+module github.com/camdenorrb/minecraftPackets/nbt
 
 go 1.20
 
