@@ -169,6 +169,12 @@ type PickItem struct {
 	Slot common.VarInt
 }
 
+type PlaceRecipe struct {
+	WindowID uint8
+	Recipe   common.Identifier
+	MakeAll  bool
+}
+
 type PlayerAbilities struct {
 	Flags uint8 // TODO: Enum
 }

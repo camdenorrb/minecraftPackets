@@ -45,13 +45,10 @@ type EntityAnimation struct {
 	Animation uint8 // TODO: Enum
 }
 
-type AwardStatistic struct {
-	CategoryID  common.VarInt
-	StatisticID common.VarInt
-	Value       common.VarInt
+type AwardStatistics struct {
+	Count      common.VarInt
+	Statistics common.AwardStatistics
 }
-
-type AwardStatistics []AwardStatistic
 
 type AcknowledgeBlockChange struct {
 	SequenceID common.VarInt
@@ -223,7 +220,7 @@ type Explosion struct {
 	PlayerMotionZ float32
 }
 
-type ChunkUnload struct {
+type UnloadChunk struct {
 	ChunkX int32
 	ChunkZ int32
 }

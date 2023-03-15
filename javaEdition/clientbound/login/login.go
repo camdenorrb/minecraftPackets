@@ -19,14 +19,7 @@ type Success struct {
 	UUID            uuid.UUID
 	UserName        string
 	NumOfProperties common.VarInt
-	Properties      []SuccessProperty
-}
-
-type SuccessProperty struct {
-	Name      string
-	Value     string
-	IsSigned  bool
-	Signature string
+	Properties      []common.SuccessProperty
 }
 
 type SetCompression struct {
