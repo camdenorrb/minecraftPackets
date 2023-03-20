@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"math/rand"
 	"testing"
 )
 
-func FuzzEncodeNBT_Basic(f *testing.F) {
+func FuzzEncodeNBT_All(f *testing.F) {
 
 	f.Add("MeowName", byte(1), int16(2), int32(3), int64(4), float32(5), float64(6), "MeowString", []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, "SubName")
 
@@ -22,6 +23,12 @@ func FuzzEncodeNBT_Basic(f *testing.F) {
 			DoubleTag(doubleNum),
 			StringTag(stringTag),
 			ByteArrayTag(byteArray),
+		}
+
+		// Scramble the order of the primitive tags
+		for i := range primitiveTags {
+			j := rand.Intn(i + 1)
+			primitiveTags[i], primitiveTags[j] = primitiveTags[j], primitiveTags[i]
 		}
 
 		listTag := ListTag([]Tag{
