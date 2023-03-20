@@ -1,6 +1,7 @@
 package packet
 
 import (
+	"bytes"
 	"github.com/camdenorrb/minecraftPackets/javaEdition/common"
 )
 
@@ -12,5 +13,5 @@ type CompressedPacket struct {
 type Packet struct {
 	Length common.VarInt
 	ID     common.VarInt
-	Data   []byte
+	Data   bytes.Buffer
 }

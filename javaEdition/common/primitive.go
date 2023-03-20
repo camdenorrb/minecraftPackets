@@ -12,6 +12,27 @@ const VarContinueBit = 0x80
 
 type VarInt int32
 
+func (i VarInt) ByteLength() int {
+
+	currentValue := uint32(i)
+
+	var length int
+
+	for {
+
+		length++
+
+		if currentValue&^VarSegmentBits == 0 {
+			break
+		}
+
+		currentValue >>= 7
+
+	}
+
+	return length
+}
+
 func (i VarInt) Encode() []byte {
 
 	currentValue := uint32(i)
@@ -57,6 +78,27 @@ func DecodeVarInt(input []byte) (*int32, error) {
 }
 
 type VarLong int64
+
+func (l VarLong) ByteLength() int {
+
+	currentValue := uint64(l)
+
+	var length int
+
+	for {
+
+		length++
+
+		if currentValue&^VarSegmentBits == 0 {
+			break
+		}
+
+		currentValue >>= 7
+
+	}
+
+	return length
+}
 
 func (l VarLong) Encode() []byte {
 

@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func FuzzVarInt(f *testing.F) {
+func FuzzVarInt_Encode_Decode(f *testing.F) {
 	f.Add(0)
 	f.Add(math.MinInt32)
 	f.Add(math.MaxInt32)
@@ -21,7 +21,20 @@ func FuzzVarInt(f *testing.F) {
 	})
 }
 
-func FuzzVarLong(f *testing.F) {
+func FuzzVarInt_ByteLength(f *testing.F) {
+	f.Add(0)
+	f.Add(math.MinInt32)
+	f.Add(math.MaxInt32)
+	f.Fuzz(func(t *testing.T, i int) {
+		expected := VarInt(i).ByteLength()
+		encoded := VarInt(i).Encode()
+		if len(encoded) != expected {
+			t.Errorf("Expected %d, got %d", expected, len(encoded))
+		}
+	})
+}
+
+func FuzzVarLong_Encode_Decode(f *testing.F) {
 	f.Add(0)
 	f.Add(math.MinInt64)
 	f.Add(math.MaxInt64)
@@ -33,6 +46,19 @@ func FuzzVarLong(f *testing.F) {
 		}
 		if *decoded != int64(i) {
 			t.Errorf("Expected %d, got %d", i, *decoded)
+		}
+	})
+}
+
+func FuzzVarLong_ByteLength(f *testing.F) {
+	f.Add(0)
+	f.Add(math.MinInt64)
+	f.Add(math.MaxInt64)
+	f.Fuzz(func(t *testing.T, i int) {
+		expected := VarLong(i).ByteLength()
+		encoded := VarLong(i).Encode()
+		if len(encoded) != expected {
+			t.Errorf("Expected %d, got %d", expected, len(encoded))
 		}
 	})
 }
