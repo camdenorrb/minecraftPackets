@@ -1,0 +1,23 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: test-bedrock
+    image: golang:alpine
+    commands:
+      - cd bedrockEdition
+      - go build
+      - go test -v
+  - name: test-java
+    image: golang:alpine
+    commands:
+      - cd javaEdition
+      - go build
+      - go test -v
+  - name: test-nbt
+    image: golang:alpine
+    commands:
+      - cd nbt
+      - go build
+      - go test -v
