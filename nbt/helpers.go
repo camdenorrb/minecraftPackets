@@ -20,6 +20,10 @@ func writeBytes(writer io.ByteWriter, data []byte) error {
 
 func readNBytes(reader *bytes.Reader, n int) ([]byte, error) {
 
+	if n == 0 {
+		return nil, nil
+	}
+
 	data := make([]byte, n)
 
 	amount, err := reader.Read(data)

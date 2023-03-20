@@ -10,9 +10,15 @@ import (
 
 func FuzzEncodeNBT_All(f *testing.F) {
 
-	f.Add("MeowName", byte(1), int16(2), int32(3), int64(4), float32(5), float64(6), "MeowString", []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, "SubName")
+	f.Add("MeowName", byte(1), int16(2), int32(3), int64(4), float32(5), float64(6), "MeowString", []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, "SubName", true)
+	f.Add("NameMeow", byte(6), int16(5), int32(4), int64(3), float32(2), float64(1), "StringMeow", []byte{10, 9, 8, 7, 6, 5, 4, 3, 2, 1}, "SubName", false)
 
-	f.Fuzz(func(t *testing.T, name string, byteNum byte, shortNum int16, intNum int32, longNum int64, floatNum float32, doubleNum float64, stringTag string, byteArray []byte, subName string) {
+	f.Fuzz(func(t *testing.T, name string, byteNum byte, shortNum int16, intNum int32, longNum int64, floatNum float32, doubleNum float64, stringTag string, byteArray []byte, subName string, bigEndian bool) {
+
+		endian := LittleEndian
+		if bigEndian {
+			endian = BigEndian
+		}
 
 		primitiveTags := []Tag{
 			ByteTag(byteNum),
@@ -55,41 +61,29 @@ func FuzzEncodeNBT_All(f *testing.F) {
 		nbt.Tags = append(nbt.Tags, primitiveTags...)
 
 		output := bytes.Buffer{}
-		err := nbt.PushToWriter(&output, BigEndian, true)
-		if err != nil {
-			t.Fatal(err)
-		}
+		err := nbt.PushToWriter(&output, endian, true)
+		assert.NoError(t, err)
 
 		reader := bytes.NewReader(output.Bytes())
-		parsedNBT, err := readNBT(reader, BigEndian)
-		if err != nil {
-			t.Error(err)
-		}
+		parsedNBT, err := readNBT(reader, endian)
+		assert.NoError(t, err)
 
 		// Validate that the NBT we read back is the same as the one we wrote
-		if nbt.Name != parsedNBT.Name {
-			t.Errorf("Expected Name to be %s, got %s", nbt.Name, parsedNBT.Name)
-		}
-
-		if len(nbt.Tags) != len(parsedNBT.Tags) {
-			t.Errorf("Expected Tags length to be %d, got %d", len(nbt.Tags), len(parsedNBT.Tags))
-		}
+		assert.Equal(t, nbt.Name, parsedNBT.Name)
+		assert.Len(t, nbt.Tags, len(parsedNBT.Tags))
 
 		for i, tag := range nbt.Tags {
 
 			testOutput := bytes.Buffer{}
 
-			err := tag.PushToWriter(&testOutput, BigEndian, true)
-			if err != nil {
-				return
-			}
+			err := tag.PushToWriter(&testOutput, endian, true)
+			assert.NoError(t, err)
 
 			testOutput2 := bytes.Buffer{}
-			err = parsedNBT.Tags[i].PushToWriter(&testOutput2, BigEndian, true)
+			err = parsedNBT.Tags[i].PushToWriter(&testOutput2, endian, true)
+			assert.NoError(t, err)
 
-			if !bytes.Equal(testOutput.Bytes(), testOutput2.Bytes()) {
-				t.Errorf("Expected Tag %d to be %v, got %v", i, testOutput.Bytes(), testOutput2.Bytes())
-			}
+			assert.EqualValues(t, testOutput.Bytes(), testOutput2.Bytes())
 		}
 	})
 }
@@ -242,11 +236,9 @@ func FuzzListTag_Single_Byte(f *testing.F) {
 
 		assert.Equal(t, expectedBytes, testOutput.Bytes(), "Expected equal bytes")
 
-		//reader := bytes.NewReader(testOutput.Bytes())
 		testOutputBytes := testOutput.Bytes()
 		assert.Equal(t, byte(0x09), testOutputBytes[0], "Expected List tag")
 		assert.Equal(t, byte(0x01), testOutputBytes[1], "Expected Byte tag list type")
-		// Write size
 		lengthReader := bytes.NewReader(testOutputBytes[2 : 2+4])
 		actualLength, err := readInt(lengthReader, endian)
 		assert.NoError(t, err)
@@ -257,7 +249,6 @@ func FuzzListTag_Single_Byte(f *testing.F) {
 		parsedListTag, err := readListTag(reader, endian)
 		assert.NoError(t, err)
 
-		// Validate that the NBT is the same
 		assert.Len(t, listTag, len(parsedListTag))
 	})
 }

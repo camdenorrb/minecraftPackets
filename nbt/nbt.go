@@ -20,7 +20,8 @@ const (
 
 type Tag interface {
 	ID() uint8
-	Size() int                                                                 // Total size in bytes including the tag ID
+	Size() int // Total size in bytes including the tag ID
+	//TODO: String() string                                                            // Returns a string representation of the tag
 	PushToWriter(writer io.ByteWriter, endian Endian, includeTagID bool) error // Pushes the tag to the writer
 }
 
