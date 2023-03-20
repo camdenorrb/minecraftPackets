@@ -12,11 +12,12 @@ steps:
   - name: test-java
     image: golang:alpine
     commands:
-      - apk add build-base
+      - apk add build-base # Adds gcc
       - cd javaEdition
       - go test -v ./...
   - name: test-nbt
     image: golang:alpine
     commands:
+      - apk add build-base # Adds gcc
       - cd nbt
       - go test -v ./...
