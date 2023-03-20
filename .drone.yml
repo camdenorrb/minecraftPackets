@@ -13,7 +13,7 @@ steps:
     image: golang:alpine
     commands:
       - cd javaEdition
-      - go test -v javaEdition
+      - go test -v github.com/camdenorrb/minecraftPackets/javaEdition
   - name: test-nbt
     image: golang:alpine
     commands:
