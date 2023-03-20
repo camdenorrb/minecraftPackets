@@ -1,4 +1,4 @@
-package protocol
+package common
 
 // Version is a type that represents the version of the protocol.
 type Version uint16
