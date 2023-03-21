@@ -65,7 +65,7 @@ func (n *NBT) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID boo
 		}
 	}
 
-	err := writeUShort(writer, uint16(len(n.Name)), endian)
+	err := writeUInt16(writer, uint16(len(n.Name)), endian)
 	if err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to write compound name length")
 	}
@@ -103,7 +103,7 @@ func readNBT(reader *bytes.Reader, endian Endian) (*NBT, error) {
 
 func readCompound(reader *bytes.Reader, endian Endian) (*NBT, error) {
 
-	nameLength, err := readUShort(reader, endian)
+	nameLength, err := readUint16(reader, endian)
 	if err != nil {
 		return nil, errorx.IllegalState.Wrap(err, "failed to read compound name length")
 	}
@@ -148,38 +148,38 @@ func readTag(reader *bytes.Reader, tagID uint8, endian Endian) (Tag, error) {
 		}
 		return ByteTag(byteValue), nil
 	case 2:
-		shortValue, err := readShort(reader, endian)
+		shortValue, err := readInt16(reader, endian)
 		if err != nil {
 			return nil, errorx.IllegalState.Wrap(err, "failed to read short tag")
 		}
 		return ShortTag(shortValue), nil
 	case 3:
-		intValue, err := readInt(reader, endian)
+		intValue, err := readInt32(reader, endian)
 		if err != nil {
 			return nil, errorx.IllegalState.Wrap(err, "failed to read int tag")
 		}
 		return IntTag(intValue), nil
 	case 4:
-		longValue, err := readLong(reader, endian)
+		longValue, err := readInt64(reader, endian)
 		if err != nil {
 			return nil, errorx.IllegalState.Wrap(err, "failed to read long tag")
 		}
 		return LongTag(longValue), nil
 	case 5:
-		floatValue, err := readFloat(reader, endian)
+		floatValue, err := readFloat32(reader, endian)
 		if err != nil {
 			return nil, errorx.IllegalState.Wrap(err, "failed to read float tag")
 		}
 		return FloatTag(floatValue), nil
 	case 6:
-		doubleValue, err := readDouble(reader, endian)
+		doubleValue, err := readFloat64(reader, endian)
 		if err != nil {
 			return nil, errorx.IllegalState.Wrap(err, "failed to read double tag")
 		}
 		return DoubleTag(doubleValue), nil
 	case 7:
 
-		length, err := readInt(reader, endian)
+		length, err := readInt32(reader, endian)
 		if err != nil {
 			return nil, errorx.IllegalState.Wrap(err, "failed to read byte array length")
 		}
@@ -193,7 +193,7 @@ func readTag(reader *bytes.Reader, tagID uint8, endian Endian) (Tag, error) {
 
 	case 8:
 
-		length, err := readShort(reader, endian)
+		length, err := readInt16(reader, endian)
 		if err != nil {
 			return nil, errorx.IllegalState.Wrap(err, "failed to read string length")
 		}
@@ -321,7 +321,7 @@ func (s ShortTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID
 		}
 	}
 
-	err := writeShort(writer, int16(s), endian)
+	err := writeInt16(writer, int16(s), endian)
 	if err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to write short")
 	}
@@ -361,7 +361,7 @@ func (i IntTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID b
 		}
 	}
 
-	err := writeInt(writer, int32(i), endian)
+	err := writeInt32(writer, int32(i), endian)
 	if err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to write int")
 	}
@@ -401,7 +401,7 @@ func (l LongTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID 
 		}
 	}
 
-	err := writeLong(writer, int64(l), endian)
+	err := writeInt64(writer, int64(l), endian)
 	if err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to write long")
 	}
@@ -441,7 +441,7 @@ func (f FloatTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID
 		}
 	}
 
-	err := writeFloat(writer, float32(f), endian)
+	err := writeFloat32(writer, float32(f), endian)
 	if err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to write float")
 	}
@@ -481,7 +481,7 @@ func (d DoubleTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagI
 		}
 	}
 
-	err := writeDouble(writer, float64(d), endian)
+	err := writeFloat64(writer, float64(d), endian)
 	if err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to write double")
 	}
@@ -522,7 +522,7 @@ func (b ByteArrayTag) PushToWriter(writer io.ByteWriter, endian Endian, includeT
 		}
 	}
 
-	err := writeInt(writer, int32(len(b)), endian)
+	err := writeInt32(writer, int32(len(b)), endian)
 	if err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to write byte array length")
 	}
@@ -570,7 +570,7 @@ func (s StringTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagI
 
 	asBytes := []byte(s)
 
-	err := writeUShort(writer, uint16(len(asBytes)), endian)
+	err := writeUInt16(writer, uint16(len(asBytes)), endian)
 	if err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to write string length")
 	}
@@ -630,7 +630,7 @@ func (l ListTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID 
 		return errorx.IllegalState.Wrap(err, "failed to write tag id for list type")
 	}
 
-	err = writeInt(writer, int32(len(l)), endian)
+	err = writeInt32(writer, int32(len(l)), endian)
 	if err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to write length of list")
 	}
@@ -657,7 +657,7 @@ func readListTag(reader *bytes.Reader, endian Endian) (ListTag, error) {
 		return nil, errorx.IllegalState.Wrap(err, "failed to tag id for list type")
 	}
 
-	length, err := readInt(reader, endian)
+	length, err := readInt32(reader, endian)
 	if err != nil {
 		return nil, errorx.IllegalState.Wrap(err, "failed to length of list")
 	}
@@ -706,13 +706,13 @@ func (i IntArrayTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTa
 		}
 	}
 
-	err := writeInt(writer, int32(len(i)), endian)
+	err := writeInt32(writer, int32(len(i)), endian)
 	if err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to length of int array length")
 	}
 
 	for _, v := range i {
-		err := writeInt(writer, v, endian)
+		err := writeInt32(writer, v, endian)
 		if err != nil {
 			return errorx.IllegalState.Wrap(err, "failed to write int array")
 		}
@@ -723,14 +723,14 @@ func (i IntArrayTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTa
 
 func readIntArrayTag(reader *bytes.Reader, endian Endian) (IntArrayTag, error) {
 
-	length, err := readInt(reader, endian)
+	length, err := readInt32(reader, endian)
 	if err != nil {
 		return nil, errorx.IllegalState.Wrap(err, "failed to read length of int array")
 	}
 
 	var array IntArrayTag
 	for i := 0; i < int(length); i++ {
-		v, err := readInt(reader, endian)
+		v, err := readInt32(reader, endian)
 		if err != nil {
 			return nil, errorx.IllegalState.Wrap(err, "failed to read int array")
 		}
@@ -773,13 +773,13 @@ func (l LongArrayTag) PushToWriter(writer io.ByteWriter, endian Endian, includeT
 		}
 	}
 
-	err := writeInt(writer, int32(len(l)), endian)
+	err := writeInt32(writer, int32(len(l)), endian)
 	if err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to length of long array")
 	}
 
 	for _, v := range l {
-		err := writeLong(writer, v, endian)
+		err := writeInt64(writer, v, endian)
 		if err != nil {
 			return errorx.IllegalState.Wrap(err, "failed to write long array")
 		}
@@ -790,14 +790,14 @@ func (l LongArrayTag) PushToWriter(writer io.ByteWriter, endian Endian, includeT
 
 func readLongArrayTag(reader *bytes.Reader, endian Endian) (LongArrayTag, error) {
 
-	length, err := readInt(reader, endian)
+	length, err := readInt32(reader, endian)
 	if err != nil {
 		return nil, errorx.IllegalState.Wrap(err, "failed to read length of long array")
 	}
 
 	var array LongArrayTag
 	for i := 0; i < int(length); i++ {
-		v, err := readLong(reader, endian)
+		v, err := readInt64(reader, endian)
 		if err != nil {
 			return nil, errorx.IllegalState.Wrap(err, "failed to read long array")
 		}

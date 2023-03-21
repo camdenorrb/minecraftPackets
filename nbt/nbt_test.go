@@ -136,6 +136,11 @@ func FuzzEncodeSubNBT_Byte(f *testing.F) {
 
 	f.Fuzz(func(t *testing.T, name, subName string, byteNum byte, bigEndian bool) {
 
+		endian := LittleEndian
+		if bigEndian {
+			endian = BigEndian
+		}
+
 		subNBT := NBT{
 			Name: subName,
 			Tags: []Tag{ByteTag(byteNum)},
@@ -144,11 +149,6 @@ func FuzzEncodeSubNBT_Byte(f *testing.F) {
 		nbt := NBT{
 			Name: name,
 			Tags: []Tag{&subNBT},
-		}
-
-		endian := LittleEndian
-		if bigEndian {
-			endian = BigEndian
 		}
 
 		testOutput := bytes.Buffer{}
@@ -199,6 +199,8 @@ func FuzzListTag_Single_Byte(f *testing.F) {
 		testOutput := bytes.Buffer{}
 		err := listTag.PushToWriter(&testOutput, endian, includeTagID)
 		assert.NoError(t, err)
+
+		assert.Equal(t, listTag.Size(includeTagID), len(testOutput.Bytes()))
 
 		expectedByteBuffer := NewByteBufferWithNames()
 		if includeTagID {
@@ -274,7 +276,7 @@ func (b *ByteBufferWithNames) WriteInt16(t *testing.T, i int16, name string, end
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
 	}
 
-	assert.NoError(t, writeShort(b.Buffer, i, endian))
+	assert.NoError(t, writeInt16(b.Buffer, i, endian))
 }
 
 func (b *ByteBufferWithNames) WriteUInt16(t *testing.T, i uint16, name string, endian Endian) {
@@ -283,7 +285,7 @@ func (b *ByteBufferWithNames) WriteUInt16(t *testing.T, i uint16, name string, e
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
 	}
 
-	assert.NoError(t, writeUShort(b.Buffer, i, endian))
+	assert.NoError(t, writeUInt16(b.Buffer, i, endian))
 }
 
 func (b *ByteBufferWithNames) WriteInt32(t *testing.T, i int32, name string, endian Endian) {
@@ -292,7 +294,7 @@ func (b *ByteBufferWithNames) WriteInt32(t *testing.T, i int32, name string, end
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
 	}
 
-	assert.NoError(t, writeInt(b.Buffer, i, endian))
+	assert.NoError(t, writeInt32(b.Buffer, i, endian))
 }
 
 func (b *ByteBufferWithNames) WriteUInt32(t *testing.T, i uint32, name string, endian Endian) {
@@ -301,7 +303,7 @@ func (b *ByteBufferWithNames) WriteUInt32(t *testing.T, i uint32, name string, e
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
 	}
 
-	assert.NoError(t, writeUInt(b.Buffer, i, endian))
+	assert.NoError(t, writeUInt32(b.Buffer, i, endian))
 }
 
 func (b *ByteBufferWithNames) WriteInt64(t *testing.T, i int64, name string, endian Endian) {
@@ -310,7 +312,7 @@ func (b *ByteBufferWithNames) WriteInt64(t *testing.T, i int64, name string, end
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
 	}
 
-	assert.NoError(t, writeLong(b.Buffer, i, endian))
+	assert.NoError(t, writeInt64(b.Buffer, i, endian))
 }
 
 func (b *ByteBufferWithNames) WriteUInt64(t *testing.T, i uint64, name string, endian Endian) {
@@ -319,7 +321,7 @@ func (b *ByteBufferWithNames) WriteUInt64(t *testing.T, i uint64, name string, e
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
 	}
 
-	assert.NoError(t, writeULong(b.Buffer, i, endian))
+	assert.NoError(t, writeUInt64(b.Buffer, i, endian))
 }
 
 func (b *ByteBufferWithNames) WriteFloat32(t *testing.T, f float32, name string, endian Endian) {
@@ -328,7 +330,7 @@ func (b *ByteBufferWithNames) WriteFloat32(t *testing.T, f float32, name string,
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
 	}
 
-	assert.NoError(t, writeFloat(b.Buffer, f, endian))
+	assert.NoError(t, writeFloat32(b.Buffer, f, endian))
 }
 
 func (b *ByteBufferWithNames) WriteFloat64(t *testing.T, f float64, name string, endian Endian) {
@@ -337,7 +339,7 @@ func (b *ByteBufferWithNames) WriteFloat64(t *testing.T, f float64, name string,
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
 	}
 
-	assert.NoError(t, writeDouble(b.Buffer, f, endian))
+	assert.NoError(t, writeFloat64(b.Buffer, f, endian))
 }
 
 func (b *ByteBufferWithNames) WriteBytes(t *testing.T, array []byte, name string) {

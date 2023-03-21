@@ -47,7 +47,7 @@ func FuzzReadNBytes(f *testing.F) {
 	})
 }
 
-func FuzzReadShort(f *testing.F) {
+func FuzzReadInt16(f *testing.F) {
 
 	f.Add(int16(0), false)
 	f.Add(int16(1), true)
@@ -70,14 +70,14 @@ func FuzzReadShort(f *testing.F) {
 
 		reader := bytes.NewReader(data)
 
-		actualShort, err := readShort(reader, endian)
+		actualShort, err := readInt16(reader, endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, short, actualShort)
 	})
 }
 
-func FuzzReadUShort(f *testing.F) {
+func FuzzReadUInt16(f *testing.F) {
 
 	f.Add(uint16(0), false)
 	f.Add(uint16(1), true)
@@ -100,14 +100,14 @@ func FuzzReadUShort(f *testing.F) {
 
 		reader := bytes.NewReader(data)
 
-		actualShort, err := readUShort(reader, endian)
+		actualShort, err := readUint16(reader, endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, short, actualShort)
 	})
 }
 
-func FuzzReadInt(f *testing.F) {
+func FuzzReadInt32(f *testing.F) {
 
 	f.Add(int32(0), false)
 	f.Add(int32(1), true)
@@ -130,14 +130,14 @@ func FuzzReadInt(f *testing.F) {
 
 		reader := bytes.NewReader(data)
 
-		actualInt, err := readInt(reader, endian)
+		actualInt, err := readInt32(reader, endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, i, actualInt)
 	})
 }
 
-func FuzzReadUInt(f *testing.F) {
+func FuzzReadUInt32(f *testing.F) {
 
 	f.Add(uint32(0), false)
 	f.Add(uint32(1), true)
@@ -160,14 +160,14 @@ func FuzzReadUInt(f *testing.F) {
 
 		reader := bytes.NewReader(data)
 
-		actualInt, err := readUInt(reader, endian)
+		actualInt, err := readUInt32(reader, endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, i, actualInt)
 	})
 }
 
-func FuzzReadLong(f *testing.F) {
+func FuzzReadInt64(f *testing.F) {
 
 	f.Add(int64(0), false)
 	f.Add(int64(1), true)
@@ -190,14 +190,14 @@ func FuzzReadLong(f *testing.F) {
 
 		reader := bytes.NewReader(data)
 
-		actualLong, err := readLong(reader, endian)
+		actualLong, err := readInt64(reader, endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, l, actualLong)
 	})
 }
 
-func FuzzReadULong(f *testing.F) {
+func FuzzReadUInt64(f *testing.F) {
 
 	f.Add(uint64(0), false)
 	f.Add(uint64(1), true)
@@ -220,14 +220,14 @@ func FuzzReadULong(f *testing.F) {
 
 		reader := bytes.NewReader(data)
 
-		actualLong, err := readULong(reader, endian)
+		actualLong, err := readUInt64(reader, endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, l, actualLong)
 	})
 }
 
-func FuzzReadFloat(f *testing.F) {
+func FuzzReadFloat32(f *testing.F) {
 
 	f.Add(float32(0), false)
 	f.Add(float32(1), true)
@@ -252,14 +252,14 @@ func FuzzReadFloat(f *testing.F) {
 
 		reader := bytes.NewReader(data)
 
-		actualFloat, err := readFloat(reader, endian)
+		actualFloat, err := readFloat32(reader, endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, f32, actualFloat)
 	})
 }
 
-func FuzzReadDouble(f *testing.F) {
+func FuzzReadFloat64(f *testing.F) {
 
 	f.Add(float64(0), false)
 	f.Add(float64(1), true)
@@ -284,14 +284,14 @@ func FuzzReadDouble(f *testing.F) {
 
 		reader := bytes.NewReader(data)
 
-		actualDouble, err := readDouble(reader, endian)
+		actualDouble, err := readFloat64(reader, endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, f64, actualDouble)
 	})
 }
 
-func FuzzWriteShort(f *testing.F) {
+func FuzzWriteInt16(f *testing.F) {
 
 	f.Add(int16(0), false)
 	f.Add(int16(1), true)
@@ -313,14 +313,14 @@ func FuzzWriteShort(f *testing.F) {
 		}
 
 		buffer := new(bytes.Buffer)
-		err := writeShort(buffer, s, endian)
+		err := writeInt16(buffer, s, endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, expected, buffer.Bytes())
 	})
 }
 
-func FuzzWriteUShort(f *testing.F) {
+func FuzzWriteUInt16(f *testing.F) {
 
 	f.Add(uint16(0), false)
 	f.Add(uint16(1), true)
@@ -342,14 +342,14 @@ func FuzzWriteUShort(f *testing.F) {
 		}
 
 		buffer := new(bytes.Buffer)
-		err := writeUShort(buffer, s, endian)
+		err := writeUInt16(buffer, s, endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, expected, buffer.Bytes())
 	})
 }
 
-func FuzzWriteInt(f *testing.F) {
+func FuzzWriteInt32(f *testing.F) {
 
 	f.Add(int32(0), false)
 	f.Add(int32(1), true)
@@ -371,14 +371,14 @@ func FuzzWriteInt(f *testing.F) {
 		}
 
 		buffer := new(bytes.Buffer)
-		err := writeInt(buffer, i, endian)
+		err := writeInt32(buffer, i, endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, expected, buffer.Bytes())
 	})
 }
 
-func FuzzWriteUInt(f *testing.F) {
+func FuzzWriteUInt32(f *testing.F) {
 
 	f.Add(uint32(0), false)
 	f.Add(uint32(1), true)
@@ -400,14 +400,14 @@ func FuzzWriteUInt(f *testing.F) {
 		}
 
 		buffer := new(bytes.Buffer)
-		err := writeUInt(buffer, i, endian)
+		err := writeUInt32(buffer, i, endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, expected, buffer.Bytes())
 	})
 }
 
-func FuzzWriteLong(f *testing.F) {
+func FuzzWriteInt64(f *testing.F) {
 
 	f.Add(int64(0), false)
 	f.Add(int64(1), true)
@@ -429,14 +429,14 @@ func FuzzWriteLong(f *testing.F) {
 		}
 
 		buffer := new(bytes.Buffer)
-		err := writeLong(buffer, l, endian)
+		err := writeInt64(buffer, l, endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, expected, buffer.Bytes())
 	})
 }
 
-func FuzzWriteULong(f *testing.F) {
+func FuzzWriteUInt64(f *testing.F) {
 
 	f.Add(uint64(0), false)
 	f.Add(uint64(1), true)
@@ -458,14 +458,14 @@ func FuzzWriteULong(f *testing.F) {
 		}
 
 		buffer := new(bytes.Buffer)
-		err := writeULong(buffer, l, endian)
+		err := writeUInt64(buffer, l, endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, expected, buffer.Bytes())
 	})
 }
 
-func FuzzWriteFloat(f *testing.F) {
+func FuzzWriteFloat32(f *testing.F) {
 
 	f.Add(float32(0), false)
 	f.Add(float32(1), true)
@@ -489,14 +489,14 @@ func FuzzWriteFloat(f *testing.F) {
 		}
 
 		buffer := new(bytes.Buffer)
-		err := writeFloat(buffer, f32, endian)
+		err := writeFloat32(buffer, f32, endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, expected, buffer.Bytes())
 	})
 }
 
-func FuzzWriteDouble(f *testing.F) {
+func FuzzWriteFloat64(f *testing.F) {
 
 	f.Add(float64(0), false)
 	f.Add(float64(1), true)
@@ -520,7 +520,7 @@ func FuzzWriteDouble(f *testing.F) {
 		}
 
 		buffer := new(bytes.Buffer)
-		err := writeDouble(buffer, f64, endian)
+		err := writeFloat64(buffer, f64, endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, expected, buffer.Bytes())

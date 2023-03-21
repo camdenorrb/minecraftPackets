@@ -37,7 +37,7 @@ func readNBytes(reader *bytes.Reader, n int) ([]byte, error) {
 	return data, nil
 }
 
-func readShort(reader *bytes.Reader, endian Endian) (int16, error) {
+func readInt16(reader *bytes.Reader, endian Endian) (int16, error) {
 
 	data, err := readNBytes(reader, 2)
 	if err != nil {
@@ -51,7 +51,7 @@ func readShort(reader *bytes.Reader, endian Endian) (int16, error) {
 	return int16(data[0]) | int16(data[1])<<8, nil
 }
 
-func readUShort(reader *bytes.Reader, endian Endian) (uint16, error) {
+func readUint16(reader *bytes.Reader, endian Endian) (uint16, error) {
 
 	data, err := readNBytes(reader, 2)
 	if err != nil {
@@ -65,7 +65,7 @@ func readUShort(reader *bytes.Reader, endian Endian) (uint16, error) {
 	return binary.LittleEndian.Uint16(data), nil
 }
 
-func readInt(reader *bytes.Reader, endian Endian) (int32, error) {
+func readInt32(reader *bytes.Reader, endian Endian) (int32, error) {
 
 	data, err := readNBytes(reader, 4)
 	if err != nil {
@@ -79,7 +79,7 @@ func readInt(reader *bytes.Reader, endian Endian) (int32, error) {
 	return int32(data[0]) | int32(data[1])<<8 | int32(data[2])<<16 | int32(data[3])<<24, nil
 }
 
-func readUInt(reader *bytes.Reader, endian Endian) (uint32, error) {
+func readUInt32(reader *bytes.Reader, endian Endian) (uint32, error) {
 
 	data, err := readNBytes(reader, 4)
 	if err != nil {
@@ -93,7 +93,7 @@ func readUInt(reader *bytes.Reader, endian Endian) (uint32, error) {
 	return binary.LittleEndian.Uint32(data), nil
 }
 
-func readLong(reader *bytes.Reader, endian Endian) (int64, error) {
+func readInt64(reader *bytes.Reader, endian Endian) (int64, error) {
 
 	data, err := readNBytes(reader, 8)
 	if err != nil {
@@ -109,7 +109,7 @@ func readLong(reader *bytes.Reader, endian Endian) (int64, error) {
 		int64(data[4])<<32 | int64(data[5])<<40 | int64(data[6])<<48 | int64(data[7])<<56, nil
 }
 
-func readULong(reader *bytes.Reader, endian Endian) (uint64, error) {
+func readUInt64(reader *bytes.Reader, endian Endian) (uint64, error) {
 
 	data, err := readNBytes(reader, 8)
 	if err != nil {
@@ -123,7 +123,7 @@ func readULong(reader *bytes.Reader, endian Endian) (uint64, error) {
 	return binary.LittleEndian.Uint64(data), nil
 }
 
-func readFloat(reader *bytes.Reader, endian Endian) (float32, error) {
+func readFloat32(reader *bytes.Reader, endian Endian) (float32, error) {
 
 	data, err := readNBytes(reader, 4)
 	if err != nil {
@@ -137,7 +137,7 @@ func readFloat(reader *bytes.Reader, endian Endian) (float32, error) {
 	return math.Float32frombits(binary.LittleEndian.Uint32(data)), nil
 }
 
-func readDouble(reader *bytes.Reader, endian Endian) (float64, error) {
+func readFloat64(reader *bytes.Reader, endian Endian) (float64, error) {
 
 	data, err := readNBytes(reader, 8)
 	if err != nil {
@@ -151,7 +151,7 @@ func readDouble(reader *bytes.Reader, endian Endian) (float64, error) {
 	return math.Float64frombits(binary.LittleEndian.Uint64(data)), nil
 }
 
-func writeShort(writer io.ByteWriter, value int16, endian Endian) error {
+func writeInt16(writer io.ByteWriter, value int16, endian Endian) error {
 
 	var err error
 
@@ -168,7 +168,7 @@ func writeShort(writer io.ByteWriter, value int16, endian Endian) error {
 	return nil
 }
 
-func writeUShort(writer io.ByteWriter, value uint16, endian Endian) error {
+func writeUInt16(writer io.ByteWriter, value uint16, endian Endian) error {
 
 	var err error
 
@@ -185,7 +185,7 @@ func writeUShort(writer io.ByteWriter, value uint16, endian Endian) error {
 	return nil
 }
 
-func writeInt(writer io.ByteWriter, value int32, endian Endian) error {
+func writeInt32(writer io.ByteWriter, value int32, endian Endian) error {
 
 	var err error
 
@@ -202,7 +202,7 @@ func writeInt(writer io.ByteWriter, value int32, endian Endian) error {
 	return nil
 }
 
-func writeUInt(writer io.ByteWriter, value uint32, endian Endian) error {
+func writeUInt32(writer io.ByteWriter, value uint32, endian Endian) error {
 
 	var err error
 
@@ -219,7 +219,7 @@ func writeUInt(writer io.ByteWriter, value uint32, endian Endian) error {
 	return nil
 }
 
-func writeLong(writer io.ByteWriter, value int64, endian Endian) error {
+func writeInt64(writer io.ByteWriter, value int64, endian Endian) error {
 
 	var err error
 
@@ -238,7 +238,7 @@ func writeLong(writer io.ByteWriter, value int64, endian Endian) error {
 	return nil
 }
 
-func writeULong(writer io.ByteWriter, value uint64, endian Endian) error {
+func writeUInt64(writer io.ByteWriter, value uint64, endian Endian) error {
 
 	var err error
 
@@ -257,7 +257,7 @@ func writeULong(writer io.ByteWriter, value uint64, endian Endian) error {
 	return nil
 }
 
-func writeFloat(writer io.ByteWriter, value float32, endian Endian) error {
+func writeFloat32(writer io.ByteWriter, value float32, endian Endian) error {
 
 	asUint := math.Float32bits(value)
 
@@ -276,7 +276,7 @@ func writeFloat(writer io.ByteWriter, value float32, endian Endian) error {
 	return nil
 }
 
-func writeDouble(writer io.ByteWriter, value float64, endian Endian) error {
+func writeFloat64(writer io.ByteWriter, value float64, endian Endian) error {
 
 	asUint := math.Float64bits(value)
 
