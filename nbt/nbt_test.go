@@ -65,6 +65,8 @@ func FuzzEncodeNBT_All(f *testing.F) {
 		err := nbt.PushToWriter(&output, endian, true)
 		assert.NoError(t, err)
 
+		assert.Equal(t, nbt.Size(true), output.Len())
+
 		reader := bytes.NewReader(output.Bytes())
 		parsedNBT, err := readNBT(reader, endian)
 		assert.NoError(t, err)
@@ -153,6 +155,8 @@ func FuzzEncodeSubNBT_Byte(f *testing.F) {
 		err := nbt.PushToWriter(&testOutput, endian, true)
 		assert.NoError(t, err)
 
+		assert.Equal(t, nbt.Size(true), len(testOutput.Bytes()))
+
 		expectedByteBuffer := NewByteBufferWithNames()
 		expectedByteBuffer.WriteByte(t, 0xa, "Compound Tag")
 		expectedByteBuffer.WriteUInt16(t, uint16(len([]byte(name))), "Name Length", endian)
@@ -206,12 +210,12 @@ func FuzzListTag_Single_Byte(f *testing.F) {
 
 		expectedByteBuffer.Validate(t, testOutput.Bytes())
 
-		startIndex := 1
+		startOfListIndex := 1
 		if !includeTagID {
-			startIndex = 0
+			startOfListIndex = 0
 		}
 
-		reader := bytes.NewReader(testOutput.Bytes()[startIndex:])
+		reader := bytes.NewReader(testOutput.Bytes()[startOfListIndex:])
 		parsedListTag, err := readListTag(reader, endian)
 		assert.NoError(t, err)
 
@@ -236,8 +240,10 @@ func (b *ByteBufferWithNames) Validate(t *testing.T, actual []byte) {
 
 	assert.Len(t, b.names, len(actual), "Expected equal number of names and bytes")
 
-	fmt.Println("Expected:", b.Buffer.Bytes())
-	fmt.Println("Actual:  ", actual)
+	if len(b.Buffer.Bytes()) != len(actual) {
+		fmt.Println("Expected:", b.Buffer.Bytes())
+		fmt.Println("Actual:  ", actual)
+	}
 
 	for i := 0; i < len(actual); i++ {
 		assert.Equal(t, bufferBytes[i], actual[i], "Expected equal bytes at index "+strconv.Itoa(i)+" ["+b.names[i]+"]")

@@ -20,7 +20,7 @@ const (
 
 type Tag interface {
 	ID() uint8
-	Size() int // Total size in bytes including the tag ID
+	Size(includeTagID bool) int // Total size in bytes
 	//TODO: String() string                                                            // Returns a string representation of the tag
 	PushToWriter(writer io.ByteWriter, endian Endian, includeTagID bool) error // Pushes the tag to the writer
 }
@@ -37,15 +37,22 @@ func (n *NBT) ID() uint8 {
 	return 10
 }
 
-func (n *NBT) Size() int {
+func (n *NBT) Size(includeTagID bool) int {
 
 	size := 0
-	size += 2 // Name size
-	size += 1 // Tag ID size
+
+	if includeTagID {
+		size++ // CompoundTag ID
+	}
+
+	size += 2                   // Name Length
+	size += len([]byte(n.Name)) // Name
 
 	for _, tag := range n.Tags {
-		size += tag.Size()
+		size += tag.Size(true)
 	}
+
+	size += 1 // End tag
 
 	return size
 }
@@ -218,9 +225,16 @@ func (e EndTag) ID() uint8 {
 	return 0
 }
 
-func (e EndTag) Size() int {
-	// Data bytes + tag ID size
-	return 0 + 1
+func (e EndTag) Size(includeTagID bool) int {
+
+	size := 0
+
+	if includeTagID {
+		size += 1
+	}
+
+	// tag ID + Data bytes
+	return size + 0
 }
 
 func (e EndTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID bool) error {
@@ -245,9 +259,17 @@ func (b ByteTag) ID() uint8 {
 	return 1
 }
 
-func (b ByteTag) Size() int {
-	// Data bytes + tag ID size
-	return 1 + 1
+func (b ByteTag) Size(includeTagID bool) int {
+
+	size := 0
+
+	if includeTagID {
+		size++ // ByteTag ID
+	}
+
+	size++ // Data bytes
+
+	return size
 }
 
 func (b ByteTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID bool) error {
@@ -277,9 +299,17 @@ func (s ShortTag) ID() uint8 {
 	return 2
 }
 
-func (s ShortTag) Size() int {
-	// Data bytes + tag ID size
-	return 2 + 1
+func (s ShortTag) Size(includeTagID bool) int {
+
+	size := 0
+
+	if includeTagID {
+		size++ // ShortTag ID
+	}
+
+	size += 2 // Data bytes
+
+	return size
 }
 
 func (s ShortTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID bool) error {
@@ -309,9 +339,17 @@ func (i IntTag) ID() uint8 {
 	return 3
 }
 
-func (i IntTag) Size() int {
-	// Data bytes + tag ID size
-	return 4 + 1
+func (i IntTag) Size(includeTagID bool) int {
+
+	size := 0
+
+	if includeTagID {
+		size++ // IntTag ID
+	}
+
+	size += 4 // Data bytes
+
+	return size
 }
 
 func (i IntTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID bool) error {
@@ -341,9 +379,17 @@ func (l LongTag) ID() uint8 {
 	return 4
 }
 
-func (l LongTag) Size() int {
-	// Data bytes + tag ID size
-	return 8 + 1
+func (l LongTag) Size(includeTagID bool) int {
+
+	size := 0
+
+	if includeTagID {
+		size++ // LongTag ID
+	}
+
+	size += 8 // Data bytes
+
+	return size
 }
 
 func (l LongTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID bool) error {
@@ -373,9 +419,17 @@ func (f FloatTag) ID() uint8 {
 	return 5
 }
 
-func (f FloatTag) Size() int {
-	// Data bytes + tag ID size
-	return 4 + 1
+func (f FloatTag) Size(includeTagID bool) int {
+
+	size := 0
+
+	if includeTagID {
+		size++ // FloatTag ID
+	}
+
+	size += 4 // FloatTag Data
+
+	return size
 }
 
 func (f FloatTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID bool) error {
@@ -405,8 +459,17 @@ func (d DoubleTag) ID() uint8 {
 	return 6
 }
 
-func (d DoubleTag) Size() int {
-	return 8
+func (d DoubleTag) Size(includeTagID bool) int {
+
+	size := 0
+
+	if includeTagID {
+		size++ // DoubleTag ID
+	}
+
+	size += 8 // DoubleTag Data
+
+	return size
 }
 
 func (d DoubleTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID bool) error {
@@ -436,9 +499,18 @@ func (b ByteArrayTag) ID() uint8 {
 	return 7
 }
 
-func (b ByteArrayTag) Size() int {
-	// Data bytes + tag ID size + name size (short)
-	return len(b) + 1 + 2
+func (b ByteArrayTag) Size(includeTagID bool) int {
+
+	size := 0
+
+	if includeTagID {
+		size++ // ByteArrayTag ID
+	}
+
+	size += 4      // length (int32)
+	size += len(b) // data
+
+	return size
 }
 
 func (b ByteArrayTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID bool) error {
@@ -473,9 +545,18 @@ func (s StringTag) ID() uint8 {
 	return 8
 }
 
-func (s StringTag) Size() int {
-	// Data bytes + tag ID size + length (short)
-	return len(s) + 1 + 2
+func (s StringTag) Size(includeTagID bool) int {
+
+	size := 0
+
+	if includeTagID {
+		size++ // String tag ID
+	}
+
+	size += 2              // String length (u16)
+	size += len([]byte(s)) // String length
+
+	return size
 }
 
 func (s StringTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID bool) error {
@@ -512,16 +593,22 @@ func (l ListTag) ID() uint8 {
 	return 9
 }
 
-func (l ListTag) Size() int {
+func (l ListTag) Size(includeTagID bool) int {
 
 	size := 0
 
-	for _, tag := range l {
-		size += tag.Size()
+	if includeTagID {
+		size++ // List Tag ID
 	}
 
-	// Entry Tags size + Tag ID size + length (int)
-	return size + 1 + 4
+	size++    // Entry Tag ID
+	size += 4 // length (i32)
+
+	for _, tag := range l {
+		size += tag.Size(false)
+	}
+
+	return size
 }
 
 func (l ListTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID bool) error {
@@ -596,9 +683,18 @@ func (i IntArrayTag) ID() uint8 {
 	return 11
 }
 
-func (i IntArrayTag) Size() int {
-	// Data bytes + tag ID size + length (int)
-	return len(i)*4 + 1 + 4
+func (i IntArrayTag) Size(includeTagID bool) int {
+
+	size := 0
+
+	if includeTagID {
+		size++
+	}
+
+	size += 4          // length (int)
+	size += len(i) * 4 // data
+
+	return size
 }
 
 func (i IntArrayTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID bool) error {
@@ -654,9 +750,18 @@ func (l LongArrayTag) ID() uint8 {
 	return 12
 }
 
-func (l LongArrayTag) Size() int {
-	// Data bytes + tag ID size + length (int)
-	return len(l)*8 + 1 + 4
+func (l LongArrayTag) Size(includeTagID bool) int {
+
+	size := 0
+
+	if includeTagID {
+		size++ // LongArrayTag ID
+	}
+
+	size += 4          // length (i32)
+	size += len(l) * 8 // data
+
+	return size
 }
 
 func (l LongArrayTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID bool) error {
