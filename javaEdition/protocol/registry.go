@@ -25,7 +25,7 @@ func (r RegistryCache) RegistryFor(bound common.Bound, version common.Version) c
 func RegistryFor(bound common.Bound, version common.Version) common.PacketRegistry {
 
 	switch version {
-	case common.Version_1_8:
+	case common.Version_1_19:
 		return version119.Registry(bound)
 	}
 

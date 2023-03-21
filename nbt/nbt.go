@@ -28,7 +28,14 @@ type Tag interface {
 // NBT We use NBT to represent Compound
 type NBT struct {
 	Name string
-	Tags []Tag
+	Tags map[string]Tag
+}
+
+func NewNBT(name string) *NBT {
+	return &NBT{
+		Name: name,
+		Tags: make(map[string]Tag),
+	}
 }
 
 // region Compound
@@ -65,12 +72,7 @@ func (n *NBT) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID boo
 		}
 	}
 
-	err := writeUInt16(writer, uint16(len(n.Name)), endian)
-	if err != nil {
-		return errorx.IllegalState.Wrap(err, "failed to write compound name length")
-	}
-
-	err = writeBytes(writer, []byte(n.Name))
+	err := writeString(writer, n.Name, endian)
 	if err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to write compound name")
 	}
@@ -103,19 +105,19 @@ func readNBT(reader *bytes.Reader, endian Endian) (*NBT, error) {
 
 func readCompound(reader *bytes.Reader, endian Endian) (*NBT, error) {
 
-	nameLength, err := readUint16(reader, endian)
-	if err != nil {
-		return nil, errorx.IllegalState.Wrap(err, "failed to read compound name length")
-	}
-
-	nameBytes, err := readNBytes(reader, int(nameLength))
+	name, err := readString(reader, endian)
 	if err != nil {
 		return nil, errorx.IllegalState.Wrap(err, "failed to read compound name")
 	}
 
-	nbt := NBT{Name: string(nameBytes)}
+	nbt := NewNBT(name)
 
 	for {
+
+		name, err := readString(reader, endian)
+		if err != nil {
+			return nil, errorx.IllegalState.Wrap(err, "failed to read tag name")
+		}
 
 		tagID, err := reader.ReadByte()
 		if err != nil {
@@ -129,10 +131,11 @@ func readCompound(reader *bytes.Reader, endian Endian) (*NBT, error) {
 		if err != nil {
 			return nil, errorx.IllegalState.Wrap(err, "failed to read tag")
 		}
-		nbt.Tags = append(nbt.Tags, tag)
+
+		nbt.Tags[name] = tag
 	}
 
-	return &nbt, nil
+	return nbt, nil
 }
 
 // endregion Compound
@@ -568,14 +571,7 @@ func (s StringTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagI
 		}
 	}
 
-	asBytes := []byte(s)
-
-	err := writeUInt16(writer, uint16(len(asBytes)), endian)
-	if err != nil {
-		return errorx.IllegalState.Wrap(err, "failed to write string length")
-	}
-
-	err = writeBytes(writer, asBytes)
+	err := writeString(writer, string(s), endian)
 	if err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to write string")
 	}

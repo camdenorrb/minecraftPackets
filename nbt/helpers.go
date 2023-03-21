@@ -151,6 +151,21 @@ func readFloat64(reader *bytes.Reader, endian Endian) (float64, error) {
 	return math.Float64frombits(binary.LittleEndian.Uint64(data)), nil
 }
 
+func readString(reader *bytes.Reader, endian Endian) (string, error) {
+
+	length, err := readUint16(reader, endian)
+	if err != nil {
+		return "", errorx.IllegalState.Wrap(err, "failed to read string length")
+	}
+
+	data, err := readNBytes(reader, int(length))
+	if err != nil {
+		return "", errorx.IllegalState.Wrap(err, "failed to read string")
+	}
+
+	return string(data), nil
+}
+
 func writeInt16(writer io.ByteWriter, value int16, endian Endian) error {
 
 	var err error
@@ -291,6 +306,22 @@ func writeFloat64(writer io.ByteWriter, value float64, endian Endian) error {
 
 	if err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to write double")
+	}
+
+	return nil
+}
+
+// WriteString writes a string to the writer.
+// First, the length of the string is written as a uint32.
+// Then, the string is written as a sequence of bytes.
+func writeString(writer io.ByteWriter, value string, endian Endian) error {
+
+	if err := writeUInt32(writer, uint32(len(value)), endian); err != nil {
+		return errorx.IllegalState.Wrap(err, "failed to write string length")
+	}
+
+	if err := writeBytes(writer, []byte(value)); err != nil {
+		return errorx.IllegalState.Wrap(err, "failed to write string")
 	}
 
 	return nil
