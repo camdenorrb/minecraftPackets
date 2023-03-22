@@ -316,7 +316,7 @@ func writeFloat64(writer io.ByteWriter, value float64, endian Endian) error {
 // Then, the string is written as a sequence of bytes.
 func writeString(writer io.ByteWriter, value string, endian Endian) error {
 
-	if err := writeUInt32(writer, uint32(len(value)), endian); err != nil {
+	if err := writeUInt16(writer, uint16(len(value)), endian); err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to write string length")
 	}
 

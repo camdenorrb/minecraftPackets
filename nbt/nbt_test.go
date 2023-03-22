@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/stretchr/testify/assert"
-	"math/rand"
+	"sort"
 	"strconv"
 	"testing"
 )
@@ -21,21 +21,15 @@ func FuzzEncodeNBT_All(f *testing.F) {
 			endian = BigEndian
 		}
 
-		primitiveTags := []Tag{
-			ByteTag(byteNum),
-			ShortTag(shortNum),
-			IntTag(intNum),
-			LongTag(longNum),
-			FloatTag(floatNum),
-			DoubleTag(doubleNum),
-			StringTag(stringTag),
-			ByteArrayTag(byteArray),
-		}
-
-		// Scramble the order of the primitive tags
-		for i := range primitiveTags {
-			j := rand.Intn(i + 1)
-			primitiveTags[i], primitiveTags[j] = primitiveTags[j], primitiveTags[i]
+		primitiveTags := map[string]Tag{
+			"Byte":      ByteTag(byteNum),
+			"Short":     ShortTag(shortNum),
+			"Int":       IntTag(intNum),
+			"Long":      LongTag(longNum),
+			"Float":     FloatTag(floatNum),
+			"Double":    DoubleTag(doubleNum),
+			"String":    StringTag(stringTag),
+			"ByteArray": ByteArrayTag(byteArray),
 		}
 
 		listTag := ListTag([]Tag{
@@ -48,18 +42,22 @@ func FuzzEncodeNBT_All(f *testing.F) {
 
 		subNBT := NBT{
 			Name: subName,
-			Tags: primitiveTags,
+			Tags: map[string]Tag{},
 		}
 
 		nbt := NBT{
 			Name: name,
-			Tags: []Tag{
-				&subNBT,
-				listTag,
+			Tags: map[string]Tag{
+				//"SubNBT":  &subNBT,
+				"ListTag": listTag,
 			},
 		}
 
-		nbt.Tags = append(nbt.Tags, primitiveTags...)
+		// Add all the primitive tags to the NBT
+		for name, tag := range primitiveTags {
+			nbt.Tags[name] = tag
+			subNBT.Tags[name] = tag
+		}
 
 		output := bytes.Buffer{}
 		err := nbt.PushToWriter(&output, endian, true)
@@ -75,19 +73,7 @@ func FuzzEncodeNBT_All(f *testing.F) {
 		assert.Equal(t, nbt.Name, parsedNBT.Name)
 		assert.Len(t, nbt.Tags, len(parsedNBT.Tags))
 
-		for i, tag := range nbt.Tags {
-
-			testOutput := bytes.Buffer{}
-
-			err := tag.PushToWriter(&testOutput, endian, true)
-			assert.NoError(t, err)
-
-			testOutput2 := bytes.Buffer{}
-			err = parsedNBT.Tags[i].PushToWriter(&testOutput2, endian, true)
-			assert.NoError(t, err)
-
-			assert.EqualValues(t, testOutput.Bytes(), testOutput2.Bytes())
-		}
+		validateEqualTagBytes(t, &nbt, parsedNBT, endian, true)
 	})
 }
 
@@ -110,7 +96,7 @@ func FuzzEncodeNBT(f *testing.F) {
 		err := nbt.PushToWriter(&testOutput, endian, true)
 		assert.NoError(t, err)
 
-		expectedByteBuffer := NewByteBufferWithNames()
+		expectedByteBuffer := newByteBufferWithNames()
 		expectedByteBuffer.WriteByte(t, 0xa, "Compound tag")
 		expectedByteBuffer.WriteUInt16(t, uint16(len([]byte(name))), "Name length", endian)
 		expectedByteBuffer.WriteBytes(t, []byte(name), "Name")
@@ -143,12 +129,12 @@ func FuzzEncodeSubNBT_Byte(f *testing.F) {
 
 		subNBT := NBT{
 			Name: subName,
-			Tags: []Tag{ByteTag(byteNum)},
+			Tags: map[string]Tag{"Byte": ByteTag(byteNum)},
 		}
 
 		nbt := NBT{
 			Name: name,
-			Tags: []Tag{&subNBT},
+			Tags: map[string]Tag{"SubNBT": &subNBT},
 		}
 
 		testOutput := bytes.Buffer{}
@@ -157,14 +143,14 @@ func FuzzEncodeSubNBT_Byte(f *testing.F) {
 
 		assert.Equal(t, nbt.Size(true), len(testOutput.Bytes()))
 
-		expectedByteBuffer := NewByteBufferWithNames()
+		expectedByteBuffer := newByteBufferWithNames()
 		expectedByteBuffer.WriteByte(t, 0xa, "Compound Tag")
-		expectedByteBuffer.WriteUInt16(t, uint16(len([]byte(name))), "Name Length", endian)
-		expectedByteBuffer.WriteBytes(t, []byte(name), "Name")
+		expectedByteBuffer.WriteString(t, name, endian)
 		expectedByteBuffer.WriteByte(t, 0xa, "Sub Compound Tag")
-		expectedByteBuffer.WriteUInt16(t, uint16(len([]byte(subName))), "Sub Name Length", endian)
-		expectedByteBuffer.WriteBytes(t, []byte(subName), "Sub Name")
+		expectedByteBuffer.WriteString(t, "SubNBT", endian)
+		expectedByteBuffer.WriteString(t, subName, endian)
 		expectedByteBuffer.WriteByte(t, 0x01, "Byte Tag")
+		expectedByteBuffer.WriteString(t, "Byte", endian)
 		expectedByteBuffer.WriteByte(t, byteNum, "Byte Value")
 		expectedByteBuffer.WriteByte(t, 0x00, "Sub End Tag")
 		expectedByteBuffer.WriteByte(t, 0x00, "End Tag")
@@ -202,7 +188,7 @@ func FuzzListTag_Single_Byte(f *testing.F) {
 
 		assert.Equal(t, listTag.Size(includeTagID), len(testOutput.Bytes()))
 
-		expectedByteBuffer := NewByteBufferWithNames()
+		expectedByteBuffer := newByteBufferWithNames()
 		if includeTagID {
 			expectedByteBuffer.WriteByte(t, 0x09, "List Tag")
 		}
@@ -225,18 +211,18 @@ func FuzzListTag_Single_Byte(f *testing.F) {
 	})
 }
 
-type ByteBufferWithNames struct {
+type byteBufferWithNames struct {
 	Buffer *bytes.Buffer
 	names  []string
 }
 
-func NewByteBufferWithNames() *ByteBufferWithNames {
-	return &ByteBufferWithNames{
+func newByteBufferWithNames() *byteBufferWithNames {
+	return &byteBufferWithNames{
 		Buffer: &bytes.Buffer{},
 	}
 }
 
-func (b *ByteBufferWithNames) Validate(t *testing.T, actual []byte) {
+func (b *byteBufferWithNames) Validate(t *testing.T, actual []byte) {
 
 	bufferBytes := b.Buffer.Bytes()
 
@@ -254,7 +240,7 @@ func (b *ByteBufferWithNames) Validate(t *testing.T, actual []byte) {
 	assert.Equal(t, b.Buffer.Bytes(), actual, "Expected equal bytes")
 }
 
-func (b *ByteBufferWithNames) Write(t *testing.T, p []byte, name string) {
+func (b *byteBufferWithNames) Write(t *testing.T, p []byte, name string) {
 
 	for i := 0; i < len(p); i++ {
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
@@ -265,12 +251,12 @@ func (b *ByteBufferWithNames) Write(t *testing.T, p []byte, name string) {
 	assert.Len(t, p, wrote, "Expected to write all bytes")
 }
 
-func (b *ByteBufferWithNames) WriteByte(t *testing.T, c byte, name string) {
+func (b *byteBufferWithNames) WriteByte(t *testing.T, c byte, name string) {
 	b.names = append(b.names, name)
 	assert.NoError(t, b.Buffer.WriteByte(c))
 }
 
-func (b *ByteBufferWithNames) WriteInt16(t *testing.T, i int16, name string, endian Endian) {
+func (b *byteBufferWithNames) WriteInt16(t *testing.T, i int16, name string, endian Endian) {
 
 	for i := 1; i <= 2; i++ {
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
@@ -279,7 +265,7 @@ func (b *ByteBufferWithNames) WriteInt16(t *testing.T, i int16, name string, end
 	assert.NoError(t, writeInt16(b.Buffer, i, endian))
 }
 
-func (b *ByteBufferWithNames) WriteUInt16(t *testing.T, i uint16, name string, endian Endian) {
+func (b *byteBufferWithNames) WriteUInt16(t *testing.T, i uint16, name string, endian Endian) {
 
 	for i := 1; i <= 2; i++ {
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
@@ -288,7 +274,7 @@ func (b *ByteBufferWithNames) WriteUInt16(t *testing.T, i uint16, name string, e
 	assert.NoError(t, writeUInt16(b.Buffer, i, endian))
 }
 
-func (b *ByteBufferWithNames) WriteInt32(t *testing.T, i int32, name string, endian Endian) {
+func (b *byteBufferWithNames) WriteInt32(t *testing.T, i int32, name string, endian Endian) {
 
 	for i := 1; i <= 4; i++ {
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
@@ -297,7 +283,7 @@ func (b *ByteBufferWithNames) WriteInt32(t *testing.T, i int32, name string, end
 	assert.NoError(t, writeInt32(b.Buffer, i, endian))
 }
 
-func (b *ByteBufferWithNames) WriteUInt32(t *testing.T, i uint32, name string, endian Endian) {
+func (b *byteBufferWithNames) WriteUInt32(t *testing.T, i uint32, name string, endian Endian) {
 
 	for i := 1; i <= 4; i++ {
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
@@ -306,7 +292,7 @@ func (b *ByteBufferWithNames) WriteUInt32(t *testing.T, i uint32, name string, e
 	assert.NoError(t, writeUInt32(b.Buffer, i, endian))
 }
 
-func (b *ByteBufferWithNames) WriteInt64(t *testing.T, i int64, name string, endian Endian) {
+func (b *byteBufferWithNames) WriteInt64(t *testing.T, i int64, name string, endian Endian) {
 
 	for i := 1; i <= 8; i++ {
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
@@ -315,7 +301,7 @@ func (b *ByteBufferWithNames) WriteInt64(t *testing.T, i int64, name string, end
 	assert.NoError(t, writeInt64(b.Buffer, i, endian))
 }
 
-func (b *ByteBufferWithNames) WriteUInt64(t *testing.T, i uint64, name string, endian Endian) {
+func (b *byteBufferWithNames) WriteUInt64(t *testing.T, i uint64, name string, endian Endian) {
 
 	for i := 1; i <= 8; i++ {
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
@@ -324,7 +310,7 @@ func (b *ByteBufferWithNames) WriteUInt64(t *testing.T, i uint64, name string, e
 	assert.NoError(t, writeUInt64(b.Buffer, i, endian))
 }
 
-func (b *ByteBufferWithNames) WriteFloat32(t *testing.T, f float32, name string, endian Endian) {
+func (b *byteBufferWithNames) WriteFloat32(t *testing.T, f float32, name string, endian Endian) {
 
 	for i := 1; i <= 4; i++ {
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
@@ -333,7 +319,7 @@ func (b *ByteBufferWithNames) WriteFloat32(t *testing.T, f float32, name string,
 	assert.NoError(t, writeFloat32(b.Buffer, f, endian))
 }
 
-func (b *ByteBufferWithNames) WriteFloat64(t *testing.T, f float64, name string, endian Endian) {
+func (b *byteBufferWithNames) WriteFloat64(t *testing.T, f float64, name string, endian Endian) {
 
 	for i := 1; i <= 8; i++ {
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
@@ -342,7 +328,7 @@ func (b *ByteBufferWithNames) WriteFloat64(t *testing.T, f float64, name string,
 	assert.NoError(t, writeFloat64(b.Buffer, f, endian))
 }
 
-func (b *ByteBufferWithNames) WriteBytes(t *testing.T, array []byte, name string) {
+func (b *byteBufferWithNames) WriteBytes(t *testing.T, array []byte, name string) {
 
 	for i := 0; i < len(array); i++ {
 		b.names = append(b.names, name+" ("+strconv.Itoa(i)+")")
@@ -351,7 +337,68 @@ func (b *ByteBufferWithNames) WriteBytes(t *testing.T, array []byte, name string
 	assert.NoError(t, writeBytes(b.Buffer, array))
 }
 
+func (b *byteBufferWithNames) WriteString(t *testing.T, input string, endian Endian) {
+
+	// Short for length
+	for i := 0; i < 2; i++ {
+		b.names = append(b.names, "length of string '"+input+"' ("+strconv.Itoa(i)+")")
+	}
+
+	for i := 0; i < len([]byte(input)); i++ {
+		b.names = append(b.names, "string '"+input+"' ("+strconv.Itoa(i)+")")
+	}
+
+	assert.NoError(t, writeString(b.Buffer, input, endian))
+}
+
 // Testing helpers
+
+func validateEqualTagBytes(t *testing.T, expected, actual Tag, endian Endian, includeTagID bool) {
+
+	assert.Equal(t, expected.ID(), actual.ID(), "Expected equal tag IDs")
+
+	// If NBT
+	if expected.ID() == 10 {
+
+		expectedNBT := expected.(*NBT)
+		actualNBT := actual.(*NBT)
+
+		// Assert same Tags keys
+
+		var expectedKeys []string
+		for k := range expectedNBT.Tags {
+			expectedKeys = append(expectedKeys, k)
+		}
+
+		var actualKeys []string
+		for k := range actualNBT.Tags {
+			actualKeys = append(actualKeys, k)
+		}
+
+		// Sort both
+		sort.Strings(expectedKeys)
+		sort.Strings(actualKeys)
+
+		assert.Equal(t, expectedKeys, actualKeys, "Expected equal keys in NBT tags")
+
+		for name := range expectedNBT.Tags {
+			validateEqualTagBytes(t, expectedNBT.Tags[name], actualNBT.Tags[name], endian, true)
+		}
+
+		return
+	}
+
+	// Buffers
+	expectedBuffer := bytes.Buffer{}
+	actualBuffer := bytes.Buffer{}
+
+	// Write expected
+	assert.NoError(t, expected.PushToWriter(&expectedBuffer, endian, includeTagID))
+	assert.NoError(t, actual.PushToWriter(&actualBuffer, endian, includeTagID))
+
+	// Assert equal
+	assert.Equal(t, expectedBuffer.Bytes(), actualBuffer.Bytes(), "Expected equal bytes")
+}
 
 func printOutBytesAsHex(byteArray []byte) {
 	for _, b := range byteArray {

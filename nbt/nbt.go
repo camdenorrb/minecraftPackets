@@ -55,7 +55,9 @@ func (n *NBT) Size(includeTagID bool) int {
 	size += 2                   // Name Length
 	size += len([]byte(n.Name)) // Name
 
-	for _, tag := range n.Tags {
+	for name, tag := range n.Tags {
+		size += 2                 // Name Length
+		size += len([]byte(name)) // Name
 		size += tag.Size(true)
 	}
 
@@ -77,8 +79,16 @@ func (n *NBT) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID boo
 		return errorx.IllegalState.Wrap(err, "failed to write compound name")
 	}
 
-	for _, tag := range n.Tags {
-		if err := tag.PushToWriter(writer, endian, true); err != nil {
+	for name, tag := range n.Tags {
+
+		err := writer.WriteByte(tag.ID())
+		if err != nil {
+			return errorx.IllegalState.Wrap(err, "failed to write tag ID")
+		}
+
+		err = writeString(writer, name, endian)
+
+		if err := tag.PushToWriter(writer, endian, false); err != nil {
 			return errorx.IllegalState.Wrap(err, "failed to write tag")
 		}
 	}
@@ -114,17 +124,17 @@ func readCompound(reader *bytes.Reader, endian Endian) (*NBT, error) {
 
 	for {
 
-		name, err := readString(reader, endian)
-		if err != nil {
-			return nil, errorx.IllegalState.Wrap(err, "failed to read tag name")
-		}
-
 		tagID, err := reader.ReadByte()
 		if err != nil {
 			return nil, errorx.IllegalState.Wrap(err, "failed to read tag ID")
 		}
 		if tagID == 0 {
 			break
+		}
+
+		name, err := readString(reader, endian)
+		if err != nil {
+			return nil, errorx.IllegalState.Wrap(err, "failed to read tag name")
 		}
 
 		tag, err := readTag(reader, tagID, endian)

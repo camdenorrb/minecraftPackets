@@ -1,14 +1,8 @@
 package nbt
 
-import (
-	"github.com/joomcode/errorx"
-	"strconv"
-	"strings"
-)
-
 // https://minecraft.fandom.com/wiki/NBT_format#SNBT_format
 
-func ParseSNBT(input string) (Tag, error) {
+/*func ParseSNBT(input string) (Tag, error) {
 	return parseValue(input)
 }
 
@@ -146,10 +140,11 @@ func parseCompound(value string) (NBT, error) {
 	pairs := strings.Split(value, ",")
 
 	// Create the compound
-	compound := NBT{}
+	compound := NewNBT("")
 
 }
 
 func (n *NBT) FormatSNBT() string {
 
 }
+*/
