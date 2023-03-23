@@ -21,6 +21,14 @@ func FuzzEncodeNBT_All(f *testing.F) {
 			endian = BigEndian
 		}
 
+		intArray := []int32{intNum, intNum, intNum, intNum, intNum}
+		longArray := []int64{longNum, longNum, longNum, longNum, longNum}
+
+		int8Array := make([]int8, len(byteArray))
+		for i, b := range byteArray {
+			int8Array[i] = int8(b)
+		}
+
 		primitiveTags := map[string]Tag{
 			"Byte":      ByteTag(byteNum),
 			"Short":     ShortTag(shortNum),
@@ -29,7 +37,9 @@ func FuzzEncodeNBT_All(f *testing.F) {
 			"Float":     FloatTag(floatNum),
 			"Double":    DoubleTag(doubleNum),
 			"String":    StringTag(stringTag),
-			"ByteArray": ByteArrayTag(byteArray),
+			"ByteArray": ByteArrayTag(int8Array),
+			"IntArray":  IntArrayTag(intArray),
+			"LongArray": LongArrayTag(longArray),
 		}
 
 		listTag := ListTag([]Tag{
@@ -48,7 +58,7 @@ func FuzzEncodeNBT_All(f *testing.F) {
 		nbt := NBT{
 			Name: name,
 			Tags: map[string]Tag{
-				//"SubNBT":  &subNBT,
+				"SubNBT":  &subNBT,
 				"ListTag": listTag,
 			},
 		}

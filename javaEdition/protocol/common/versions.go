@@ -38,6 +38,7 @@ const (
 	Version_1_18_1 = 757
 	Version_1_18_2 = 758
 	Version_1_19   = 759
+	Version_1_19_1 = 760
 	Version_1_19_2 = 760
 	Version_1_19_3 = 761
 	Version_1_19_4 = 762

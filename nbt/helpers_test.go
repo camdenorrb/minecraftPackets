@@ -36,7 +36,7 @@ func FuzzReadNBytes(f *testing.F) {
 
 		reader := bytes.NewReader(values)
 
-		nBytes, err := readNBytes(reader, len(values))
+		nBytes, err := readBytes(reader, len(values))
 		assert.NoError(t, err)
 
 		if len(values) == 0 {

@@ -61,7 +61,7 @@ func (n *NBT) Size(includeTagID bool) int {
 		size += tag.Size(true)
 	}
 
-	size += 1 // End tag
+	size++ // End tag
 
 	return size
 }
@@ -197,7 +197,7 @@ func readTag(reader *bytes.Reader, tagID uint8, endian Endian) (Tag, error) {
 			return nil, errorx.IllegalState.Wrap(err, "failed to read byte array length")
 		}
 
-		bytesArray, err := readNBytes(reader, int(length))
+		bytesArray, err := readInt8Array(reader, int(length))
 		if err != nil {
 			return nil, errorx.IllegalState.Wrap(err, "failed to read byte array tag")
 		}
@@ -211,7 +211,7 @@ func readTag(reader *bytes.Reader, tagID uint8, endian Endian) (Tag, error) {
 			return nil, errorx.IllegalState.Wrap(err, "failed to read string length")
 		}
 
-		stringArray, err := readNBytes(reader, int(length))
+		stringArray, err := readBytes(reader, int(length))
 		if err != nil {
 			return nil, errorx.IllegalState.Wrap(err, "failed to read string tag")
 		}
@@ -243,7 +243,7 @@ func (e EndTag) Size(includeTagID bool) int {
 	size := 0
 
 	if includeTagID {
-		size += 1
+		size++
 	}
 
 	// tag ID + Data bytes
@@ -506,7 +506,7 @@ func (d DoubleTag) PushToWriter(writer io.ByteWriter, endian Endian, includeTagI
 
 // region ByteArrayTag
 
-type ByteArrayTag []byte
+type ByteArrayTag []int8
 
 func (b ByteArrayTag) ID() uint8 {
 	return 7
@@ -540,7 +540,7 @@ func (b ByteArrayTag) PushToWriter(writer io.ByteWriter, endian Endian, includeT
 		return errorx.IllegalState.Wrap(err, "failed to write byte array length")
 	}
 
-	err = writeBytes(writer, b)
+	err = writeInt8Array(writer, b)
 	if err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to write byte array")
 	}

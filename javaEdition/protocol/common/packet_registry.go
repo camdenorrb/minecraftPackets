@@ -13,6 +13,7 @@ type packetRegistry struct {
 	PacketToID  map[interface{}]map[State]common.VarInt
 }
 
+// Ideally we would get via something like PacketRegistry.GetPacketID(nil.(Type))
 func NewPacketRegistry() PacketRegistry {
 	return &packetRegistry{
 		KeyToPacket: make(map[State]map[common.VarInt]interface{}),

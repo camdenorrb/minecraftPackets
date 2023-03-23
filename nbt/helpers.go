@@ -18,7 +18,17 @@ func writeBytes(writer io.ByteWriter, data []byte) error {
 	return nil
 }
 
-func readNBytes(reader *bytes.Reader, n int) ([]byte, error) {
+func writeInt8Array(writer io.ByteWriter, data []int8) error {
+	for _, b := range data {
+		err := writer.WriteByte(uint8(b))
+		if err != nil {
+			return errorx.IllegalState.Wrap(err, "failed to write bytes")
+		}
+	}
+	return nil
+}
+
+func readBytes(reader *bytes.Reader, n int) ([]byte, error) {
 
 	if n == 0 {
 		return nil, nil
@@ -37,9 +47,28 @@ func readNBytes(reader *bytes.Reader, n int) ([]byte, error) {
 	return data, nil
 }
 
+func readInt8Array(reader *bytes.Reader, n int) ([]int8, error) {
+
+	if n == 0 {
+		return nil, nil
+	}
+
+	data := make([]int8, n)
+
+	for i := 0; i < n; i++ {
+		b, err := reader.ReadByte()
+		if err != nil {
+			return nil, errorx.IllegalState.Wrap(err, "Failed to read byte")
+		}
+		data[i] = int8(b)
+	}
+
+	return data, nil
+}
+
 func readInt16(reader *bytes.Reader, endian Endian) (int16, error) {
 
-	data, err := readNBytes(reader, 2)
+	data, err := readBytes(reader, 2)
 	if err != nil {
 		return 0, errorx.IllegalState.Wrap(err, "failed to read short")
 	}
@@ -53,7 +82,7 @@ func readInt16(reader *bytes.Reader, endian Endian) (int16, error) {
 
 func readUint16(reader *bytes.Reader, endian Endian) (uint16, error) {
 
-	data, err := readNBytes(reader, 2)
+	data, err := readBytes(reader, 2)
 	if err != nil {
 		return 0, errorx.IllegalState.Wrap(err, "failed to read short")
 	}
@@ -67,7 +96,7 @@ func readUint16(reader *bytes.Reader, endian Endian) (uint16, error) {
 
 func readInt32(reader *bytes.Reader, endian Endian) (int32, error) {
 
-	data, err := readNBytes(reader, 4)
+	data, err := readBytes(reader, 4)
 	if err != nil {
 		return 0, errorx.IllegalState.Wrap(err, "failed to read int")
 	}
@@ -81,7 +110,7 @@ func readInt32(reader *bytes.Reader, endian Endian) (int32, error) {
 
 func readUInt32(reader *bytes.Reader, endian Endian) (uint32, error) {
 
-	data, err := readNBytes(reader, 4)
+	data, err := readBytes(reader, 4)
 	if err != nil {
 		return 0, errorx.IllegalState.Wrap(err, "failed to read uint")
 	}
@@ -95,7 +124,7 @@ func readUInt32(reader *bytes.Reader, endian Endian) (uint32, error) {
 
 func readInt64(reader *bytes.Reader, endian Endian) (int64, error) {
 
-	data, err := readNBytes(reader, 8)
+	data, err := readBytes(reader, 8)
 	if err != nil {
 		return 0, errorx.IllegalState.Wrap(err, "failed to read long")
 	}
@@ -111,7 +140,7 @@ func readInt64(reader *bytes.Reader, endian Endian) (int64, error) {
 
 func readUInt64(reader *bytes.Reader, endian Endian) (uint64, error) {
 
-	data, err := readNBytes(reader, 8)
+	data, err := readBytes(reader, 8)
 	if err != nil {
 		return 0, errorx.IllegalState.Wrap(err, "failed to read long")
 	}
@@ -125,7 +154,7 @@ func readUInt64(reader *bytes.Reader, endian Endian) (uint64, error) {
 
 func readFloat32(reader *bytes.Reader, endian Endian) (float32, error) {
 
-	data, err := readNBytes(reader, 4)
+	data, err := readBytes(reader, 4)
 	if err != nil {
 		return 0, errorx.IllegalState.Wrap(err, "failed to read float")
 	}
@@ -139,7 +168,7 @@ func readFloat32(reader *bytes.Reader, endian Endian) (float32, error) {
 
 func readFloat64(reader *bytes.Reader, endian Endian) (float64, error) {
 
-	data, err := readNBytes(reader, 8)
+	data, err := readBytes(reader, 8)
 	if err != nil {
 		return 0, errorx.IllegalState.Wrap(err, "failed to read double")
 	}
@@ -158,7 +187,7 @@ func readString(reader *bytes.Reader, endian Endian) (string, error) {
 		return "", errorx.IllegalState.Wrap(err, "failed to read string length")
 	}
 
-	data, err := readNBytes(reader, int(length))
+	data, err := readBytes(reader, int(length))
 	if err != nil {
 		return "", errorx.IllegalState.Wrap(err, "failed to read string")
 	}
