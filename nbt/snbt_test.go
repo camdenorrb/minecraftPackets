@@ -79,7 +79,6 @@ func FuzzParseSNBT(f *testing.F) {
 		snbt, err := nbt.FormatSNBT()
 		assert.NoError(t, err)
 
-		fmt.Println(snbt)
 		parsedNBT, err := ParseSNBT(snbt)
 		assert.NoError(t, err)
 
