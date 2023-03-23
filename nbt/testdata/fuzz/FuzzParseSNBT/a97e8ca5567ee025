@@ -1,0 +1,9 @@
+go test fuzz v1
+byte('\x0f')
+int16(2)
+rune('\x05')
+int64(75)
+float32(-38.166668)
+float64(89)
+string("0\\")
+[]byte("0")

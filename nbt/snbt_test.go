@@ -10,6 +10,7 @@ import (
 func FuzzParseSNBT(f *testing.F) {
 
 	f.Add(byte(1), int16(2), int32(3), int64(4), float32(5), float64(6), "MeowString", []byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
+	f.Add(byte(6), int16(5), int32(4), int64(3), float32(2), float64(1), "StringMeow", []byte{10, 9, 8, 7, 6, 5, 4, 3, 2, 1})
 
 	f.Fuzz(func(t *testing.T, byteNum byte, shortNum int16, intNum int32, longNum int64, floatNum float32, doubleNum float64, stringTag string, byteArray []byte) {
 

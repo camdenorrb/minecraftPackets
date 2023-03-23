@@ -1,0 +1,9 @@
+go test fuzz v1
+byte('\x01')
+int16(89)
+rune('W')
+int64(-71)
+float32(-26)
+float64(6)
+string("0000\xa200000")
+[]byte("")
