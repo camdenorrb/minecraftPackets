@@ -1,9 +1,0 @@
-go test fuzz v1
-byte('\x01')
-int16(2)
-rune('\x03')
-int64(4)
-float32(5)
-float64(6)
-string(" ")
-[]byte("0")
