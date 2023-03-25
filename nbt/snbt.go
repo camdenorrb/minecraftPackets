@@ -385,7 +385,7 @@ func validateString(input string) error {
 
 	// Validate every " has a \ before it
 	for i := 0; i < len(text); i++ {
-		if text[i] == '"' && text[i-1] != '\\' {
+		if text[i] == '"' && (i == 0 || text[i-1] != '\\') {
 			return errorx.IllegalState.New("invalid string, no \\ before \": %s", input)
 		}
 	}

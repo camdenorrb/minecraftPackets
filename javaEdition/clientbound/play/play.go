@@ -256,7 +256,7 @@ type ChunkDataAndUpdateLight struct {
 	ChunkZ               int32
 	Heightmaps           nbt.NBT
 	Size                 common.VarInt
-	Data                 []byte
+	Data                 []common.ChunkSection
 	NumOfBlockEntities   common.VarInt
 	BlockEntities        []common.BlockEntity
 	TrustEdges           bool
