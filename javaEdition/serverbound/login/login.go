@@ -1,7 +1,7 @@
 package login
 
 import (
-	"github.com/camdenorrb/minecraftPackets/javaEdition/common"
+	"github.com/camdenorrb/minecraftPackets/javaEdition/v1/common"
 	"github.com/google/uuid"
 )
 

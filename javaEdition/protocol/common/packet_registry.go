@@ -1,6 +1,6 @@
 package common
 
-import "github.com/camdenorrb/minecraftPackets/javaEdition/common"
+import "github.com/camdenorrb/minecraftPackets/javaEdition/v1/common"
 
 type PacketRegistry interface {
 	Register(state State, id common.VarInt, packet interface{})
