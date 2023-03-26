@@ -1,6 +1,6 @@
 package handshake
 
-import "github.com/camdenorrb/minecraftPackets/javaEdition/v1/common"
+import "github.com/camdenorrb/minecraftPackets/javaEdition/common"
 
 type Handshake struct {
 	ProtocolVersion common.VarInt
