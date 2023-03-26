@@ -1,8 +1,8 @@
 package protocol
 
 import (
-	"github.com/camdenorrb/minecraftPackets/javaEdition/protocol/common"
-	version119 "github.com/camdenorrb/minecraftPackets/javaEdition/protocol/version119"
+	"javaEdition/protocol/common"
+	version119 "javaEdition/protocol/version119"
 )
 
 type RegistryCache map[common.Version]map[common.Bound]common.PacketRegistry
