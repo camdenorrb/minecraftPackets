@@ -1,8 +1,8 @@
 package play
 
 import (
+	"github.com/camdenorrb/minecraftPackets/javaEdition/common"
 	"github.com/google/uuid"
-	"javaEdition/common"
 )
 
 type ConfirmTeleportation struct {

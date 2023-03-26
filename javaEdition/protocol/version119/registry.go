@@ -1,14 +1,14 @@
 package version119
 
 import (
-	clientLogin "javaEdition/clientbound/login"
-	clientPlay "javaEdition/clientbound/play"
-	clientStatus "javaEdition/clientbound/status"
-	"javaEdition/protocol/common"
-	serverHandshake "javaEdition/serverbound/handshake"
-	serverLogin "javaEdition/serverbound/login"
-	serverPlay "javaEdition/serverbound/play"
-	serverStatus "javaEdition/serverbound/status"
+	clientLogin "github.com/camdenorrb/minecraftPackets/javaEdition/clientbound/login"
+	clientPlay "github.com/camdenorrb/minecraftPackets/javaEdition/clientbound/play"
+	clientStatus "github.com/camdenorrb/minecraftPackets/javaEdition/clientbound/status"
+	"github.com/camdenorrb/minecraftPackets/javaEdition/protocol/common"
+	serverHandshake "github.com/camdenorrb/minecraftPackets/javaEdition/serverbound/handshake"
+	serverLogin "github.com/camdenorrb/minecraftPackets/javaEdition/serverbound/login"
+	serverPlay "github.com/camdenorrb/minecraftPackets/javaEdition/serverbound/play"
+	serverStatus "github.com/camdenorrb/minecraftPackets/javaEdition/serverbound/status"
 )
 
 func Registry(bound common.Bound) common.PacketRegistry {

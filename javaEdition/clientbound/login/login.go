@@ -1,8 +1,8 @@
 package login
 
 import (
+	"github.com/camdenorrb/minecraftPackets/javaEdition/common"
 	"github.com/google/uuid"
-	"javaEdition/common"
 )
 
 type Disconnect struct {

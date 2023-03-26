@@ -2,7 +2,7 @@ package packet
 
 import (
 	"bytes"
-	"javaEdition/common"
+	"github.com/camdenorrb/minecraftPackets/javaEdition/common"
 )
 
 type CompressedPacket struct {

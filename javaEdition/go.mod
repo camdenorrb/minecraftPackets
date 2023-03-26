@@ -1,4 +1,4 @@
-module javaEdition
+module github.com/camdenorrb/minecraftPackets/javaEdition
 
 go 1.20
 
