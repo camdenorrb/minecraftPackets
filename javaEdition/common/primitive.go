@@ -1,6 +1,7 @@
 package common
 
 import (
+	"bytes"
 	"errors"
 	"regexp"
 )
@@ -54,12 +55,17 @@ func (i VarInt) Encode() []byte {
 	return bytes
 }
 
-func DecodeVarInt(input []byte) (*int32, error) {
+func DecodeVarInt(input *bytes.Buffer) (*int32, error) {
 
 	value := int32(0)
 	position := 0
 
-	for _, currentByte := range input {
+	for {
+
+		currentByte, err := input.ReadByte()
+		if err != nil {
+			return nil, err
+		}
 
 		value |= (int32(currentByte) & VarSegmentBits) << position
 
@@ -122,12 +128,17 @@ func (l VarLong) Encode() []byte {
 
 }
 
-func DecodeVarLong(input []byte) (*int64, error) {
+func DecodeVarLong(input *bytes.Buffer) (*int64, error) {
 
 	value := int64(0)
 	position := 0
 
-	for _, currentByte := range input {
+	for {
+
+		currentByte, err := input.ReadByte()
+		if err != nil {
+			return nil, err
+		}
 
 		value |= (int64(currentByte) & VarSegmentBits) << position
 

@@ -1,6 +1,7 @@
 package common
 
 import (
+	"bytes"
 	"math"
 	"testing"
 )
@@ -10,7 +11,7 @@ func FuzzVarInt_Encode_Decode(f *testing.F) {
 	f.Add(math.MinInt32)
 	f.Add(math.MaxInt32)
 	f.Fuzz(func(t *testing.T, i int) {
-		encoded := VarInt(i).Encode()
+		encoded := bytes.NewBuffer(VarInt(i).Encode())
 		decoded, err := DecodeVarInt(encoded)
 		if err != nil {
 			t.Error(err)
@@ -39,7 +40,7 @@ func FuzzVarLong_Encode_Decode(f *testing.F) {
 	f.Add(math.MinInt64)
 	f.Add(math.MaxInt64)
 	f.Fuzz(func(t *testing.T, i int) {
-		encoded := VarLong(i).Encode()
+		encoded := bytes.NewBuffer(VarLong(i).Encode())
 		decoded, err := DecodeVarLong(encoded)
 		if err != nil {
 			t.Error(err)
