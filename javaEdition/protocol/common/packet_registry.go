@@ -22,6 +22,14 @@ func NewPacketRegistry() PacketRegistry {
 }
 
 func (r *packetRegistry) Register(state State, id common.VarInt, packet interface{}) {
+
+	if r.KeyToPacket[state] == nil {
+		r.KeyToPacket[state] = make(map[common.VarInt]interface{})
+	}
+	if r.PacketToID[packet] == nil {
+		r.PacketToID[packet] = make(map[State]common.VarInt)
+	}
+
 	r.KeyToPacket[state][id] = packet
 	r.PacketToID[packet][state] = id
 }

@@ -22,19 +22,20 @@ func (s MCString) Encode() []byte {
 
 func DecodeMCString(input *bytes.Buffer) (*string, error) {
 
-	length, err := DecodeVarInt(input)
+	lengthVarInt, err := DecodeVarInt(input)
 	if err != nil {
 		return nil, err
 	}
 
-	if input.Len() < int(*length) {
+	length := int(*lengthVarInt)
+
+	if input.Len() < length {
 		return nil, errors.New("input length is less than length")
 	}
 
-	value := input.Next(int(*length))
+	value := string(input.Next(length))
 
-	asString := string(value)
-	return &asString, nil
+	return &value, nil
 }
 
 //endregion
