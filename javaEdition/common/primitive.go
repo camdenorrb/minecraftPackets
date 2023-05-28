@@ -6,6 +6,39 @@ import (
 	"regexp"
 )
 
+//region MCString
+
+type MCString string
+
+func (s MCString) ByteLength() int {
+	length := len([]byte(s))
+	return VarInt(length).ByteLength() + len([]byte(s))
+}
+
+func (s MCString) Encode() []byte {
+	// Length of string bytes + string bytes
+	return append(VarInt(len([]byte(s))).Encode(), []byte(s)...)
+}
+
+func DecodeMCString(input *bytes.Buffer) (*string, error) {
+
+	length, err := DecodeVarInt(input)
+	if err != nil {
+		return nil, err
+	}
+
+	if input.Len() < int(*length) {
+		return nil, errors.New("input length is less than length")
+	}
+
+	value := input.Next(int(*length))
+
+	asString := string(value)
+	return &asString, nil
+}
+
+//endregion
+
 //region Var length integers
 
 const VarSegmentBits = 0x7F
