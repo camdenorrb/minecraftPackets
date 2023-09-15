@@ -89,9 +89,9 @@ func (i VarInt) Encode() []byte {
 	return bytes
 }
 
-func DecodeVarInt(input *bytes.Buffer) (*int32, error) {
+func DecodeVarInt(input *bytes.Buffer) (*VarInt, error) {
 
-	value := int32(0)
+	value := VarInt(0)
 	position := 0
 
 	for {
@@ -162,9 +162,9 @@ func (l VarLong) Encode() []byte {
 
 }
 
-func DecodeVarLong(input *bytes.Buffer) (*int64, error) {
+func DecodeVarLong(input *bytes.Buffer) (*VarLong, error) {
 
-	value := int64(0)
+	value := VarLong(0)
 	position := 0
 
 	for {
