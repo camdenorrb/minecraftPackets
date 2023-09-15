@@ -134,7 +134,7 @@ const (
 
 	// Status
 	ServerBoundStatusRequest ServerBoundPacket = "StatusRequest"
-	ServerBoundStatusPong    ServerBoundPacket = "StatusPong"
+	ServerBoundStatusPing    ServerBoundPacket = "StatusPing"
 
 	// Login
 	ServerBoundLoginStart              ServerBoundPacket = "LoginStart"
