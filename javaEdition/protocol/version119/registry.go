@@ -22,7 +22,7 @@ func clientBound() common.PacketRegistry {
 
 	// Status
 	registry.Register(common.StatusState, 0x00, string(common.ClientBoundStatusResponse))
-	registry.Register(common.StatusState, 0x01, string(common.ClientBoundStatusPing))
+	registry.Register(common.StatusState, 0x01, string(common.ClientBoundStatusPong))
 
 	// Login
 	registry.Register(common.LoginState, 0x00, string(common.ClientBoundLoginDisconnect))

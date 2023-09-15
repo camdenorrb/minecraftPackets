@@ -5,8 +5,8 @@ type ClientBoundPacket string
 const (
 
 	// Status
-	ClientBoundStatusResponse ClientBoundPacket = "Response"
-	ClientBoundStatusPing     ClientBoundPacket = "Ping"
+	ClientBoundStatusResponse ClientBoundPacket = "StatusResponse"
+	ClientBoundStatusPong     ClientBoundPacket = "StatusPong"
 
 	// Login
 	ClientBoundLoginDisconnect        ClientBoundPacket = "Disconnect"
@@ -134,7 +134,7 @@ const (
 
 	// Status
 	ServerBoundStatusRequest ServerBoundPacket = "StatusRequest"
-	ServerBoundStatusPing    ServerBoundPacket = "StatusPing"
+	ServerBoundStatusPong    ServerBoundPacket = "StatusPong"
 
 	// Login
 	ServerBoundLoginStart              ServerBoundPacket = "LoginStart"
