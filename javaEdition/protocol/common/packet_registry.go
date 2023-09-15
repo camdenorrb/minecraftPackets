@@ -3,39 +3,45 @@ package common
 import "github.com/camdenorrb/minecraftPackets/javaEdition/common"
 
 type PacketRegistry interface {
-	Register(state State, id common.VarInt, packet interface{})
-	GetPacket(state State, id common.VarInt) any
+	Register(state State, id common.VarInt, packet string)
+	GetPacket(state State, id common.VarInt) *string
 	GetID(state State, packet interface{}) common.VarInt
 }
 
 type packetRegistry struct {
-	KeyToPacket map[State]map[common.VarInt]interface{}
+	KeyToPacket map[State]map[common.VarInt]*string
 	PacketToID  map[interface{}]map[State]common.VarInt
 }
 
 // Ideally we would get via something like PacketRegistry.GetPacketID(nil.(Type))
 func NewPacketRegistry() PacketRegistry {
 	return &packetRegistry{
-		KeyToPacket: make(map[State]map[common.VarInt]interface{}),
+		KeyToPacket: make(map[State]map[common.VarInt]*string),
 		PacketToID:  make(map[interface{}]map[State]common.VarInt),
 	}
 }
 
-func (r *packetRegistry) Register(state State, id common.VarInt, packet interface{}) {
+func (r *packetRegistry) Register(state State, id common.VarInt, packet string) {
 
 	if r.KeyToPacket[state] == nil {
-		r.KeyToPacket[state] = make(map[common.VarInt]interface{})
+		r.KeyToPacket[state] = make(map[common.VarInt]*string)
 	}
 	if r.PacketToID[packet] == nil {
 		r.PacketToID[packet] = make(map[State]common.VarInt)
 	}
 
-	r.KeyToPacket[state][id] = packet
+	r.KeyToPacket[state][id] = &packet
 	r.PacketToID[packet][state] = id
 }
 
-func (r *packetRegistry) GetPacket(state State, id common.VarInt) any {
-	return r.KeyToPacket[state][id]
+func (r *packetRegistry) GetPacket(state State, id common.VarInt) *string {
+
+	value, exists := r.KeyToPacket[state][id]
+	if !exists {
+		return nil
+	}
+
+	return value
 }
 
 func (r *packetRegistry) GetID(state State, packet interface{}) common.VarInt {
