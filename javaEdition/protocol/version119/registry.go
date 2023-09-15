@@ -153,7 +153,7 @@ func serverBound() common.PacketRegistry {
 
 	// Status
 	registry.Register(common.StatusState, 0x00, string(common.ServerBoundStatusRequest))
-	registry.Register(common.StatusState, 0x01, string(common.ServerBoundStatusPing))
+	registry.Register(common.StatusState, 0x01, string(common.ServerBoundStatusPong))
 
 	// Login
 	registry.Register(common.LoginState, 0x00, string(common.ServerBoundLoginStart))
