@@ -91,7 +91,7 @@ func (i VarInt) Encode() []byte {
 
 func DecodeVarInt(input *bytes.Buffer) (*VarInt, error) {
 
-	value := VarInt(0)
+	value := int32(0)
 	position := 0
 
 	for {
@@ -114,7 +114,8 @@ func DecodeVarInt(input *bytes.Buffer) (*VarInt, error) {
 		}
 	}
 
-	return &value, nil
+	asVarInt := VarInt(value)
+	return &asVarInt, nil
 }
 
 type VarLong int64
@@ -164,7 +165,7 @@ func (l VarLong) Encode() []byte {
 
 func DecodeVarLong(input *bytes.Buffer) (*VarLong, error) {
 
-	value := VarLong(0)
+	value := int64(0)
 	position := 0
 
 	for {
@@ -187,7 +188,8 @@ func DecodeVarLong(input *bytes.Buffer) (*VarLong, error) {
 		}
 	}
 
-	return &value, nil
+	asVarLong := VarLong(value)
+	return &asVarLong, nil
 }
 
 //endregion
