@@ -5,7 +5,7 @@ import "github.com/camdenorrb/minecraftPackets/javaEdition/common"
 type PacketRegistry interface {
 	Register(state State, id common.VarInt, packet string)
 	GetPacket(state State, id common.VarInt) *string
-	GetID(state State, packet string) common.VarInt
+	GetID(state State, packet string) *common.VarInt
 }
 
 type packetRegistry struct {
@@ -44,6 +44,12 @@ func (r *packetRegistry) GetPacket(state State, id common.VarInt) *string {
 	return value
 }
 
-func (r *packetRegistry) GetID(state State, packet string) common.VarInt {
-	return r.PacketToID[packet][state]
+func (r *packetRegistry) GetID(state State, packet string) *common.VarInt {
+
+	value, exists := r.PacketToID[packet][state]
+	if !exists {
+		return nil
+	}
+
+	return &value
 }

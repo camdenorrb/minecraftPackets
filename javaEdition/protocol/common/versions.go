@@ -43,3 +43,5 @@ const (
 	Version_1_19_3 = 761
 	Version_1_19_4 = 762
 )
+
+const Version_Latest = Version_1_19_4
