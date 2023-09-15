@@ -37,7 +37,7 @@ func FuzzVarInt_Encode_Decode(f *testing.F) {
 		encoded := bytes.NewBuffer(VarInt(i).Encode())
 		decoded, err := DecodeVarInt(encoded)
 		assert.NoError(t, err)
-		assert.Equal(t, *decoded, int32(i))
+		assert.Equal(t, *decoded, VarInt(i))
 	})
 }
 
@@ -60,7 +60,7 @@ func FuzzVarLong_Encode_Decode(f *testing.F) {
 		encoded := bytes.NewBuffer(VarLong(i).Encode())
 		decoded, err := DecodeVarLong(encoded)
 		assert.NoError(t, err)
-		assert.Equal(t, *decoded, int64(i))
+		assert.Equal(t, *decoded, VarLong(i))
 	})
 }
 
