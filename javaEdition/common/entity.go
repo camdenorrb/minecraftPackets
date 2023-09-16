@@ -1,10 +1,13 @@
 package common
 
-import "github.com/camdenorrb/minecraftPackets/nbt"
+import (
+	"github.com/camdenorrb/minecraftPackets/nbt"
+	"github.com/camdenorrb/minecraftPackets/primitive"
+)
 
 type BlockEntity struct {
 	PackedXZ byte
 	Y        int16
-	Type     VarInt
+	Type     primitive.VarInt
 	Data     nbt.NBT
 }

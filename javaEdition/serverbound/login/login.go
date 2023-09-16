@@ -1,7 +1,7 @@
 package login
 
 import (
-	"github.com/camdenorrb/minecraftPackets/javaEdition/common"
+	"github.com/camdenorrb/minecraftPackets/primitive"
 	"github.com/google/uuid"
 )
 
@@ -17,7 +17,7 @@ type EncryptionResponse struct {
 }
 
 type PluginResponse struct {
-	MessageID  common.VarInt
+	MessageID  primitive.VarInt
 	Successful bool
 	Data       []byte
 }

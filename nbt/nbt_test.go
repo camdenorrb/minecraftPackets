@@ -1,13 +1,59 @@
 package nbt
 
 import (
+	"bufio"
 	"bytes"
+	"compress/gzip"
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"os"
 	"sort"
 	"strconv"
 	"testing"
 )
+
+func TestNBT_HelloWorld(t *testing.T) {
+
+	helloWorldBytes, err := os.ReadFile("testdata/hello_world.nbt")
+	assert.NoError(t, err)
+
+	nbt, err := readNBT(bufio.NewReader(bytes.NewReader(helloWorldBytes)), BigEndian)
+	assert.NoError(t, err)
+
+	snbt, err := nbt.FormatSNBT()
+	assert.NoError(t, err)
+
+	assert.Equal(t, len(helloWorldBytes), nbt.Size(true))
+	assert.Equal(t, "{name:\"Bananrama\"}", snbt)
+}
+
+func TestNBT_BigTest(t *testing.T) {
+
+	bigNBTBytes, err := os.ReadFile("testdata/bigtest.nbt")
+	assert.NoError(t, err)
+
+	reader, err := gzip.NewReader(bytes.NewReader(bigNBTBytes))
+	assert.NoError(t, err)
+
+	endian := BigEndian
+
+	nbt, err := readNBT(bufio.NewReader(reader), endian)
+	assert.NoError(t, err)
+
+	output := bytes.Buffer{}
+	err = nbt.PushToWriter(&output, endian, true)
+	assert.NoError(t, err)
+
+	parsedNBT, err := readNBT(bufio.NewReader(bytes.NewReader(output.Bytes())), endian)
+	assert.NoError(t, err)
+
+	assert.Equal(t, parsedNBT.Size(true), output.Len())
+	assert.Equal(t, nbt.Size(true), parsedNBT.Size(true))
+	assert.Equal(t, nbt.Size(false), parsedNBT.Size(false))
+	assert.Len(t, nbt.Tags, len(parsedNBT.Tags))
+	validateEqualTagBytes(t, nbt, parsedNBT, endian, true)
+
+}
 
 func FuzzEncodeNBT_All(f *testing.F) {
 
@@ -50,10 +96,7 @@ func FuzzEncodeNBT_All(f *testing.F) {
 			ByteTag(byteNum),
 		})
 
-		subNBT := NBT{
-			Name: subName,
-			Tags: map[string]Tag{},
-		}
+		subNBT := CompoundTag{}
 
 		nbt := NBT{
 			Name: name,
@@ -66,18 +109,19 @@ func FuzzEncodeNBT_All(f *testing.F) {
 		// Add all the primitive tags to the NBT
 		for name, tag := range primitiveTags {
 			nbt.Tags[name] = tag
-			subNBT.Tags[name] = tag
+			subNBT[name] = tag
 		}
 
 		output := bytes.Buffer{}
 		err := nbt.PushToWriter(&output, endian, true)
 		assert.NoError(t, err)
 
-		assert.Equal(t, nbt.Size(true), output.Len())
-
 		reader := bytes.NewReader(output.Bytes())
-		parsedNBT, err := readNBT(reader, endian)
+		parsedNBT, err := readNBT(bufio.NewReader(reader), endian)
 		assert.NoError(t, err)
+
+		validateEqualTagBytes(t, &nbt, parsedNBT, endian, true)
+		assert.Equal(t, nbt.Size(true), output.Len())
 
 		// Validate that the NBT we read back is the same as the one we wrote
 		assert.Equal(t, nbt.Name, parsedNBT.Name)
@@ -115,7 +159,7 @@ func FuzzEncodeNBT(f *testing.F) {
 		expectedByteBuffer.Validate(t, testOutput.Bytes())
 
 		reader := bytes.NewReader(testOutput.Bytes())
-		parsedNBT, err := readNBT(reader, endian)
+		parsedNBT, err := readNBT(bufio.NewReader(reader), endian)
 		assert.NoError(t, err)
 
 		// Validate that the NBT is the same
@@ -137,9 +181,8 @@ func FuzzEncodeSubNBT_Byte(f *testing.F) {
 			endian = BigEndian
 		}
 
-		subNBT := NBT{
-			Name: subName,
-			Tags: map[string]Tag{"Byte": ByteTag(byteNum)},
+		subNBT := CompoundTag{
+			"Byte": ByteTag(byteNum),
 		}
 
 		nbt := NBT{
@@ -158,7 +201,6 @@ func FuzzEncodeSubNBT_Byte(f *testing.F) {
 		expectedByteBuffer.WriteString(t, name, endian)
 		expectedByteBuffer.WriteByte(t, 0xa, "Sub Compound Tag")
 		expectedByteBuffer.WriteString(t, "SubNBT", endian)
-		expectedByteBuffer.WriteString(t, subName, endian)
 		expectedByteBuffer.WriteByte(t, 0x01, "Byte Tag")
 		expectedByteBuffer.WriteString(t, "Byte", endian)
 		expectedByteBuffer.WriteByte(t, byteNum, "Byte Value")
@@ -168,7 +210,7 @@ func FuzzEncodeSubNBT_Byte(f *testing.F) {
 		expectedByteBuffer.Validate(t, testOutput.Bytes())
 
 		reader := bytes.NewReader(testOutput.Bytes())
-		parsedNBT, err := readNBT(reader, endian)
+		parsedNBT, err := readNBT(bufio.NewReader(reader), endian)
 		assert.NoError(t, err)
 
 		// Validate that the NBT is the same
@@ -214,7 +256,7 @@ func FuzzListTag_Single_Byte(f *testing.F) {
 		}
 
 		reader := bytes.NewReader(testOutput.Bytes()[startOfListIndex:])
-		parsedListTag, err := readListTag(reader, endian)
+		parsedListTag, err := readListTag(bufio.NewReader(reader), endian)
 		assert.NoError(t, err)
 
 		assert.Len(t, listTag, len(parsedListTag))
@@ -358,7 +400,7 @@ func (b *byteBufferWithNames) WriteString(t *testing.T, input string, endian End
 		b.names = append(b.names, "string '"+input+"' ("+strconv.Itoa(i)+")")
 	}
 
-	assert.NoError(t, writeString(b.Buffer, input, endian))
+	assert.NoError(t, writeMCString(b.Buffer, input, endian))
 }
 
 // Testing helpers
@@ -367,21 +409,31 @@ func validateEqualTagBytes(t *testing.T, expected, actual Tag, endian Endian, in
 
 	assert.Equal(t, expected.ID(), actual.ID(), "Expected equal tag IDs")
 
-	// If NBT
-	if expected.ID() == 10 {
+	_, isCompound := expected.(*CompoundTag)
+	_, isNBT := expected.(*NBT)
 
-		expectedNBT := expected.(*NBT)
-		actualNBT := actual.(*NBT)
+	// If NBT or Compound
+	if isCompound || isNBT {
+
+		var expectedCompound CompoundTag
+		var actualCompound CompoundTag
+
+		if isCompound {
+			expectedCompound = *expected.(*CompoundTag)
+			actualCompound = *actual.(*CompoundTag)
+		} else {
+			expectedCompound = expected.(*NBT).Tags
+			actualCompound = actual.(*NBT).Tags
+		}
 
 		// Assert same Tags keys
-
 		var expectedKeys []string
-		for k := range expectedNBT.Tags {
+		for k := range expectedCompound {
 			expectedKeys = append(expectedKeys, k)
 		}
 
 		var actualKeys []string
-		for k := range actualNBT.Tags {
+		for k := range actualCompound {
 			actualKeys = append(actualKeys, k)
 		}
 
@@ -391,11 +443,24 @@ func validateEqualTagBytes(t *testing.T, expected, actual Tag, endian Endian, in
 
 		assert.Equal(t, expectedKeys, actualKeys, "Expected equal keys in NBT tags")
 
-		for name := range expectedNBT.Tags {
-			validateEqualTagBytes(t, expectedNBT.Tags[name], actualNBT.Tags[name], endian, true)
+		for name := range expectedCompound {
+			validateEqualTagBytes(t, expectedCompound[name], actualCompound[name], endian, true)
 		}
 
 		return
+	}
+
+	expectedList, isList := expected.(ListTag)
+	actualList, _ := actual.(ListTag)
+
+	if isList && len(expectedList) != 0 {
+		// If compound list, validate each compound
+		if _, isCompound := (expectedList)[0].(*CompoundTag); isCompound {
+			for i := range expectedList {
+				validateEqualTagBytes(t, (expectedList)[i], (actualList)[i], endian, true)
+			}
+			return
+		}
 	}
 
 	// Buffers
@@ -407,7 +472,7 @@ func validateEqualTagBytes(t *testing.T, expected, actual Tag, endian Endian, in
 	assert.NoError(t, actual.PushToWriter(&actualBuffer, endian, includeTagID))
 
 	// Assert equal
-	assert.Equal(t, expectedBuffer.Bytes(), actualBuffer.Bytes(), "Expected equal bytes")
+	assert.Equal(t, expectedBuffer.Bytes(), actualBuffer.Bytes(), "Expected equal bytes, tag: "+strconv.Itoa(int(expected.ID())))
 }
 
 func printOutBytesAsHex(byteArray []byte) {

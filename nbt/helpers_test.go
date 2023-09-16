@@ -1,6 +1,7 @@
 package nbt
 
 import (
+	"bufio"
 	"bytes"
 	"github.com/stretchr/testify/assert"
 	"math"
@@ -36,7 +37,7 @@ func FuzzReadNBytes(f *testing.F) {
 
 		reader := bytes.NewReader(values)
 
-		nBytes, err := readBytes(reader, len(values))
+		nBytes, err := readBytes(bufio.NewReader(reader), len(values))
 		assert.NoError(t, err)
 
 		if len(values) == 0 {
@@ -70,7 +71,7 @@ func FuzzReadInt16(f *testing.F) {
 
 		reader := bytes.NewReader(data)
 
-		actualShort, err := readInt16(reader, endian)
+		actualShort, err := readInt16(bufio.NewReader(reader), endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, short, actualShort)
@@ -100,7 +101,7 @@ func FuzzReadUInt16(f *testing.F) {
 
 		reader := bytes.NewReader(data)
 
-		actualShort, err := readUint16(reader, endian)
+		actualShort, err := readUint16(bufio.NewReader(reader), endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, short, actualShort)
@@ -130,7 +131,7 @@ func FuzzReadInt32(f *testing.F) {
 
 		reader := bytes.NewReader(data)
 
-		actualInt, err := readInt32(reader, endian)
+		actualInt, err := readInt32(bufio.NewReader(reader), endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, i, actualInt)
@@ -160,7 +161,7 @@ func FuzzReadUInt32(f *testing.F) {
 
 		reader := bytes.NewReader(data)
 
-		actualInt, err := readUInt32(reader, endian)
+		actualInt, err := readUInt32(bufio.NewReader(reader), endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, i, actualInt)
@@ -190,7 +191,7 @@ func FuzzReadInt64(f *testing.F) {
 
 		reader := bytes.NewReader(data)
 
-		actualLong, err := readInt64(reader, endian)
+		actualLong, err := readInt64(bufio.NewReader(reader), endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, l, actualLong)
@@ -220,7 +221,7 @@ func FuzzReadUInt64(f *testing.F) {
 
 		reader := bytes.NewReader(data)
 
-		actualLong, err := readUInt64(reader, endian)
+		actualLong, err := readUInt64(bufio.NewReader(reader), endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, l, actualLong)
@@ -252,7 +253,7 @@ func FuzzReadFloat32(f *testing.F) {
 
 		reader := bytes.NewReader(data)
 
-		actualFloat, err := readFloat32(reader, endian)
+		actualFloat, err := readFloat32(bufio.NewReader(reader), endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, f32, actualFloat)
@@ -284,7 +285,7 @@ func FuzzReadFloat64(f *testing.F) {
 
 		reader := bytes.NewReader(data)
 
-		actualDouble, err := readFloat64(reader, endian)
+		actualDouble, err := readFloat64(bufio.NewReader(reader), endian)
 		assert.NoError(t, err)
 
 		assert.Equal(t, f64, actualDouble)

@@ -1,8 +1,11 @@
 package common
 
-import "github.com/google/uuid"
+import (
+	"github.com/camdenorrb/minecraftPackets/primitive"
+	"github.com/google/uuid"
+)
 
-type Hand VarInt
+type Hand primitive.VarInt
 
 const (
 	MainHand Hand = iota
@@ -22,7 +25,7 @@ type PlayerInfoAction struct {
 
 type PlayerInfoActionAddPlayer struct {
 	Name            string
-	PropertiesCount VarInt
+	PropertiesCount primitive.VarInt
 	Properties      []PlayerInfoActionAddPlayerProperty
 }
 
@@ -36,14 +39,14 @@ type PlayerInfoActionAddPlayerProperty struct {
 type PlayerInfoActionUpdateInitializeChat struct {
 	HasSignatureData       bool
 	ChatSessionID          uuid.UUID
-	EncodedPublicKeySize   VarInt
+	EncodedPublicKeySize   primitive.VarInt
 	EncodedPublicKey       []byte
-	PublicKeySignatureSize VarInt
+	PublicKeySignatureSize primitive.VarInt
 	PublicKeySignature     []byte
 }
 
 type PlayerInfoActionUpdateGameMode struct {
-	GameMode VarInt
+	GameMode primitive.VarInt
 }
 
 type PlayerInfoActionUpdateListed struct {
@@ -51,7 +54,7 @@ type PlayerInfoActionUpdateListed struct {
 }
 
 type PlayerInfoActionUpdateLatency struct {
-	Ping VarInt
+	Ping primitive.VarInt
 }
 
 type PlayerInfoActionUpdateDisplayName struct {

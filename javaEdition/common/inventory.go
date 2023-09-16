@@ -1,10 +1,13 @@
 package common
 
-import "github.com/camdenorrb/minecraftPackets/nbt"
+import (
+	"github.com/camdenorrb/minecraftPackets/nbt"
+	"github.com/camdenorrb/minecraftPackets/primitive"
+)
 
 type Slot struct {
 	IsPresent bool
-	ItemID    VarInt
+	ItemID    primitive.VarInt
 	ItemCount byte
 	NBTData   nbt.NBT
 }

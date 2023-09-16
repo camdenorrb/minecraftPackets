@@ -3,6 +3,7 @@ module github.com/camdenorrb/minecraftPackets/nbt
 go 1.20
 
 require (
+	github.com/camdenorrb/minecraftPackets/primitive v1.0.0
 	github.com/joomcode/errorx v1.1.1
 	github.com/stretchr/testify v1.8.4
 )

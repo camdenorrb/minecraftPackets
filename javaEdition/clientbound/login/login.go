@@ -2,6 +2,7 @@ package login
 
 import (
 	"github.com/camdenorrb/minecraftPackets/javaEdition/common"
+	"github.com/camdenorrb/minecraftPackets/primitive"
 	"github.com/google/uuid"
 )
 
@@ -18,16 +19,16 @@ type EncryptionRequest struct {
 type Success struct {
 	UUID            uuid.UUID
 	UserName        string
-	NumOfProperties common.VarInt
+	NumOfProperties primitive.VarInt
 	Properties      []common.SuccessProperty
 }
 
 type SetCompression struct {
-	Threshold common.VarInt
+	Threshold primitive.VarInt
 }
 
 type PluginRequest struct {
-	MessageID common.VarInt
+	MessageID primitive.VarInt
 	Channel   string
 	Data      []byte
 }

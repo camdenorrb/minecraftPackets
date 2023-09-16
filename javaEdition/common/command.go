@@ -1,16 +1,18 @@
 package common
 
+import "github.com/camdenorrb/minecraftPackets/primitive"
+
 // CommandNode is a node in a command tree.
 // Refer to https://wiki.vg/Command_Data
 type CommandNode struct {
 	Flags         byte // TODO: Enum
-	ChildrenCount VarInt
-	Children      []VarInt
-	RedirectNode  *VarInt
+	ChildrenCount primitive.VarInt
+	Children      []primitive.VarInt
+	RedirectNode  *primitive.VarInt
 	Name          *string
-	ParserID      *VarInt
+	ParserID      *primitive.VarInt
 	//Properties    *CommandNodeProperties // TODO: Figure out
-	SuggestionsType *Identifier
+	SuggestionsType *primitive.Identifier
 }
 
 type ChatCommandSignature struct {

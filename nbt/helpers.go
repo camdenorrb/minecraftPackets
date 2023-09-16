@@ -1,8 +1,9 @@
 package nbt
 
 import (
-	"bytes"
+	"bufio"
 	"encoding/binary"
+	"github.com/camdenorrb/minecraftPackets/primitive"
 	"github.com/joomcode/errorx"
 	"io"
 	"math"
@@ -28,7 +29,7 @@ func writeInt8Array(writer io.ByteWriter, data []int8) error {
 	return nil
 }
 
-func readBytes(reader *bytes.Reader, n int) ([]byte, error) {
+func readBytes(reader *bufio.Reader, n int) ([]byte, error) {
 
 	if n == 0 {
 		return nil, nil
@@ -47,7 +48,7 @@ func readBytes(reader *bytes.Reader, n int) ([]byte, error) {
 	return data, nil
 }
 
-func readInt8Array(reader *bytes.Reader, n int) ([]int8, error) {
+func readInt8Array(reader *bufio.Reader, n int) ([]int8, error) {
 
 	if n == 0 {
 		return nil, nil
@@ -66,7 +67,7 @@ func readInt8Array(reader *bytes.Reader, n int) ([]int8, error) {
 	return data, nil
 }
 
-func readInt16(reader *bytes.Reader, endian Endian) (int16, error) {
+func readInt16(reader *bufio.Reader, endian Endian) (int16, error) {
 
 	data, err := readBytes(reader, 2)
 	if err != nil {
@@ -80,7 +81,7 @@ func readInt16(reader *bytes.Reader, endian Endian) (int16, error) {
 	return int16(data[0]) | int16(data[1])<<8, nil
 }
 
-func readUint16(reader *bytes.Reader, endian Endian) (uint16, error) {
+func readUint16(reader *bufio.Reader, endian Endian) (uint16, error) {
 
 	data, err := readBytes(reader, 2)
 	if err != nil {
@@ -94,7 +95,7 @@ func readUint16(reader *bytes.Reader, endian Endian) (uint16, error) {
 	return binary.LittleEndian.Uint16(data), nil
 }
 
-func readInt32(reader *bytes.Reader, endian Endian) (int32, error) {
+func readInt32(reader *bufio.Reader, endian Endian) (int32, error) {
 
 	data, err := readBytes(reader, 4)
 	if err != nil {
@@ -108,7 +109,7 @@ func readInt32(reader *bytes.Reader, endian Endian) (int32, error) {
 	return int32(data[0]) | int32(data[1])<<8 | int32(data[2])<<16 | int32(data[3])<<24, nil
 }
 
-func readUInt32(reader *bytes.Reader, endian Endian) (uint32, error) {
+func readUInt32(reader *bufio.Reader, endian Endian) (uint32, error) {
 
 	data, err := readBytes(reader, 4)
 	if err != nil {
@@ -122,7 +123,7 @@ func readUInt32(reader *bytes.Reader, endian Endian) (uint32, error) {
 	return binary.LittleEndian.Uint32(data), nil
 }
 
-func readInt64(reader *bytes.Reader, endian Endian) (int64, error) {
+func readInt64(reader *bufio.Reader, endian Endian) (int64, error) {
 
 	data, err := readBytes(reader, 8)
 	if err != nil {
@@ -138,7 +139,7 @@ func readInt64(reader *bytes.Reader, endian Endian) (int64, error) {
 		int64(data[4])<<32 | int64(data[5])<<40 | int64(data[6])<<48 | int64(data[7])<<56, nil
 }
 
-func readUInt64(reader *bytes.Reader, endian Endian) (uint64, error) {
+func readUInt64(reader *bufio.Reader, endian Endian) (uint64, error) {
 
 	data, err := readBytes(reader, 8)
 	if err != nil {
@@ -152,7 +153,7 @@ func readUInt64(reader *bytes.Reader, endian Endian) (uint64, error) {
 	return binary.LittleEndian.Uint64(data), nil
 }
 
-func readFloat32(reader *bytes.Reader, endian Endian) (float32, error) {
+func readFloat32(reader *bufio.Reader, endian Endian) (float32, error) {
 
 	data, err := readBytes(reader, 4)
 	if err != nil {
@@ -166,7 +167,7 @@ func readFloat32(reader *bytes.Reader, endian Endian) (float32, error) {
 	return math.Float32frombits(binary.LittleEndian.Uint32(data)), nil
 }
 
-func readFloat64(reader *bytes.Reader, endian Endian) (float64, error) {
+func readFloat64(reader *bufio.Reader, endian Endian) (float64, error) {
 
 	data, err := readBytes(reader, 8)
 	if err != nil {
@@ -180,7 +181,11 @@ func readFloat64(reader *bytes.Reader, endian Endian) (float64, error) {
 	return math.Float64frombits(binary.LittleEndian.Uint64(data)), nil
 }
 
-func readString(reader *bytes.Reader, endian Endian) (string, error) {
+func readVarInt(reader *bufio.Reader) (*primitive.VarInt, error) {
+	return primitive.DecodeVarInt(reader)
+}
+
+func readMCString(reader *bufio.Reader, endian Endian) (string, error) {
 
 	length, err := readUint16(reader, endian)
 	if err != nil {
@@ -188,6 +193,21 @@ func readString(reader *bytes.Reader, endian Endian) (string, error) {
 	}
 
 	data, err := readBytes(reader, int(length))
+	if err != nil {
+		return "", errorx.IllegalState.Wrap(err, "failed to read string")
+	}
+
+	return string(data), nil
+}
+
+func readBedrockMCString(reader *bufio.Reader) (string, error) {
+
+	length, err := readVarInt(reader)
+	if err != nil {
+		return "", errorx.IllegalState.Wrap(err, "failed to read string length")
+	}
+
+	data, err := readBytes(reader, int(*length))
 	if err != nil {
 		return "", errorx.IllegalState.Wrap(err, "failed to read string")
 	}
@@ -339,11 +359,27 @@ func writeFloat64(writer io.ByteWriter, value float64, endian Endian) error {
 
 	return nil
 }
+func writeVarInt(writer io.ByteWriter, value primitive.VarInt) error {
+	return writeBytes(writer, value.Encode())
+}
 
 // WriteString writes a string to the writer.
 // First, the length of the string is written as a uint32.
 // Then, the string is written as a sequence of bytes.
-func writeString(writer io.ByteWriter, value string, endian Endian) error {
+func writeBedrockMCString(writer io.ByteWriter, value string) error {
+
+	if err := writeVarInt(writer, primitive.VarInt(len(value))); err != nil {
+		return errorx.IllegalState.Wrap(err, "failed to write string length")
+	}
+
+	if err := writeBytes(writer, []byte(value)); err != nil {
+		return errorx.IllegalState.Wrap(err, "failed to write string")
+	}
+
+	return nil
+}
+
+func writeMCString(writer io.ByteWriter, value string, endian Endian) error {
 
 	if err := writeUInt16(writer, uint16(len(value)), endian); err != nil {
 		return errorx.IllegalState.Wrap(err, "failed to write string length")

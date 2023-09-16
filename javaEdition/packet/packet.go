@@ -2,16 +2,16 @@ package packet
 
 import (
 	"bytes"
-	"github.com/camdenorrb/minecraftPackets/javaEdition/common"
+	"github.com/camdenorrb/minecraftPackets/primitive"
 )
 
 type CompressedPacket struct {
 	*Packet
-	PacketLength common.VarInt
+	PacketLength primitive.VarInt
 }
 
 type Packet struct {
-	Length common.VarInt
-	ID     common.VarInt
+	Length primitive.VarInt
+	ID     primitive.VarInt
 	Data   bytes.Buffer
 }

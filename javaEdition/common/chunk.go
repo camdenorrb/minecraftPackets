@@ -1,19 +1,21 @@
 package common
 
+import "github.com/camdenorrb/minecraftPackets/primitive"
+
 type SkyLightArray struct {
-	Length VarInt
+	Length primitive.VarInt
 	Data   []byte
 }
 
 type BlockLightArray struct {
-	Length VarInt
+	Length primitive.VarInt
 	Data   []byte
 }
 
 type PalettedContainerStructure struct {
 	BitsPerEntry    uint8
 	Palette         Palette
-	DataArrayLength VarInt
+	DataArrayLength primitive.VarInt
 	DataArray       []int64
 }
 
@@ -24,12 +26,12 @@ type Palette struct {
 }
 
 type SingleValuedPalette struct {
-	Value VarInt
+	Value primitive.VarInt
 }
 
 type IndirectPalette struct {
-	PaletteLength VarInt
-	Palette       []VarInt
+	PaletteLength primitive.VarInt
+	Palette       []primitive.VarInt
 }
 
 type DirectPalette struct{}
