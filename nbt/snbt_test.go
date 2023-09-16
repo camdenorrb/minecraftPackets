@@ -84,7 +84,7 @@ func FuzzParseSNBT(f *testing.F) {
 		nbt := NBT{
 			Name: "",
 			Tags: map[string]Tag{
-				"SubNBT":  &subNBT,
+				"SubNBT":  subNBT,
 				"ListTag": listTag,
 			},
 		}
@@ -101,6 +101,6 @@ func FuzzParseSNBT(f *testing.F) {
 		parsedNBT, err := ParseSNBT(snbt)
 		assert.NoError(t, err)
 
-		assert.Equal(t, &nbt.Tags, parsedNBT.(*CompoundTag))
+		assert.Equal(t, nbt.Tags, parsedNBT.Tags)
 	})
 }

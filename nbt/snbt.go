@@ -11,8 +11,21 @@ import (
 
 // https://minecraft.fandom.com/wiki/NBT_format#SNBT_format
 
-func ParseSNBT(input string) (Tag, error) {
-	return parseValue(input)
+func ParseSNBT(input string) (*NBT, error) {
+	return parseNBT(input)
+}
+
+func parseNBT(input string) (*NBT, error) {
+
+	compound, err := parseCompound(input)
+	if err != nil {
+		return nil, errorx.IllegalState.Wrap(err, "failed to parse compound %s", input)
+	}
+
+	return &NBT{
+		Name: "",
+		Tags: *compound,
+	}, nil
 }
 
 func parseValue(value string) (Tag, error) {
@@ -60,7 +73,13 @@ func parseValue(value string) (Tag, error) {
 
 	// Handle compound
 	if value[0] == '{' && value[len(value)-1] == '}' {
-		return parseCompound(value)
+
+		compound, err := parseCompound(value)
+		if err != nil {
+			return nil, errorx.IllegalState.Wrap(err, "failed to parse compound %s", value)
+		}
+
+		return *compound, nil
 	}
 
 	return nil, errorx.IllegalState.New("invalid value %s", value)
@@ -510,7 +529,7 @@ func formatTag(tag Tag) (string, error) {
 	case 9:
 		return formatList(tag.(ListTag))
 	case 10:
-		return formatCompound(*tag.(*CompoundTag))
+		return formatCompound(tag.(CompoundTag))
 	case 11:
 		return formatIntArray(tag.(IntArrayTag)), nil
 	case 12:

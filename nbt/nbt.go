@@ -295,7 +295,14 @@ func readTag(reader *bufio.Reader, tagID uint8, endian Endian) (Tag, error) {
 	case 9:
 		return readListTag(reader, endian)
 	case 10:
-		return readCompound(reader, endian)
+
+		compound, err := readCompound(reader, endian)
+		if err != nil {
+			return nil, errorx.IllegalState.Wrap(err, "failed to read compound tag")
+		}
+
+		return *compound, nil
+
 	case 11:
 		return readIntArrayTag(reader, endian)
 	case 12:

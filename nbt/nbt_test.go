@@ -100,7 +100,7 @@ func FuzzEncodeNBT_All(f *testing.F) {
 		nbt := NBT{
 			Name: name,
 			Tags: map[string]Tag{
-				"SubNBT":  &subNBT,
+				"SubNBT":  subNBT,
 				"ListTag": listTag,
 			},
 		}
@@ -408,7 +408,7 @@ func validateEqualTagBytes(t *testing.T, expected, actual Tag, endian Endian, in
 
 	assert.Equal(t, expected.ID(), actual.ID(), "Expected equal tag IDs")
 
-	_, isCompound := expected.(*CompoundTag)
+	_, isCompound := expected.(CompoundTag)
 	_, isNBT := expected.(*NBT)
 
 	// If NBT or Compound
@@ -418,8 +418,8 @@ func validateEqualTagBytes(t *testing.T, expected, actual Tag, endian Endian, in
 		var actualCompound CompoundTag
 
 		if isCompound {
-			expectedCompound = *expected.(*CompoundTag)
-			actualCompound = *actual.(*CompoundTag)
+			expectedCompound = expected.(CompoundTag)
+			actualCompound = actual.(CompoundTag)
 		} else {
 			expectedCompound = expected.(*NBT).Tags
 			actualCompound = actual.(*NBT).Tags
@@ -454,7 +454,7 @@ func validateEqualTagBytes(t *testing.T, expected, actual Tag, endian Endian, in
 
 	if isList && len(expectedList) != 0 {
 		// If compound list, validate each compound
-		if _, isCompound := (expectedList)[0].(*CompoundTag); isCompound {
+		if _, isCompound := (expectedList)[0].(CompoundTag); isCompound {
 			for i := range expectedList {
 				validateEqualTagBytes(t, (expectedList)[i], (actualList)[i], endian, true)
 			}
