@@ -1,8 +1,8 @@
 package primitive
 
 import (
-	"bytes"
 	"errors"
+	"io"
 	"regexp"
 )
 
@@ -20,7 +20,7 @@ func (s MCString) Encode() []byte {
 	return append(VarInt(len([]byte(s))).Encode(), []byte(s)...)
 }
 
-func DecodeMCString(input *bytes.Buffer) (*string, error) {
+func DecodeMCString(input io.ByteReader) (*string, error) {
 
 	lengthVarInt, err := DecodeVarInt(input)
 	if err != nil {
@@ -28,13 +28,21 @@ func DecodeMCString(input *bytes.Buffer) (*string, error) {
 	}
 
 	length := int(*lengthVarInt)
+	read := 0
+	stringBytes := make([]byte, length)
 
-	if input.Len() < length {
-		return nil, errors.New("input length is less than length")
+	for read < length {
+
+		currentByte, err := input.ReadByte()
+		if err != nil {
+			return nil, err
+		}
+
+		stringBytes[read] = currentByte
+		read++
 	}
 
-	value := string(input.Next(length))
-
+	value := string(stringBytes)
 	return &value, nil
 }
 
@@ -89,7 +97,7 @@ func (i VarInt) Encode() []byte {
 	return bytes
 }
 
-func DecodeVarInt(input *bytes.Buffer) (*VarInt, error) {
+func DecodeVarInt(input io.ByteReader) (*VarInt, error) {
 
 	value := int32(0)
 	position := 0
@@ -163,7 +171,7 @@ func (l VarLong) Encode() []byte {
 
 }
 
-func DecodeVarLong(input *bytes.Buffer) (*VarLong, error) {
+func DecodeVarLong(input io.ByteReader) (*VarLong, error) {
 
 	value := int64(0)
 	position := 0
