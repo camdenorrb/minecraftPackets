@@ -3,6 +3,7 @@ package common
 // Version is a type that represents the version of the protocol.
 type Version uint16
 
+//goland:noinspection GoUnusedConst,GoSnakeCaseUsage
 const (
 	Version_1_7_10 = 5
 	Version_1_8    = 47
@@ -42,6 +43,9 @@ const (
 	Version_1_19_2 = 760
 	Version_1_19_3 = 761
 	Version_1_19_4 = 762
+	Version_1_20   = 763
+	Version_1_20_1 = 763
 )
 
-const Version_Latest = Version_1_19_4
+//goland:noinspection GoUnusedConst,GoSnakeCaseUsage
+const Version_Latest = Version_1_20_1
