@@ -17,7 +17,7 @@ func TestNBT_HelloWorld(t *testing.T) {
 	helloWorldBytes, err := os.ReadFile("testdata/hello_world.nbt")
 	assert.NoError(t, err)
 
-	nbt, err := readNBT(bufio.NewReader(bytes.NewReader(helloWorldBytes)), BigEndian)
+	nbt, err := ReadNBT(bufio.NewReader(bytes.NewReader(helloWorldBytes)), BigEndian)
 	assert.NoError(t, err)
 
 	snbt, err := nbt.FormatSNBT()
@@ -37,14 +37,14 @@ func TestNBT_BigTest(t *testing.T) {
 
 	endian := BigEndian
 
-	nbt, err := readNBT(bufio.NewReader(reader), endian)
+	nbt, err := ReadNBT(bufio.NewReader(reader), endian)
 	assert.NoError(t, err)
 
 	output := bytes.Buffer{}
 	err = nbt.PushToWriter(&output, endian, true)
 	assert.NoError(t, err)
 
-	parsedNBT, err := readNBT(bufio.NewReader(bytes.NewReader(output.Bytes())), endian)
+	parsedNBT, err := ReadNBT(bufio.NewReader(bytes.NewReader(output.Bytes())), endian)
 	assert.NoError(t, err)
 
 	assert.Equal(t, parsedNBT.Size(true), output.Len())
@@ -116,7 +116,7 @@ func FuzzEncodeNBT_All(f *testing.F) {
 		assert.NoError(t, err)
 
 		reader := bytes.NewReader(output.Bytes())
-		parsedNBT, err := readNBT(bufio.NewReader(reader), endian)
+		parsedNBT, err := ReadNBT(bufio.NewReader(reader), endian)
 		assert.NoError(t, err)
 
 		validateEqualTagBytes(t, &nbt, parsedNBT, endian, true)
@@ -158,7 +158,7 @@ func FuzzEncodeNBT(f *testing.F) {
 		expectedByteBuffer.Validate(t, testOutput.Bytes())
 
 		reader := bytes.NewReader(testOutput.Bytes())
-		parsedNBT, err := readNBT(bufio.NewReader(reader), endian)
+		parsedNBT, err := ReadNBT(bufio.NewReader(reader), endian)
 		assert.NoError(t, err)
 
 		// Validate that the NBT is the same
@@ -209,7 +209,7 @@ func FuzzEncodeSubNBT_Byte(f *testing.F) {
 		expectedByteBuffer.Validate(t, testOutput.Bytes())
 
 		reader := bytes.NewReader(testOutput.Bytes())
-		parsedNBT, err := readNBT(bufio.NewReader(reader), endian)
+		parsedNBT, err := ReadNBT(bufio.NewReader(reader), endian)
 		assert.NoError(t, err)
 
 		// Validate that the NBT is the same

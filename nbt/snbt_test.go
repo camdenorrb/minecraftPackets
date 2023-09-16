@@ -21,7 +21,7 @@ func TestSNBT_BigTest(t *testing.T) {
 
 	endian := BigEndian
 
-	nbt, err := readNBT(bufio.NewReader(reader), endian)
+	nbt, err := ReadNBT(bufio.NewReader(reader), endian)
 	assert.NoError(t, err)
 
 	snbt, err := nbt.FormatSNBT()

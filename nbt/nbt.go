@@ -106,7 +106,7 @@ func (n *NBT) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID boo
 	return nil
 }
 
-func readNBT(reader *bufio.Reader, endian Endian) (*NBT, error) {
+func ReadNBT(reader *bufio.Reader, endian Endian) (*NBT, error) {
 
 	tagID, err := reader.ReadByte()
 	if err != nil {
@@ -118,12 +118,12 @@ func readNBT(reader *bufio.Reader, endian Endian) (*NBT, error) {
 
 	name, err := readMCString(reader, endian)
 	if err != nil {
-		return nil, errorx.IllegalState.Wrap(err, "readNBT: failed to read tag name")
+		return nil, errorx.IllegalState.Wrap(err, "ReadNBT: failed to read tag name")
 	}
 
 	compound, err := readCompound(reader, endian)
 	if err != nil {
-		return nil, errorx.IllegalState.Wrap(err, "readNBT: failed to read compound tag")
+		return nil, errorx.IllegalState.Wrap(err, "ReadNBT: failed to read compound tag")
 	}
 
 	return &NBT{
