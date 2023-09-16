@@ -163,7 +163,7 @@ func parseList(value string) (ListTag, error) {
 	return listEntries, nil
 }
 
-func parseCompound(value string) (*NBT, error) {
+func parseCompound(value string) (*CompoundTag, error) {
 
 	// Remove surrounding brackets
 	value = value[1 : len(value)-1]
@@ -171,7 +171,7 @@ func parseCompound(value string) (*NBT, error) {
 	pairs := parseCompoundPairs(value)
 
 	// Create the compound
-	compound := NewNBT("")
+	compound := CompoundTag{}
 
 	// Parse all pairs
 	for _, pair := range pairs {
@@ -191,10 +191,10 @@ func parseCompound(value string) (*NBT, error) {
 			return nil, errorx.IllegalState.Wrap(err, "failed to parse value %q", parts[1])
 		}
 
-		compound.Tags[parts[0]] = tag
+		compound[parts[0]] = tag
 	}
 
-	return compound, nil
+	return &compound, nil
 }
 
 func parseCompoundPairs(value string) []string {
@@ -419,19 +419,50 @@ func isString(input string) bool {
 }
 
 func (n *NBT) FormatSNBT() (string, error) {
-	return formatCompound(n)
+	return formatNBT(n)
 }
 
-func formatCompound(compound *NBT) (string, error) {
+func formatNBT(nbt *NBT) (string, error) {
 
 	var builder strings.Builder
 
 	builder.WriteString("{")
 
 	index := 0
-	length := len(compound.Tags)
+	length := len(nbt.Tags)
 
-	for key, value := range compound.Tags {
+	for key, value := range nbt.Tags {
+
+		builder.WriteString(key)
+		builder.WriteString(":")
+		formattedValue, err := formatTag(value)
+		if err != nil {
+			return "", errorx.IllegalState.Wrap(err, "failed to format value tag %s:%s", key, value)
+		}
+		builder.WriteString(formattedValue)
+
+		if index < length-1 {
+			builder.WriteString(",")
+		}
+
+		index++
+	}
+
+	builder.WriteString("}")
+
+	return builder.String(), nil
+}
+
+func formatCompound(compound CompoundTag) (string, error) {
+
+	var builder strings.Builder
+
+	builder.WriteString("{")
+
+	index := 0
+	length := len(compound)
+
+	for key, value := range compound {
 
 		builder.WriteString(key)
 		builder.WriteString(":")
@@ -479,7 +510,7 @@ func formatTag(tag Tag) (string, error) {
 	case 9:
 		return formatList(tag.(ListTag))
 	case 10:
-		return formatCompound(tag.(*NBT))
+		return formatCompound(*tag.(*CompoundTag))
 	case 11:
 		return formatIntArray(tag.(IntArrayTag)), nil
 	case 12:

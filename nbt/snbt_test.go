@@ -1,11 +1,33 @@
 package nbt
 
 import (
+	"bufio"
+	"bytes"
+	"compress/gzip"
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"os"
 	"strings"
 	"testing"
 )
+
+func TestSNBT_BigTest(t *testing.T) {
+
+	bigNBTBytes, err := os.ReadFile("testdata/bigtest.nbt")
+	assert.NoError(t, err)
+
+	reader, err := gzip.NewReader(bytes.NewReader(bigNBTBytes))
+	assert.NoError(t, err)
+
+	endian := BigEndian
+
+	nbt, err := readNBT(bufio.NewReader(reader), endian)
+	assert.NoError(t, err)
+
+	snbt, err := nbt.FormatSNBT()
+	assert.NoError(t, err)
+	assert.NotNil(t, snbt)
+}
 
 func FuzzParseSNBT(f *testing.F) {
 
@@ -57,10 +79,7 @@ func FuzzParseSNBT(f *testing.F) {
 			ByteTag(byteNum),
 		})
 
-		subNBT := NBT{
-			Name: "",
-			Tags: map[string]Tag{},
-		}
+		subNBT := CompoundTag{}
 
 		nbt := NBT{
 			Name: "",
@@ -73,7 +92,7 @@ func FuzzParseSNBT(f *testing.F) {
 		// Add all the primitive tags to the NBT
 		for name, tag := range primitiveTags {
 			nbt.Tags[name] = tag
-			subNBT.Tags[name] = tag
+			subNBT[name] = tag
 		}
 
 		snbt, err := nbt.FormatSNBT()
@@ -82,6 +101,6 @@ func FuzzParseSNBT(f *testing.F) {
 		parsedNBT, err := ParseSNBT(snbt)
 		assert.NoError(t, err)
 
-		assert.Equal(t, &nbt, parsedNBT.(*NBT))
+		assert.Equal(t, &nbt.Tags, parsedNBT.(*CompoundTag))
 	})
 }

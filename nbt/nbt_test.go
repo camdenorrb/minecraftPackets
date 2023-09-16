@@ -52,7 +52,6 @@ func TestNBT_BigTest(t *testing.T) {
 	assert.Equal(t, nbt.Size(false), parsedNBT.Size(false))
 	assert.Len(t, nbt.Tags, len(parsedNBT.Tags))
 	validateEqualTagBytes(t, nbt, parsedNBT, endian, true)
-
 }
 
 func FuzzEncodeNBT_All(f *testing.F) {
