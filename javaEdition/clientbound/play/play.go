@@ -326,6 +326,7 @@ type Login struct {
 	HasDeathLocation    bool
 	DeathDimension      *common.Identifier
 	DeathLocation       *common.BlockPosition
+	PortalCooldown      common.VarInt
 }
 
 type Icon struct {
