@@ -1,4 +1,4 @@
-module github.com/camdenorrb/minecraftPackets/common
+module github.com/camdenorrb/minecraftPackets/common/primitive
 
 go 1.20
 
