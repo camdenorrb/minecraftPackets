@@ -8,6 +8,6 @@ require (
 )
 
 require (
-	github.com/camdenorrb/minecraftPackets/nbt v1.0.2
+	github.com/camdenorrb/minecraftPackets/nbt v1.0.3
 	github.com/joomcode/errorx v1.1.1 // indirect
 )
