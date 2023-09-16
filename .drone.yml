@@ -21,9 +21,9 @@ steps:
       - apk add build-base # Adds gcc
       - cd nbt
       - go test -v ./...
-  - name: test-common
+  - name: test-primitive
     image: golang:alpine
     commands:
       - apk add build-base # Adds gcc
-      - cd common
+      - cd primitive
       - go test -v ./...
