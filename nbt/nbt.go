@@ -281,17 +281,12 @@ func readTag(reader *bufio.Reader, tagID uint8, endian Endian) (Tag, error) {
 
 	case 8:
 
-		length, err := readInt16(reader, endian)
-		if err != nil {
-			return nil, errorx.IllegalState.Wrap(err, "failed to read string length")
-		}
-
-		stringArray, err := readBytes(reader, int(length))
+		parsedString, err := readMCString(reader, endian)
 		if err != nil {
 			return nil, errorx.IllegalState.Wrap(err, "failed to read string tag")
 		}
 
-		return StringTag(stringArray), nil
+		return StringTag(parsedString), nil
 	case 9:
 		return readListTag(reader, endian)
 	case 10:

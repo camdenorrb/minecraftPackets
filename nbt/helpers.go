@@ -37,7 +37,7 @@ func readBytes(reader *bufio.Reader, n int) ([]byte, error) {
 
 	data := make([]byte, n)
 
-	amount, err := reader.Read(data)
+	amount, err := io.ReadFull(reader, data)
 	if err != nil {
 		return nil, errorx.IllegalState.Wrap(err, "Failed to read %d bytes", n)
 	}

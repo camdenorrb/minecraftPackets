@@ -12,12 +12,48 @@ import (
 	"testing"
 )
 
+func TestNBT_SubCompound(t *testing.T) {
+
+	tags := ListTag{}
+
+	for i := 0; i < 10; i++ {
+		tags = append(tags, CompoundTag{
+			"Byte": ByteTag(byte(i)),
+			"NBT": CompoundTag{
+				"String": StringTag("Meow"),
+				"Description": CompoundTag{
+					"String": StringTag("Meow"),
+				},
+			},
+		})
+	}
+
+	nbt := NBT{
+		Name: "",
+		Tags: CompoundTag{
+			"List": tags,
+		},
+	}
+
+	output := bytes.Buffer{}
+	err := nbt.PushToWriter(&output, BigEndian, true)
+	assert.NoError(t, err)
+
+	parsedNBT, err := ReadNBT(bufio.NewReader(bytes.NewReader(output.Bytes())), BigEndian)
+	assert.NoError(t, err)
+
+	validateEqualTagBytes(t, &nbt, parsedNBT, BigEndian, true)
+}
+
 func TestNBT_HelloWorld(t *testing.T) {
 
 	helloWorldBytes, err := os.ReadFile("testdata/hello_world.nbt")
 	assert.NoError(t, err)
 
-	nbt, err := ReadNBT(bufio.NewReader(bytes.NewReader(helloWorldBytes)), BigEndian)
+	helloWorldFile, err := os.Open("testdata/hello_world.nbt")
+	assert.NoError(t, err)
+
+	nbt, err := ReadNBT(bufio.NewReader(helloWorldFile), BigEndian)
 	assert.NoError(t, err)
 
 	snbt, err := nbt.FormatSNBT()
@@ -25,6 +61,33 @@ func TestNBT_HelloWorld(t *testing.T) {
 
 	assert.Equal(t, len(helloWorldBytes), nbt.Size(true))
 	assert.Equal(t, "{name:\"Bananrama\"}", snbt)
+}
+
+func TestNBT_RegistryCodec(t *testing.T) {
+
+	registryCodecFile, err := os.ReadFile("testdata/registry_codec.nbt")
+	assert.NoError(t, err)
+
+	endian := BigEndian
+
+	gzipReader, err := gzip.NewReader(bytes.NewReader(registryCodecFile))
+	assert.NoError(t, err)
+
+	nbt, err := ReadNBT(bufio.NewReader(gzipReader), endian)
+	assert.NoError(t, err)
+
+	output := bytes.Buffer{}
+	err = nbt.PushToWriter(&output, endian, true)
+	assert.NoError(t, err)
+
+	parsedNBT, err := ReadNBT(bufio.NewReader(bytes.NewReader(output.Bytes())), endian)
+	assert.NoError(t, err)
+
+	assert.Equal(t, parsedNBT.Size(true), output.Len())
+	assert.Equal(t, nbt.Size(true), parsedNBT.Size(true))
+	assert.Equal(t, nbt.Size(false), parsedNBT.Size(false))
+	assert.Len(t, nbt.Tags, len(parsedNBT.Tags))
+	validateEqualTagBytes(t, nbt, parsedNBT, endian, true)
 }
 
 func TestNBT_BigTest(t *testing.T) {
