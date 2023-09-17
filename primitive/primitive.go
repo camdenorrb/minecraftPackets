@@ -20,14 +20,14 @@ func (s MCString) Encode() []byte {
 	return append(VarInt(len([]byte(s))).Encode(), []byte(s)...)
 }
 
-func DecodeMCString(input io.ByteReader) (*string, error) {
+func DecodeMCString(input io.ByteReader) (*string, int, error) {
 
-	lengthVarInt, err := DecodeVarInt(input)
+	lengthDecoded, varIntByteCount, err := DecodeVarInt(input)
 	if err != nil {
-		return nil, err
+		return nil, varIntByteCount, err
 	}
 
-	length := int(*lengthVarInt)
+	length := int(*lengthDecoded)
 	read := 0
 	stringBytes := make([]byte, length)
 
@@ -35,7 +35,7 @@ func DecodeMCString(input io.ByteReader) (*string, error) {
 
 		currentByte, err := input.ReadByte()
 		if err != nil {
-			return nil, err
+			return nil, length, err
 		}
 
 		stringBytes[read] = currentByte
@@ -43,7 +43,7 @@ func DecodeMCString(input io.ByteReader) (*string, error) {
 	}
 
 	value := string(stringBytes)
-	return &value, nil
+	return &value, varIntByteCount + length, nil
 }
 
 //endregion
@@ -97,7 +97,7 @@ func (i VarInt) Encode() []byte {
 	return bytes
 }
 
-func DecodeVarInt(input io.ByteReader) (*VarInt, error) {
+func DecodeVarInt(input io.ByteReader) (*VarInt, int, error) {
 
 	value := int32(0)
 	position := 0
@@ -106,7 +106,7 @@ func DecodeVarInt(input io.ByteReader) (*VarInt, error) {
 
 		currentByte, err := input.ReadByte()
 		if err != nil {
-			return nil, err
+			return nil, position/7 + 1, err
 		}
 
 		value |= (int32(currentByte) & VarSegmentBits) << position
@@ -118,12 +118,12 @@ func DecodeVarInt(input io.ByteReader) (*VarInt, error) {
 		position += 7
 
 		if position >= 32 {
-			return nil, errors.New("VarInt is too big")
+			return nil, position/7 + 1, errors.New("VarInt is too big")
 		}
 	}
 
 	asVarInt := VarInt(value)
-	return &asVarInt, nil
+	return &asVarInt, position/7 + 1, nil
 }
 
 type VarLong int64
@@ -171,7 +171,7 @@ func (l VarLong) Encode() []byte {
 
 }
 
-func DecodeVarLong(input io.ByteReader) (*VarLong, error) {
+func DecodeVarLong(input io.ByteReader) (*VarLong, int, error) {
 
 	value := int64(0)
 	position := 0
@@ -180,7 +180,7 @@ func DecodeVarLong(input io.ByteReader) (*VarLong, error) {
 
 		currentByte, err := input.ReadByte()
 		if err != nil {
-			return nil, err
+			return nil, position/7 + 1, err
 		}
 
 		value |= (int64(currentByte) & VarSegmentBits) << position
@@ -192,12 +192,12 @@ func DecodeVarLong(input io.ByteReader) (*VarLong, error) {
 		position += 7
 
 		if position >= 64 {
-			return nil, errors.New("VarLong is too big")
+			return nil, position/7 + 1, errors.New("VarLong is too big")
 		}
 	}
 
 	asVarLong := VarLong(value)
-	return &asVarLong, nil
+	return &asVarLong, position/7 + 1, nil
 }
 
 //endregion

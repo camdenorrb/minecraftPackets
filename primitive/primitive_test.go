@@ -23,8 +23,9 @@ func FuzzMCString_Encode_Decode(f *testing.F) {
 	f.Add("Hello, World!")
 	f.Fuzz(func(t *testing.T, s string) {
 		encoded := bytes.NewBuffer(MCString(s).Encode())
-		decoded, err := DecodeMCString(encoded)
+		decoded, length, err := DecodeMCString(encoded)
 		assert.NoError(t, err)
+		assert.Equal(t, len([]byte(s))+1, length)
 		assert.Equal(t, *decoded, s)
 	})
 }
@@ -35,8 +36,9 @@ func FuzzVarInt_Encode_Decode(f *testing.F) {
 	f.Add(math.MaxInt32)
 	f.Fuzz(func(t *testing.T, i int) {
 		encoded := bytes.NewBuffer(VarInt(i).Encode())
-		decoded, err := DecodeVarInt(encoded)
+		decoded, length, err := DecodeVarInt(encoded)
 		assert.NoError(t, err)
+		assert.Equal(t, VarInt(i).ByteLength(), length)
 		assert.Equal(t, *decoded, VarInt(i))
 	})
 }
@@ -58,8 +60,9 @@ func FuzzVarLong_Encode_Decode(f *testing.F) {
 	f.Add(math.MaxInt64)
 	f.Fuzz(func(t *testing.T, i int) {
 		encoded := bytes.NewBuffer(VarLong(i).Encode())
-		decoded, err := DecodeVarLong(encoded)
+		decoded, length, err := DecodeVarLong(encoded)
 		assert.NoError(t, err)
+		assert.Equal(t, VarLong(i).ByteLength(), length)
 		assert.Equal(t, *decoded, VarLong(i))
 	})
 }
