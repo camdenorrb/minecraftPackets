@@ -181,7 +181,7 @@ func readFloat64(reader *bufio.Reader, endian Endian) (float64, error) {
 	return math.Float64frombits(binary.LittleEndian.Uint64(data)), nil
 }
 
-func readVarInt(reader *bufio.Reader) (*primitive.VarInt, error) {
+func readVarInt(reader *bufio.Reader) (*primitive.VarInt, int, error) {
 	return primitive.DecodeVarInt(reader)
 }
 
@@ -202,7 +202,7 @@ func readMCString(reader *bufio.Reader, endian Endian) (string, error) {
 
 func readBedrockMCString(reader *bufio.Reader) (string, error) {
 
-	length, err := readVarInt(reader)
+	length, _, err := readVarInt(reader)
 	if err != nil {
 		return "", errorx.IllegalState.Wrap(err, "failed to read string length")
 	}
