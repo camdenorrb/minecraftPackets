@@ -1,7 +1,7 @@
-github.com/camdenorrb/minecraftPackets/nbt v1.0.6 h1:frw+YunhcHViHpk3zhJknsZNi0WFHeoDyxLa2Me0ky8=
-github.com/camdenorrb/minecraftPackets/nbt v1.0.6/go.mod h1:vj5IsC1lAQzA+D34RZqeHwypfRhtY/pzzJX/n/rIOhM=
-github.com/camdenorrb/minecraftPackets/primitive v1.0.2 h1:xaMyyC+IOuV2bFyy5M6IxYkRvMobEisUNnqfMRo/FGQ=
-github.com/camdenorrb/minecraftPackets/primitive v1.0.2/go.mod h1:jy3gsY0PRdK80rc+hDJKz2CFjJhovwAFa/pGcMW1tqE=
+github.com/camdenorrb/minecraftPackets/nbt v1.0.7 h1:frl61+rxOLMbOkx8ivBh/gEqmjY2V9Ygy/cqTnkWhGQ=
+github.com/camdenorrb/minecraftPackets/nbt v1.0.7/go.mod h1:qKtvmT6OTR3cZQJQkYRfG3w2WySDggjL96BaFo7sxKw=
+github.com/camdenorrb/minecraftPackets/primitive v1.0.4 h1:+gUdjZmHAoDxPB3oHky6fw38EPmh7y8t4yjrZTUoa/o=
+github.com/camdenorrb/minecraftPackets/primitive v1.0.4/go.mod h1:jy3gsY0PRdK80rc+hDJKz2CFjJhovwAFa/pGcMW1tqE=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/google/uuid v1.3.1 h1:KjJaJ9iWZ3jOFZIf1Lqf4laDRCasjl0BCmnEGxkdLb4=
