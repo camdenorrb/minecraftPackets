@@ -1,5 +1,5 @@
-github.com/camdenorrb/minecraftPackets/primitive v1.0.1 h1:Vrb/gE80TzlcN5vrhHmKqTihUnD7i4fgpnPz5vqe9vg=
-github.com/camdenorrb/minecraftPackets/primitive v1.0.1/go.mod h1:jy3gsY0PRdK80rc+hDJKz2CFjJhovwAFa/pGcMW1tqE=
+github.com/camdenorrb/minecraftPackets/primitive v1.0.4 h1:+gUdjZmHAoDxPB3oHky6fw38EPmh7y8t4yjrZTUoa/o=
+github.com/camdenorrb/minecraftPackets/primitive v1.0.4/go.mod h1:jy3gsY0PRdK80rc+hDJKz2CFjJhovwAFa/pGcMW1tqE=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/joomcode/errorx v1.1.1 h1:/LFG/qSk1gUTuZjs+qlyOJEpcVjD9DXgBNFhdZkQrjY=
