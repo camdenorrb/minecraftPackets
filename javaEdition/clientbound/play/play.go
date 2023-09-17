@@ -261,10 +261,10 @@ type ChunkDataAndUpdateLight struct {
 	NumOfBlockEntities   primitive.VarInt
 	BlockEntities        []common.BlockEntity
 	TrustEdges           bool
-	SkyLightMask         common.BitSet
-	BlockLightMask       common.BitSet
-	EmptySkyLightMask    common.BitSet
-	EmptyBlockLightMask  common.BitSet
+	SkyLightMask         primitive.BitSet
+	BlockLightMask       primitive.BitSet
+	EmptySkyLightMask    primitive.BitSet
+	EmptyBlockLightMask  primitive.BitSet
 	SkyLightArrayCount   primitive.VarInt
 	SkyLightArrays       []common.SkyLightArray
 	BlockLightArrayCount primitive.VarInt
@@ -296,10 +296,10 @@ type UpdateLight struct {
 	ChunkX               primitive.VarInt
 	ChunkZ               primitive.VarInt
 	TrustEdges           bool
-	SkyLightMask         common.BitSet
-	BlockLightMask       common.BitSet
-	EmptySkyLightMask    common.BitSet
-	EmptyBlockLightMask  common.BitSet
+	SkyLightMask         primitive.BitSet
+	BlockLightMask       primitive.BitSet
+	EmptySkyLightMask    primitive.BitSet
+	EmptyBlockLightMask  primitive.BitSet
 	SkyLightArrayCount   primitive.VarInt
 	SkyLightArrays       []common.SkyLightArray
 	BlockLightArrayCount primitive.VarInt
@@ -457,7 +457,7 @@ type PlayerChatMessage struct {
 	UnsignedContentPresent     bool
 	UnsignedContent            *common.Chat
 	FilterType                 primitive.VarInt // TODO: Enum
-	FilterTypeBits             *common.BitSet
+	FilterTypeBits             *primitive.BitSet
 	ChatType                   primitive.VarInt // TODO: Enum
 	NetworkName                common.Chat
 	IsNetworkTargetNamePresent bool

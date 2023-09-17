@@ -30,7 +30,7 @@ type ChatCommand struct {
 	SignatureCount primitive.VarInt
 	Signatures     []common.ChatCommandSignature
 	MessageCount   primitive.VarInt
-	Acknowledged   common.BitSet
+	Acknowledged   primitive.BitSet
 }
 
 type ChatMessage struct {
@@ -40,7 +40,7 @@ type ChatMessage struct {
 	HasSignature bool
 	Signature    []byte
 	MessageCount primitive.VarInt
-	Acknowledged common.BitSet
+	Acknowledged primitive.BitSet
 }
 
 type ClientCommand struct {
