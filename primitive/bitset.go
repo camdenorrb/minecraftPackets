@@ -1,14 +1,14 @@
-package common
+package primitive
 
 import "fmt"
 
 type BitSet struct {
-	data []uint64
+	data []uint64 // Can't inline type, since we need to change this value in the methods
 }
 
 func NewBitSet(size uint) BitSet {
 	return BitSet{
-		data: make([]uint64, (size+63)/64, (size+63)/64),
+		data: make([]uint64, (size+63)/64),
 	}
 }
 

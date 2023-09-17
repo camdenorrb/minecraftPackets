@@ -1,4 +1,4 @@
-package common
+package primitive
 
 import (
 	"math"
@@ -50,7 +50,7 @@ func FuzzBitSet_Flip(f *testing.F) {
 		bitSet.Flip(index)
 
 		if !bitSet.Get(index) {
-			t.Errorf("Expected bit at index %d to be set %v", index, bitSet.data)
+			t.Errorf("Expected bit at index %d to be set %v", index, bitSet)
 		}
 		if bitSet.Length() < index {
 			t.Errorf("Expected bitset length to be at least %d, got %d", index, bitSet.Length())
