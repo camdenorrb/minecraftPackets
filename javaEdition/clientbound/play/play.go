@@ -490,9 +490,8 @@ type PlayerInfoUpdatePlayersData struct {
 }
 
 type PlayerInfoUpdate struct {
-	Actions      PlayerInfoMask
-	NumOfPlayers primitive.VarInt
-	Players      PlayerInfoUpdatePlayersData
+	Actions PlayerInfoMask
+	Players PlayerInfoUpdatePlayersData
 }
 
 type LookAt struct {

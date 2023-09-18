@@ -15,18 +15,17 @@ const (
 // PlayerInfoAction is a player action.
 // Refer to https://wiki.vg/Protocol#Player_Info_Update
 type PlayerInfoAction struct {
-	*PlayerInfoActionAddPlayer
-	*PlayerInfoActionUpdateInitializeChat
-	*PlayerInfoActionUpdateGameMode
-	*PlayerInfoActionUpdateListed
-	*PlayerInfoActionUpdateLatency
-	*PlayerInfoActionUpdateDisplayName
+	AddPlayer         *PlayerInfoActionAddPlayer
+	InitializeChat    *PlayerInfoActionUpdateInitializeChat
+	UpdateGameMode    *PlayerInfoActionUpdateGameMode
+	UpdateListed      *PlayerInfoActionUpdateListed
+	UpdateLatency     *PlayerInfoActionUpdateLatency
+	UpdateDisplayName *PlayerInfoActionUpdateDisplayName
 }
 
 type PlayerInfoActionAddPlayer struct {
-	Name            string
-	PropertiesCount primitive.VarInt
-	Properties      []PlayerInfoActionAddPlayerProperty
+	Name       string
+	Properties []PlayerInfoActionAddPlayerProperty
 }
 
 type PlayerInfoActionAddPlayerProperty struct {
@@ -58,6 +57,5 @@ type PlayerInfoActionUpdateLatency struct {
 }
 
 type PlayerInfoActionUpdateDisplayName struct {
-	HasDisplayName bool
-	DisplayName    *Chat
+	DisplayName *Chat
 }
