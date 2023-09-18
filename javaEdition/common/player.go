@@ -36,12 +36,13 @@ type PlayerInfoActionAddPlayerProperty struct {
 }
 
 type PlayerInfoActionUpdateInitializeChat struct {
-	HasSignatureData       bool
-	ChatSessionID          uuid.UUID
-	EncodedPublicKeySize   primitive.VarInt
-	EncodedPublicKey       []byte
-	PublicKeySignatureSize primitive.VarInt
-	PublicKeySignature     []byte
+	HasSignatureData    bool
+	ChatSessionID       uuid.UUID
+	PublicKeyExpiryTime int64
+	//EncodedPublicKeySize   primitive.VarInt
+	EncodedPublicKey []byte
+	//PublicKeySignatureSize primitive.VarInt
+	PublicKeySignature []byte
 }
 
 type PlayerInfoActionUpdateGameMode struct {
