@@ -484,10 +484,15 @@ type PlayerInfoRemove struct {
 	Players      []uuid.UUID
 }
 
+type PlayerInfoUpdatePlayersData struct {
+	UUID          uuid.UUID
+	PlayerActions []common.PlayerInfoAction
+}
+
 type PlayerInfoUpdate struct {
-	Action       byte // TODO: Enum
-	NumOfActions primitive.VarInt
-	Actions      []common.PlayerInfoAction
+	Actions      PlayerInfoMask
+	NumOfPlayers primitive.VarInt
+	Players      PlayerInfoUpdatePlayersData
 }
 
 type LookAt struct {
