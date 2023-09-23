@@ -20,9 +20,9 @@ type PalettedContainerStructure struct {
 }
 
 type Palette struct {
-	*SingleValuedPalette
-	*IndirectPalette
-	*DirectPalette
+	SingleValued *SingleValuedPalette
+	Indirect     *IndirectPalette
+	Direct       *DirectPalette
 }
 
 type SingleValuedPalette struct {
