@@ -253,22 +253,18 @@ type KeepAlive struct {
 }
 
 type ChunkDataAndUpdateLight struct {
-	ChunkX               int32
-	ChunkZ               int32
-	Heightmaps           nbt.NBT
-	Size                 primitive.VarInt
-	Data                 []common.ChunkSection
-	NumOfBlockEntities   primitive.VarInt
-	BlockEntities        []common.BlockEntity
-	TrustEdges           bool
-	SkyLightMask         primitive.BitSet
-	BlockLightMask       primitive.BitSet
-	EmptySkyLightMask    primitive.BitSet
-	EmptyBlockLightMask  primitive.BitSet
-	SkyLightArrayCount   primitive.VarInt
-	SkyLightArrays       []common.SkyLightArray
-	BlockLightArrayCount primitive.VarInt
-	BlockLightArrays     []common.BlockLightArray
+	ChunkX              int32
+	ChunkZ              int32
+	Heightmaps          nbt.NBT
+	Data                []common.ChunkSection
+	BlockEntities       []common.BlockEntity
+	TrustEdges          bool
+	SkyLightMask        primitive.BitSet
+	BlockLightMask      primitive.BitSet
+	EmptySkyLightMask   primitive.BitSet
+	EmptyBlockLightMask primitive.BitSet
+	SkyLightArrays      []common.SkyLightArray
+	BlockLightArrays    []common.BlockLightArray
 }
 
 type WorldEvent struct {
