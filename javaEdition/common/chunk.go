@@ -33,7 +33,7 @@ type IndirectPalette struct {
 type DirectPalette struct{}
 
 type ChunkSection struct {
-	BlockCount  int16
+	BlockCount  uint16
 	BlockStates PalettedContainerStructure
 	Biomes      PalettedContainerStructure
 }
