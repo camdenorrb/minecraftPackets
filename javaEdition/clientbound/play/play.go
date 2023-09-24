@@ -57,25 +57,25 @@ type AcknowledgeBlockChange struct {
 
 type SetBlockDestroyStage struct {
 	EntityID primitive.VarInt
-	Location common.BlockPosition
+	Location *common.BlockPosition
 	Stage    byte // TODO: Enum
 }
 
 type BlockEntityData struct {
-	Location common.BlockPosition
+	Location *common.BlockPosition
 	Type     primitive.VarInt
 	NBTData  nbt.NBT
 }
 
 type BlockAction struct {
-	Location    common.BlockPosition
+	Location    *common.BlockPosition
 	ActionID    uint8
 	ActionParam uint8
 	BlockType   primitive.VarInt
 }
 
 type BlockUpdate struct {
-	Location common.BlockPosition
+	Location *common.BlockPosition
 	BlockID  primitive.VarInt
 }
 
@@ -269,7 +269,7 @@ type ChunkDataAndUpdateLight struct {
 
 type WorldEvent struct {
 	Event                 int32
-	Location              common.BlockPosition
+	Location              *common.BlockPosition
 	Data                  int32 // TODO: Enum
 	DisableRelativeVolume bool
 }
@@ -417,7 +417,7 @@ type OpenWindow struct {
 }
 
 type OpenSignEditor struct {
-	Location common.BlockPosition
+	Location *common.BlockPosition
 }
 
 type Ping struct {
@@ -630,12 +630,12 @@ type SetRenderDistance struct {
 }
 
 type SetDefaultSpawnPosition struct {
-	Location common.BlockPosition
+	Location *common.BlockPosition
 	Angle    float32
 }
 
 type DisplayObjective struct {
-	Position common.BlockPosition
+	Position *common.BlockPosition
 	Angle    float32
 }
 
