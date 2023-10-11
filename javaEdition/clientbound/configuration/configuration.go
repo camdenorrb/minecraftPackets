@@ -39,3 +39,8 @@ type ResourcePack struct {
 type FeatureFlags struct {
 	FeatureFlags []primitive.Identifier
 }
+
+type UpdateTags struct {
+	TagCount primitive.VarInt
+	//Tags     []Tag // TODO: Tag
+}
