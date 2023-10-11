@@ -12,7 +12,7 @@ type State uint8
 const (
 	HandshakingState State = iota
 	StatusState
-	ConfigurationState
 	LoginState
+	ConfigurationState
 	PlayState
 )
