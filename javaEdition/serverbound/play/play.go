@@ -63,6 +63,8 @@ type CommandSuggestionsRequest struct {
 	Text          string
 }
 
+type ConfigurationAcknowledged struct{}
+
 type ClickContainerButton struct {
 	WindowID byte
 	ButtonID byte
@@ -206,6 +208,10 @@ type Pong struct {
 type PlayerSession struct {
 	SessionID uuid.UUID
 	PublicKey common.PublicKey
+}
+
+type ChunkBatchReceived struct {
+	ChunksPerTick float32
 }
 
 type ChangeRecipeBookSettings struct {

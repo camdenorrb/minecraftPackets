@@ -45,7 +45,8 @@ const (
 	Version_1_19_4 = 762
 	Version_1_20   = 763
 	Version_1_20_1 = 763
+	Version_1_20_2 = 764
 )
 
 //goland:noinspection GoUnusedConst,GoSnakeCaseUsage
-const Version_Latest = Version_1_20_1
+const Version_Latest = Version_1_20_2

@@ -76,7 +76,7 @@ func clientBound() common.PacketRegistry {
 	registry.Register(common.PlayState, 0x29, string(common.ClientBoundPlayUpdateEntityRotation))
 	registry.Register(common.PlayState, 0x2A, string(common.ClientBoundPlayMoveVehicle))
 	registry.Register(common.PlayState, 0x2B, string(common.ClientBoundPlayOpenBook))
-	registry.Register(common.PlayState, 0x2C, string(common.ClientBoundPlayOpenWindow))
+	registry.Register(common.PlayState, 0x2C, string(common.ClientBoundPlayOpenScreen))
 	registry.Register(common.PlayState, 0x2D, string(common.ClientBoundPlayOpenSignEditor))
 	registry.Register(common.PlayState, 0x2E, string(common.ClientBoundPlayPing))
 	registry.Register(common.PlayState, 0x2F, string(common.ClientBoundPlayPlaceGhostRecipe))
