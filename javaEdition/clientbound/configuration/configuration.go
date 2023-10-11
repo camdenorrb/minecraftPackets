@@ -33,7 +33,7 @@ type ResourcePack struct {
 	URL           string
 	Hash          string
 	IsForced      bool
-	PromptMessage *string
+	PromptMessage *common.Chat
 }
 
 type FeatureFlags struct {
