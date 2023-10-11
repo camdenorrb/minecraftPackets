@@ -1,7 +1,13 @@
 package status
 
+import common2 "github.com/camdenorrb/minecraftPackets/javaEdition/protocol/common"
+
 type PingResponse struct {
 	Payload int64
+}
+
+func (*PingResponse) PacketType() string {
+	return string(common2.ClientBoundStatusPong)
 }
 
 type Response struct {
@@ -12,22 +18,6 @@ type Response struct {
 	EnforceSecureChat bool        `json:"enforceSecureChat"`
 }
 
-type Version struct {
-	Name     string `json:"name"`
-	Protocol int    `json:"protocol"`
-}
-
-type Players struct {
-	Max    uint `json:"max"`
-	Online uint `json:"online"`
-	Sample []PlayerSample
-}
-
-type PlayerSample struct {
-	Name string `json:"name"`
-	ID   string `json:"id"`
-}
-
-type Description struct {
-	Text string `json:"text"`
+func (*Response) PacketType() string {
+	return string(common2.ClientBoundStatusResponse)
 }

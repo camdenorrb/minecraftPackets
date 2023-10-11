@@ -5,6 +5,10 @@ import (
 	"github.com/camdenorrb/minecraftPackets/primitive"
 )
 
+type Body interface {
+	PacketType() string
+}
+
 type CompressedPacket struct {
 	*Packet
 	PacketLength primitive.VarInt

@@ -2,6 +2,7 @@ package play
 
 import (
 	"github.com/camdenorrb/minecraftPackets/javaEdition/common"
+	common2 "github.com/camdenorrb/minecraftPackets/javaEdition/protocol/common"
 	"github.com/camdenorrb/minecraftPackets/primitive"
 	"github.com/google/uuid"
 )
@@ -10,17 +11,33 @@ type ConfirmTeleportation struct {
 	TeleportID primitive.VarInt
 }
 
+func (*ConfirmTeleportation) PacketType() string {
+	return string(common2.ServerBoundPlayConfirmTeleportation)
+}
+
 type QueryBlockEntityTag struct {
 	TransactionID primitive.VarInt
 	Location      common.BlockPosition
+}
+
+func (*QueryBlockEntityTag) PacketType() string {
+	return string(common2.ServerBoundPlayQueryBlockEntityTag)
 }
 
 type ChangeDifficulty struct {
 	NewDifficulty byte // TODO: Enum
 }
 
+func (*ChangeDifficulty) PacketType() string {
+	return string(common2.ServerBoundPlayChangeDifficulty)
+}
+
 type MessageAcknowledgement struct {
 	MessageCount primitive.VarInt
+}
+
+func (*MessageAcknowledgement) PacketType() string {
+	return string(common2.ServerBoundPlayMessageAcknowledgement)
 }
 
 type ChatCommand struct {
@@ -33,6 +50,10 @@ type ChatCommand struct {
 	Acknowledged   primitive.BitSet
 }
 
+func (*ChatCommand) PacketType() string {
+	return string(common2.ServerBoundPlayChatCommand)
+}
+
 type ChatMessage struct {
 	Message      string
 	Timestamp    int64
@@ -43,8 +64,16 @@ type ChatMessage struct {
 	Acknowledged primitive.BitSet
 }
 
+func (*ChatMessage) PacketType() string {
+	return string(common2.ServerBoundPlayChatMessage)
+}
+
 type ClientCommand struct {
 	ActionID primitive.VarInt // TODO: Enum
+}
+
+func (*ClientCommand) PacketType() string {
+	return string(common2.ServerBoundPlayClientCommand)
 }
 
 type ClientInformation struct {
@@ -58,16 +87,32 @@ type ClientInformation struct {
 	AllowServerListings bool
 }
 
+func (*ClientInformation) PacketType() string {
+	return string(common2.ServerBoundPlayClientInformation)
+}
+
 type CommandSuggestionsRequest struct {
 	TransactionID primitive.VarInt
 	Text          string
 }
 
+func (*CommandSuggestionsRequest) PacketType() string {
+	return string(common2.ServerBoundPlayCommandSuggestionsRequest)
+}
+
 type ConfigurationAcknowledged struct{}
+
+func (*ConfigurationAcknowledged) PacketType() string {
+	return string(common2.ServerBoundPlayConfigurationAcknowledged)
+}
 
 type ClickContainerButton struct {
 	WindowID byte
 	ButtonID byte
+}
+
+func (*ClickContainerButton) PacketType() string {
+	return string(common2.ServerBoundPlayClickContainerButton)
 }
 
 type ClickContainer struct {
@@ -81,13 +126,25 @@ type ClickContainer struct {
 	CarriedItem common.Slot
 }
 
+func (*ClickContainer) PacketType() string {
+	return string(common2.ServerBoundPlayClickContainer)
+}
+
 type CloseContainer struct {
 	WindowID uint8
+}
+
+func (*CloseContainer) PacketType() string {
+	return string(common2.ServerBoundPlayCloseContainer)
 }
 
 type PluginMessage struct {
 	Channel primitive.Identifier
 	Data    []byte
+}
+
+func (*PluginMessage) PacketType() string {
+	return string(common2.ServerBoundPlayPluginMessage)
 }
 
 type EditBook struct {
@@ -98,9 +155,17 @@ type EditBook struct {
 	Title    *string
 }
 
+func (*EditBook) PacketType() string {
+	return string(common2.ServerBoundPlayEditBook)
+}
+
 type QueryEntityTag struct {
 	TransactionID primitive.VarInt
 	EntityID      primitive.VarInt
+}
+
+func (*QueryEntityTag) PacketType() string {
+	return string(common2.ServerBoundPlayQueryEntityTag)
 }
 
 type InteractEntity struct {
@@ -113,18 +178,34 @@ type InteractEntity struct {
 	Sneaking bool
 }
 
+func (*InteractEntity) PacketType() string {
+	return string(common2.ServerBoundPlayInteractEntity)
+}
+
 type JigsawGenerate struct {
 	Location    common.BlockPosition
 	Levels      primitive.VarInt
 	KeepJigsaws bool
 }
 
+func (*JigsawGenerate) PacketType() string {
+	return string(common2.ServerBoundPlayJigsawGenerate)
+}
+
 type KeepAlive struct {
 	KeepAliveID int64
 }
 
+func (*KeepAlive) PacketType() string {
+	return string(common2.ServerBoundPlayKeepAlive)
+}
+
 type LockDifficulty struct {
 	Locked bool
+}
+
+func (*LockDifficulty) PacketType() string {
+	return string(common2.ServerBoundPlayLockDifficulty)
 }
 
 type SetPlayerPosition struct {
@@ -136,6 +217,10 @@ type SetPlayerPosition struct {
 	OnGround bool
 }
 
+func (*SetPlayerPosition) PacketType() string {
+	return string(common2.ServerBoundPlaySetPlayerPosition)
+}
+
 type SetPlayerPositionAndRotation struct {
 	X        float64
 	FeetY    float64
@@ -145,14 +230,26 @@ type SetPlayerPositionAndRotation struct {
 	OnGround bool
 }
 
+func (*SetPlayerPositionAndRotation) PacketType() string {
+	return string(common2.ServerBoundPlaySetPlayerPositionAndRotation)
+}
+
 type SetPlayerRotation struct {
 	Yaw      float32
 	Pitch    float32
 	OnGround bool
 }
 
+func (*SetPlayerRotation) PacketType() string {
+	return string(common2.ServerBoundPlaySetPlayerRotation)
+}
+
 type SetPlayerOnGround struct {
 	OnGround bool
+}
+
+func (*SetPlayerOnGround) PacketType() string {
+	return string(common2.ServerBoundPlaySetPlayerOnGround)
 }
 
 type MoveVehicle struct {
@@ -163,13 +260,25 @@ type MoveVehicle struct {
 	Pitch float32
 }
 
+func (*MoveVehicle) PacketType() string {
+	return string(common2.ServerBoundPlayMoveVehicle)
+}
+
 type PaddleBoat struct {
 	LeftPaddleTurning  bool
 	RightPaddleTurning bool
 }
 
+func (*PaddleBoat) PacketType() string {
+	return string(common2.ServerBoundPlayPaddleBoat)
+}
+
 type PickItem struct {
 	Slot primitive.VarInt
+}
+
+func (*PickItem) PacketType() string {
+	return string(common2.ServerBoundPlayPickItem)
 }
 
 type PlaceRecipe struct {
@@ -178,8 +287,16 @@ type PlaceRecipe struct {
 	MakeAll  bool
 }
 
+func (*PlaceRecipe) PacketType() string {
+	return string(common2.ServerBoundPlayPlaceRecipe)
+}
+
 type PlayerAbilities struct {
 	Flags uint8 // TODO: Enum
+}
+
+func (*PlayerAbilities) PacketType() string {
+	return string(common2.ServerBoundPlayPlayerAbilities)
 }
 
 type PlayerAction struct {
@@ -189,10 +306,18 @@ type PlayerAction struct {
 	Sequence primitive.VarInt
 }
 
+func (*PlayerAction) PacketType() string {
+	return string(common2.ServerBoundPlayPlayerAction)
+}
+
 type PlayerCommand struct {
 	EntityID  primitive.VarInt
 	ActionID  primitive.VarInt // TODO: Enum
 	JumpBoost primitive.VarInt
+}
+
+func (*PlayerCommand) PacketType() string {
+	return string(common2.ServerBoundPlayPlayerCommand)
 }
 
 type PlayerInput struct {
@@ -201,8 +326,16 @@ type PlayerInput struct {
 	Flags    uint8 // TODO: Enum
 }
 
+func (*PlayerInput) PacketType() string {
+	return string(common2.ServerBoundPlayPlayerInput)
+}
+
 type Pong struct {
 	ID int32
+}
+
+func (*Pong) PacketType() string {
+	return string(common2.ServerBoundPlayPong)
 }
 
 type PlayerSession struct {
@@ -210,8 +343,16 @@ type PlayerSession struct {
 	PublicKey common.PublicKey
 }
 
+func (*PlayerSession) PacketType() string {
+	return string(common2.ServerBoundPlayPlayerSession)
+}
+
 type ChunkBatchReceived struct {
 	ChunksPerTick float32
+}
+
+func (*ChunkBatchReceived) PacketType() string {
+	return string(common2.ServerBoundPlayChunkBatchReceived)
 }
 
 type ChangeRecipeBookSettings struct {
@@ -220,16 +361,32 @@ type ChangeRecipeBookSettings struct {
 	FilterActive bool
 }
 
+func (*ChangeRecipeBookSettings) PacketType() string {
+	return string(common2.ServerBoundPlayChangeRecipeBookSettings)
+}
+
 type SetSeenRecipe struct {
 	RecipeID primitive.Identifier
+}
+
+func (*SetSeenRecipe) PacketType() string {
+	return string(common2.ServerBoundPlaySetSeenRecipe)
 }
 
 type RenameItem struct {
 	ItemName string
 }
 
+func (*RenameItem) PacketType() string {
+	return string(common2.ServerBoundPlayRenameItem)
+}
+
 type ResourcePack struct {
 	Result primitive.VarInt // TODO: Enum
+}
+
+func (*ResourcePack) PacketType() string {
+	return string(common2.ServerBoundPlayResourcePack)
 }
 
 type SeenAdvancements struct {
@@ -237,8 +394,16 @@ type SeenAdvancements struct {
 	TabID  *primitive.Identifier
 }
 
+func (*SeenAdvancements) PacketType() string {
+	return string(common2.ServerBoundPlaySeenAdvancements)
+}
+
 type SelectTrade struct {
 	SelectedSlot primitive.VarInt
+}
+
+func (*SelectTrade) PacketType() string {
+	return string(common2.ServerBoundPlaySelectTrade)
 }
 
 type SetBeaconEffect struct {
@@ -248,8 +413,16 @@ type SetBeaconEffect struct {
 	SecondaryEffect    primitive.VarInt // TODO: Enum
 }
 
+func (*SetBeaconEffect) PacketType() string {
+	return string(common2.ServerBoundPlaySetBeaconEffect)
+}
+
 type SetHeldItem struct {
 	Slot int16
+}
+
+func (*SetHeldItem) PacketType() string {
+	return string(common2.ServerBoundPlaySetHeldItem)
 }
 
 type ProgramCommandBlock struct {
@@ -259,15 +432,27 @@ type ProgramCommandBlock struct {
 	Flags    byte             // TODO: Enum
 }
 
+func (*ProgramCommandBlock) PacketType() string {
+	return string(common2.ServerBoundPlayProgramCommandBlock)
+}
+
 type ProgramCommandBlockMinecart struct {
 	EntityID    primitive.VarInt
 	Command     string
 	TrackOutput bool
 }
 
+func (*ProgramCommandBlockMinecart) PacketType() string {
+	return string(common2.ServerBoundPlayProgramCommandBlockMinecart)
+}
+
 type SetCreativeModeSlot struct {
 	Slot        int16
 	ClickedItem common.Slot
+}
+
+func (*SetCreativeModeSlot) PacketType() string {
+	return string(common2.ServerBoundPlaySetCreativeModeSlot)
 }
 
 type ProgramJigsawBlock struct {
@@ -277,6 +462,10 @@ type ProgramJigsawBlock struct {
 	Pool       primitive.Identifier
 	FinalState string
 	JointType  string
+}
+
+func (*ProgramJigsawBlock) PacketType() string {
+	return string(common2.ServerBoundPlayProgramJigsawBlock)
 }
 
 type ProgramStructureBlock struct {
@@ -298,6 +487,10 @@ type ProgramStructureBlock struct {
 	Flags     byte // TODO: Enum
 }
 
+func (*ProgramStructureBlock) PacketType() string {
+	return string(common2.ServerBoundPlayProgramStructureBlock)
+}
+
 type UpdateSign struct {
 	Location common.BlockPosition
 	Line1    string
@@ -306,12 +499,24 @@ type UpdateSign struct {
 	Line4    string
 }
 
+func (*UpdateSign) PacketType() string {
+	return string(common2.ServerBoundPlayUpdateSign)
+}
+
 type SwingArm struct {
 	Hand common.Hand
 }
 
+func (*SwingArm) PacketType() string {
+	return string(common2.ServerBoundPlaySwingArm)
+}
+
 type TeleportToEntity struct {
 	TargetPlayer uuid.UUID
+}
+
+func (*TeleportToEntity) PacketType() string {
+	return string(common2.ServerBoundPlayTeleportToEntity)
 }
 
 type UseItemOn struct {
@@ -325,7 +530,15 @@ type UseItemOn struct {
 	Sequence    primitive.VarInt
 }
 
+func (*UseItemOn) PacketType() string {
+	return string(common2.ServerBoundPlayUseItemOn)
+}
+
 type UseItem struct {
 	Hand     common.Hand
 	Sequence primitive.VarInt
+}
+
+func (*UseItem) PacketType() string {
+	return string(common2.ServerBoundPlayUseItem)
 }
