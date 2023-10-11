@@ -4,6 +4,7 @@ import (
 	"github.com/camdenorrb/minecraftPackets/javaEdition/protocol/common"
 	"github.com/camdenorrb/minecraftPackets/javaEdition/protocol/version119"
 	"github.com/camdenorrb/minecraftPackets/javaEdition/protocol/version120"
+	"github.com/camdenorrb/minecraftPackets/javaEdition/protocol/version1202"
 )
 
 type RegistryCache map[common.Version]map[common.Bound]common.PacketRegistry
@@ -30,6 +31,8 @@ func RegistryFor(bound common.Bound, version common.Version) common.PacketRegist
 		return version119.Registry(bound)
 	case common.Version_1_20: // 1.20.1 has same protocol as 1.20
 		return version120.Registry(bound)
+	case common.Version_1_20_2:
+		return version1202.Registry(bound)
 	}
 
 	return nil
