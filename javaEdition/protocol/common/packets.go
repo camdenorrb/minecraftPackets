@@ -8,6 +8,17 @@ const (
 	ClientBoundStatusResponse ClientBoundPacket = "StatusResponse"
 	ClientBoundStatusPong     ClientBoundPacket = "StatusPong"
 
+	// Configuration
+	ClientBoundConfigurationPluginMessage ClientBoundPacket = "PluginMessage"
+	ClientBoundConfigurationDisconnect    ClientBoundPacket = "Disconnect"
+	ClientBoundConfigurationFinish        ClientBoundPacket = "Finish"
+	ClientBoundConfigurationKeepAlive     ClientBoundPacket = "KeepAlive"
+	ClientBoundConfigurationPing          ClientBoundPacket = "Ping"
+	ClientBoundConfigurationRegistryData  ClientBoundPacket = "RegistryData"
+	ClientBoundConfigurationResourcePack  ClientBoundPacket = "ResourcePack"
+	ClientBoundConfigurationFeatureFlags  ClientBoundPacket = "FeatureFlags"
+	ClientBoundConfigurationUpdateTags    ClientBoundPacket = "UpdateTags"
+
 	// Login
 	ClientBoundLoginDisconnect        ClientBoundPacket = "Disconnect"
 	ClientBoundLoginEncryptionRequest ClientBoundPacket = "EncryptionRequest"
@@ -29,6 +40,8 @@ const (
 	ClientBoundPlayBlockUpdate                     ClientBoundPacket = "BlockUpdate"
 	ClientBoundPlayBossBar                         ClientBoundPacket = "BossBar"
 	ClientBoundPlayChangeDifficulty                ClientBoundPacket = "ChangeDifficulty"
+	ClientBoundPlayChunkBatchFinished              ClientBoundPacket = "ChunkBatchFinished"
+	ClientBoundPlayChunkBatchStart                 ClientBoundPacket = "ChunkBatchStart"
 	ClientBoundPlayChunkBiomes                     ClientBoundPacket = "ChunkBiomes"
 	ClientBoundPlayClearTitles                     ClientBoundPacket = "ClearTitles"
 	ClientBoundPlayCommandSuggestionsResponse      ClientBoundPacket = "CommandSuggestionsResponse"
@@ -64,9 +77,10 @@ const (
 	ClientBoundPlayUpdateEntityRotation            ClientBoundPacket = "UpdateEntityRotation"
 	ClientBoundPlayMoveVehicle                     ClientBoundPacket = "MoveVehicle"
 	ClientBoundPlayOpenBook                        ClientBoundPacket = "OpenBook"
-	ClientBoundPlayOpenWindow                      ClientBoundPacket = "OpenWindow"
+	ClientBoundPlayOpenScreen                      ClientBoundPacket = "OpenScreen"
 	ClientBoundPlayOpenSignEditor                  ClientBoundPacket = "OpenSignEditor"
 	ClientBoundPlayPing                            ClientBoundPacket = "Ping"
+	ClientBoundPlayPingResponse                    ClientBoundPacket = "PingResponse"
 	ClientBoundPlayPlaceGhostRecipe                ClientBoundPacket = "PlaceGhostRecipe"
 	ClientBoundPlayPlayerAbilities                 ClientBoundPacket = "PlayerAbilities"
 	ClientBoundPlayPlayerChatMessage               ClientBoundPacket = "PlayerChatMessage"
@@ -115,6 +129,7 @@ const (
 	ClientBoundPlaySetTitleAnimationTimes          ClientBoundPacket = "SetTitleAnimationTimes"
 	ClientBoundPlayEntitySoundEffect               ClientBoundPacket = "EntitySoundEffect"
 	ClientBoundPlaySoundEffect                     ClientBoundPacket = "SoundEffect"
+	ClientBoundPlayStartConfiguration              ClientBoundPacket = "StartConfiguration"
 	ClientBoundPlayStopSound                       ClientBoundPacket = "StopSound"
 	ClientBoundPlaySystemChatMessage               ClientBoundPacket = "SystemChatMessage"
 	ClientBoundPlaySetTabListHeaderAndFooter       ClientBoundPacket = "SetTabListHeaderAndFooter"
@@ -141,10 +156,19 @@ const (
 	ServerBoundStatusRequest ServerBoundPacket = "StatusRequest"
 	ServerBoundStatusPing    ServerBoundPacket = "StatusPing"
 
+	// Configuration
+	ServerBoundConfigurationClientInformation    ServerBoundPacket = "ClientInformation"
+	ServerBoundConfigurationPluginMessage        ServerBoundPacket = "PluginMessage"
+	ServerBoundConfigurationFinish               ServerBoundPacket = "Finish"
+	ServerBoundConfigurationKeepAlive            ServerBoundPacket = "KeepAlive"
+	ServerBoundConfigurationPong                 ServerBoundPacket = "Pong"
+	ServerBoundConfigurationResourcePackResponse ServerBoundPacket = "ResourcePackResponse"
+
 	// Login
 	ServerBoundLoginStart              ServerBoundPacket = "LoginStart"
 	ServerBoundLoginEncryptionResponse ServerBoundPacket = "LoginEncryptionResponse"
 	ServerBoundLoginPluginResponse     ServerBoundPacket = "LoginPluginResponse"
+	ServerBoundLoginAcknowledged       ServerBoundPacket = "LoginAcknowledged"
 
 	// Play
 	ServerBoundPlayConfirmTeleportation         ServerBoundPacket = "ConfirmTeleportation"
@@ -154,9 +178,11 @@ const (
 	ServerBoundPlayChatCommand                  ServerBoundPacket = "ChatCommand"
 	ServerBoundPlayChatMessage                  ServerBoundPacket = "ChatMessage"
 	ServerBoundPlayPlayerSession                ServerBoundPacket = "PlayerSession"
+	ServerBoundPlayChunkBatchReceived           ServerBoundPacket = "ChunkBatchRecieved"
 	ServerBoundPlayClientCommand                ServerBoundPacket = "ClientCommand"
 	ServerBoundPlayClientInformation            ServerBoundPacket = "ClientInformation"
 	ServerBoundPlayCommandSuggestionsRequest    ServerBoundPacket = "CommandSuggestionsRequest"
+	ServerBoundPlayConfigurationAcknowledged    ServerBoundPacket = "ConfigurationAcknowledged"
 	ServerBoundPlayClickContainerButton         ServerBoundPacket = "ClickContainerButton"
 	ServerBoundPlayClickContainer               ServerBoundPacket = "ClickContainer"
 	ServerBoundPlayCloseContainer               ServerBoundPacket = "CloseContainer"
@@ -174,6 +200,7 @@ const (
 	ServerBoundPlayMoveVehicle                  ServerBoundPacket = "MoveVehicle"
 	ServerBoundPlayPaddleBoat                   ServerBoundPacket = "PaddleBoat"
 	ServerBoundPlayPickItem                     ServerBoundPacket = "PickItem"
+	ServerBoundPlayPingRequest                  ServerBoundPacket = "PingRequest"
 	ServerBoundPlayPlaceRecipe                  ServerBoundPacket = "PlaceRecipe"
 	ServerBoundPlayPlayerAbilities              ServerBoundPacket = "PlayerAbilities"
 	ServerBoundPlayPlayerAction                 ServerBoundPacket = "PlayerAction"

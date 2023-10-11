@@ -122,6 +122,12 @@ type ChangeDifficulty struct {
 	IsDifficultyLocked bool
 }
 
+type ChunkBatchFinished struct {
+	NumChunks int64
+}
+
+type ChunkBatchStart struct{}
+
 type ClearTitles struct {
 	Reset bool
 }
@@ -309,7 +315,7 @@ type Login struct {
 	PreviousGameMode    uint8 // TODO: Enum GameMode
 	DimensionCount      primitive.VarInt
 	DimensionNames      []primitive.Identifier
-	RegistryCodec       nbt.NBT
+	RegistryCodec       *nbt.NBT // Moved to configuration in 1.20.2
 	DimensionType       primitive.Identifier
 	DimensionName       primitive.Identifier
 	HashedSeed          int64
@@ -410,7 +416,7 @@ type OpenBook struct {
 	Hand common.Hand
 }
 
-type OpenWindow struct {
+type OpenScreen struct {
 	WindowID    primitive.VarInt
 	WindowType  primitive.VarInt // TODO: Enum
 	WindowTitle common.Chat
@@ -422,6 +428,10 @@ type OpenSignEditor struct {
 
 type Ping struct {
 	ID int32
+}
+
+type PingResponse struct {
+	Payload int32
 }
 
 type PlaceGhostRecipe struct {

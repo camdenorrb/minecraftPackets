@@ -21,3 +21,5 @@ type PluginResponse struct {
 	Successful bool
 	Data       []byte
 }
+
+type Acknowledged struct{}
