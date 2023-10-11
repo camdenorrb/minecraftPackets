@@ -24,6 +24,13 @@ func clientBound() common.PacketRegistry {
 	registry.Register(common.StatusState, 0x00, string(common.ClientBoundStatusResponse))
 	registry.Register(common.StatusState, 0x01, string(common.ClientBoundStatusPong))
 
+	// Login
+	registry.Register(common.LoginState, 0x00, string(common.ClientBoundLoginDisconnect))
+	registry.Register(common.LoginState, 0x01, string(common.ClientBoundLoginEncryptionRequest))
+	registry.Register(common.LoginState, 0x02, string(common.ClientBoundLoginSuccess))
+	registry.Register(common.LoginState, 0x03, string(common.ClientBoundLoginSetCompression))
+	registry.Register(common.LoginState, 0x04, string(common.ClientBoundLoginPluginRequest))
+
 	// Configuration
 	registry.Register(common.ConfigurationState, 0x00, string(common.ClientBoundConfigurationPluginMessage))
 	registry.Register(common.ConfigurationState, 0x01, string(common.ClientBoundConfigurationDisconnect))
@@ -34,13 +41,6 @@ func clientBound() common.PacketRegistry {
 	registry.Register(common.ConfigurationState, 0x06, string(common.ClientBoundConfigurationResourcePack))
 	registry.Register(common.ConfigurationState, 0x07, string(common.ClientBoundConfigurationFeatureFlags))
 	registry.Register(common.ConfigurationState, 0x08, string(common.ClientBoundConfigurationUpdateTags))
-
-	// Login
-	registry.Register(common.LoginState, 0x00, string(common.ClientBoundLoginDisconnect))
-	registry.Register(common.LoginState, 0x01, string(common.ClientBoundLoginEncryptionRequest))
-	registry.Register(common.LoginState, 0x02, string(common.ClientBoundLoginSuccess))
-	registry.Register(common.LoginState, 0x03, string(common.ClientBoundLoginSetCompression))
-	registry.Register(common.LoginState, 0x04, string(common.ClientBoundLoginPluginRequest))
 
 	// Play
 	registry.Register(common.PlayState, 0x00, string(common.ClientBoundPlayBundleDelimiter))
@@ -172,6 +172,12 @@ func serverBound() common.PacketRegistry {
 	registry.Register(common.StatusState, 0x00, string(common.ServerBoundStatusRequest))
 	registry.Register(common.StatusState, 0x01, string(common.ServerBoundStatusPing))
 
+	// Login
+	registry.Register(common.LoginState, 0x00, string(common.ServerBoundLoginStart))
+	registry.Register(common.LoginState, 0x01, string(common.ServerBoundLoginEncryptionResponse))
+	registry.Register(common.LoginState, 0x02, string(common.ServerBoundLoginPluginResponse))
+	registry.Register(common.LoginState, 0x03, string(common.ServerBoundLoginAcknowledged))
+
 	// Configuration
 	registry.Register(common.ConfigurationState, 0x00, string(common.ServerBoundConfigurationClientInformation))
 	registry.Register(common.ConfigurationState, 0x01, string(common.ServerBoundConfigurationPluginMessage))
@@ -179,12 +185,6 @@ func serverBound() common.PacketRegistry {
 	registry.Register(common.ConfigurationState, 0x03, string(common.ServerBoundConfigurationKeepAlive))
 	registry.Register(common.ConfigurationState, 0x04, string(common.ServerBoundConfigurationPong))
 	registry.Register(common.ConfigurationState, 0x05, string(common.ServerBoundConfigurationResourcePackResponse))
-
-	// Login
-	registry.Register(common.LoginState, 0x00, string(common.ServerBoundLoginStart))
-	registry.Register(common.LoginState, 0x01, string(common.ServerBoundLoginEncryptionResponse))
-	registry.Register(common.LoginState, 0x02, string(common.ServerBoundLoginPluginResponse))
-	registry.Register(common.LoginState, 0x03, string(common.ServerBoundLoginAcknowledged))
 
 	// Play
 	registry.Register(common.PlayState, 0x00, string(common.ServerBoundPlayConfirmTeleportation))
