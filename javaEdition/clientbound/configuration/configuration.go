@@ -7,13 +7,12 @@ import (
 	"github.com/camdenorrb/minecraftPackets/primitive"
 )
 
-type PluginMessage struct {
-	Channel primitive.Identifier
-	Data    []byte
+type Brand struct {
+	Brand string
 }
 
-func (*PluginMessage) PacketType() string {
-	return string(common2.ClientBoundConfigurationPluginMessage)
+func (*Brand) PacketType() string {
+	return string(common2.ClientBoundConfigurationBrand)
 }
 
 type Disconnect struct {

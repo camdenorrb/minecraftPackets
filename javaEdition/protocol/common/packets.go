@@ -9,15 +9,15 @@ const (
 	ClientBoundStatusPong     ClientBoundPacket = "StatusPong"
 
 	// Configuration
-	ClientBoundConfigurationPluginMessage ClientBoundPacket = "PluginMessage"
-	ClientBoundConfigurationDisconnect    ClientBoundPacket = "Disconnect"
-	ClientBoundConfigurationFinish        ClientBoundPacket = "Finish"
-	ClientBoundConfigurationKeepAlive     ClientBoundPacket = "KeepAlive"
-	ClientBoundConfigurationPing          ClientBoundPacket = "Ping"
-	ClientBoundConfigurationRegistryData  ClientBoundPacket = "RegistryData"
-	ClientBoundConfigurationResourcePack  ClientBoundPacket = "ResourcePack"
-	ClientBoundConfigurationFeatureFlags  ClientBoundPacket = "FeatureFlags"
-	ClientBoundConfigurationUpdateTags    ClientBoundPacket = "UpdateTags"
+	ClientBoundConfigurationBrand        ClientBoundPacket = "PluginMessage"
+	ClientBoundConfigurationDisconnect   ClientBoundPacket = "Disconnect"
+	ClientBoundConfigurationFinish       ClientBoundPacket = "Finish"
+	ClientBoundConfigurationKeepAlive    ClientBoundPacket = "KeepAlive"
+	ClientBoundConfigurationPing         ClientBoundPacket = "Ping"
+	ClientBoundConfigurationRegistryData ClientBoundPacket = "RegistryData"
+	ClientBoundConfigurationResourcePack ClientBoundPacket = "ResourcePack"
+	ClientBoundConfigurationFeatureFlags ClientBoundPacket = "FeatureFlags"
+	ClientBoundConfigurationUpdateTags   ClientBoundPacket = "UpdateTags"
 
 	// Login
 	ClientBoundLoginDisconnect        ClientBoundPacket = "Disconnect"
