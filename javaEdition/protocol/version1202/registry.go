@@ -32,7 +32,7 @@ func clientBound() common.PacketRegistry {
 	registry.Register(common.LoginState, 0x04, string(common.ClientBoundLoginPluginRequest))
 
 	// Configuration
-	registry.Register(common.ConfigurationState, 0x00, string(common.ClientBoundConfigurationPluginMessage))
+	registry.Register(common.ConfigurationState, 0x00, string(common.ClientBoundConfigurationBrand))
 	registry.Register(common.ConfigurationState, 0x01, string(common.ClientBoundConfigurationDisconnect))
 	registry.Register(common.ConfigurationState, 0x02, string(common.ClientBoundConfigurationFinish))
 	registry.Register(common.ConfigurationState, 0x03, string(common.ClientBoundConfigurationKeepAlive))
