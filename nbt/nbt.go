@@ -27,14 +27,26 @@ type Tag interface {
 
 // NBT We use NBT to represent Compound
 type NBT struct {
-	Name string
+	Name *string
 	Tags CompoundTag // Please don't put NBT in NBT
 }
 
+func NewRootNBT() *NBT {
+	return NewRootNBTWithTags(make(map[string]Tag))
+}
+
+func NewRootNBTWithTags(tags CompoundTag) *NBT {
+	return &NBT{Tags: tags}
+}
+
 func NewNBT(name string) *NBT {
+	return NewNBTWithTags(name, make(map[string]Tag))
+}
+
+func NewNBTWithTags(name string, tags CompoundTag) *NBT {
 	return &NBT{
-		Name: name,
-		Tags: make(map[string]Tag),
+		Name: &name,
+		Tags: tags,
 	}
 }
 
@@ -52,8 +64,10 @@ func (n *NBT) Size(includeTagID bool) int {
 		size++ // CompoundTag ID
 	}
 
-	size += 2                   // Name Length
-	size += len([]byte(n.Name)) // Name
+	if n.Name != nil {
+		size += 2                    // Name Length
+		size += len([]byte(*n.Name)) // Name
+	}
 
 	for name, tag := range n.Tags {
 		if _, ok := tag.(*NBT); !ok {
@@ -76,8 +90,10 @@ func (n *NBT) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID boo
 		}
 	}
 
-	if err := writeMCString(writer, n.Name, endian); err != nil {
-		return errorx.IllegalState.Wrap(err, "failed to write compound name")
+	if name := n.Name; name != nil {
+		if err := writeMCString(writer, *name, endian); err != nil {
+			return errorx.IllegalState.Wrap(err, "failed to write compound name")
+		}
 	}
 
 	for name, tag := range n.Tags {
@@ -106,7 +122,7 @@ func (n *NBT) PushToWriter(writer io.ByteWriter, endian Endian, includeTagID boo
 	return nil
 }
 
-func ReadNBT(reader *bufio.Reader, endian Endian) (*NBT, error) {
+func ReadNBT(reader *bufio.Reader, endian Endian, includeRootName bool) (*NBT, error) {
 
 	tagID, err := reader.ReadByte()
 	if err != nil {
@@ -116,11 +132,17 @@ func ReadNBT(reader *bufio.Reader, endian Endian) (*NBT, error) {
 		return nil, errorx.IllegalState.New("expected compound tag")
 	}
 
-	name, err := readMCString(reader, endian)
-	if err != nil {
-		return nil, errorx.IllegalState.Wrap(err, "ReadNBT: failed to read tag name")
-	}
+	var name *string
 
+	if includeRootName {
+
+		nameTemp, err := readMCString(reader, endian)
+		if err != nil {
+			return nil, errorx.IllegalState.Wrap(err, "ReadNBT: failed to read tag name")
+		}
+
+		name = &nameTemp
+	}
 	compound, err := readCompound(reader, endian)
 	if err != nil {
 		return nil, errorx.IllegalState.Wrap(err, "ReadNBT: failed to read compound tag")
@@ -214,7 +236,7 @@ func readCompound(reader *bufio.Reader, endian Endian) (*CompoundTag, error) {
 		}
 
 		if compound, ok := tag.(*NBT); ok {
-			compound.Name = name
+			compound.Name = &name
 		}
 
 		compound[name] = tag

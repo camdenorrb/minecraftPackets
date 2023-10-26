@@ -29,7 +29,7 @@ func TestNBT_SubCompound(t *testing.T) {
 	}
 
 	nbt := NBT{
-		Name: "",
+		Name: nil,
 		Tags: CompoundTag{
 			"List": tags,
 		},
@@ -39,7 +39,7 @@ func TestNBT_SubCompound(t *testing.T) {
 	err := nbt.PushToWriter(&output, BigEndian, true)
 	assert.NoError(t, err)
 
-	parsedNBT, err := ReadNBT(bufio.NewReader(bytes.NewReader(output.Bytes())), BigEndian)
+	parsedNBT, err := ReadNBT(bufio.NewReader(bytes.NewReader(output.Bytes())), BigEndian, false)
 	assert.NoError(t, err)
 
 	validateEqualTagBytes(t, &nbt, parsedNBT, BigEndian, true)
@@ -53,7 +53,7 @@ func TestNBT_HelloWorld(t *testing.T) {
 	helloWorldFile, err := os.Open("testdata/hello_world.nbt")
 	assert.NoError(t, err)
 
-	nbt, err := ReadNBT(bufio.NewReader(helloWorldFile), BigEndian)
+	nbt, err := ReadNBT(bufio.NewReader(helloWorldFile), BigEndian, true)
 	assert.NoError(t, err)
 
 	snbt, err := nbt.FormatSNBT()
@@ -73,14 +73,14 @@ func TestNBT_RegistryCodec(t *testing.T) {
 	gzipReader, err := gzip.NewReader(bytes.NewReader(registryCodecFile))
 	assert.NoError(t, err)
 
-	nbt, err := ReadNBT(bufio.NewReader(gzipReader), endian)
+	nbt, err := ReadNBT(bufio.NewReader(gzipReader), endian, true)
 	assert.NoError(t, err)
 
 	output := bytes.Buffer{}
 	err = nbt.PushToWriter(&output, endian, true)
 	assert.NoError(t, err)
 
-	parsedNBT, err := ReadNBT(bufio.NewReader(bytes.NewReader(output.Bytes())), endian)
+	parsedNBT, err := ReadNBT(bufio.NewReader(bytes.NewReader(output.Bytes())), endian, true)
 	assert.NoError(t, err)
 
 	assert.Equal(t, parsedNBT.Size(true), output.Len())
@@ -100,14 +100,14 @@ func TestNBT_BigTest(t *testing.T) {
 
 	endian := BigEndian
 
-	nbt, err := ReadNBT(bufio.NewReader(reader), endian)
+	nbt, err := ReadNBT(bufio.NewReader(reader), endian, true)
 	assert.NoError(t, err)
 
 	output := bytes.Buffer{}
 	err = nbt.PushToWriter(&output, endian, true)
 	assert.NoError(t, err)
 
-	parsedNBT, err := ReadNBT(bufio.NewReader(bytes.NewReader(output.Bytes())), endian)
+	parsedNBT, err := ReadNBT(bufio.NewReader(bytes.NewReader(output.Bytes())), endian, true)
 	assert.NoError(t, err)
 
 	assert.Equal(t, parsedNBT.Size(true), output.Len())
@@ -161,7 +161,7 @@ func FuzzEncodeNBT_All(f *testing.F) {
 		subNBT := CompoundTag{}
 
 		nbt := NBT{
-			Name: name,
+			Name: &name,
 			Tags: map[string]Tag{
 				"SubNBT":  subNBT,
 				"ListTag": listTag,
@@ -179,7 +179,7 @@ func FuzzEncodeNBT_All(f *testing.F) {
 		assert.NoError(t, err)
 
 		reader := bytes.NewReader(output.Bytes())
-		parsedNBT, err := ReadNBT(bufio.NewReader(reader), endian)
+		parsedNBT, err := ReadNBT(bufio.NewReader(reader), endian, true)
 		assert.NoError(t, err)
 
 		validateEqualTagBytes(t, &nbt, parsedNBT, endian, true)
@@ -201,7 +201,7 @@ func FuzzEncodeNBT(f *testing.F) {
 
 	f.Fuzz(func(t *testing.T, name string, bigEndian bool) {
 
-		nbt := NBT{Name: name}
+		nbt := NBT{Name: &name}
 
 		endian := LittleEndian
 		if bigEndian {
@@ -221,7 +221,7 @@ func FuzzEncodeNBT(f *testing.F) {
 		expectedByteBuffer.Validate(t, testOutput.Bytes())
 
 		reader := bytes.NewReader(testOutput.Bytes())
-		parsedNBT, err := ReadNBT(bufio.NewReader(reader), endian)
+		parsedNBT, err := ReadNBT(bufio.NewReader(reader), endian, true)
 		assert.NoError(t, err)
 
 		// Validate that the NBT is the same
@@ -248,7 +248,7 @@ func FuzzEncodeSubNBT_Byte(f *testing.F) {
 		}
 
 		nbt := NBT{
-			Name: name,
+			Name: &name,
 			Tags: map[string]Tag{"SubNBT": &subNBT},
 		}
 
@@ -272,7 +272,7 @@ func FuzzEncodeSubNBT_Byte(f *testing.F) {
 		expectedByteBuffer.Validate(t, testOutput.Bytes())
 
 		reader := bytes.NewReader(testOutput.Bytes())
-		parsedNBT, err := ReadNBT(bufio.NewReader(reader), endian)
+		parsedNBT, err := ReadNBT(bufio.NewReader(reader), endian, true)
 		assert.NoError(t, err)
 
 		// Validate that the NBT is the same

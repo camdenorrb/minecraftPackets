@@ -21,7 +21,7 @@ func TestSNBT_BigTest(t *testing.T) {
 
 	endian := BigEndian
 
-	nbt, err := ReadNBT(bufio.NewReader(reader), endian)
+	nbt, err := ReadNBT(bufio.NewReader(reader), endian, true)
 	assert.NoError(t, err)
 
 	snbt, err := nbt.FormatSNBT()
@@ -81,13 +81,10 @@ func FuzzParseSNBT(f *testing.F) {
 
 		subNBT := CompoundTag{}
 
-		nbt := NBT{
-			Name: "",
-			Tags: map[string]Tag{
-				"SubNBT":  subNBT,
-				"ListTag": listTag,
-			},
-		}
+		nbt := NewNBTWithTags("", map[string]Tag{
+			"SubNBT":  subNBT,
+			"ListTag": listTag,
+		})
 
 		// Add all the primitive tags to the NBT
 		for name, tag := range primitiveTags {

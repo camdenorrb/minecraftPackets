@@ -22,10 +22,7 @@ func parseNBT(input string) (*NBT, error) {
 		return nil, errorx.IllegalState.Wrap(err, "failed to parse compound %s", input)
 	}
 
-	return &NBT{
-		Name: "",
-		Tags: *compound,
-	}, nil
+	return NewNBTWithTags("", *compound), nil
 }
 
 func parseValue(value string) (Tag, error) {
