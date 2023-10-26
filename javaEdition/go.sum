@@ -1,5 +1,5 @@
-github.com/camdenorrb/minecraftPackets/nbt v1.0.7 h1:frl61+rxOLMbOkx8ivBh/gEqmjY2V9Ygy/cqTnkWhGQ=
-github.com/camdenorrb/minecraftPackets/nbt v1.0.7/go.mod h1:qKtvmT6OTR3cZQJQkYRfG3w2WySDggjL96BaFo7sxKw=
+github.com/camdenorrb/minecraftPackets/nbt v1.0.8 h1:9US2KepQZucpuU8QVl6lg4DtSKnGkkzjYiLQbpQyqIk=
+github.com/camdenorrb/minecraftPackets/nbt v1.0.8/go.mod h1:qKtvmT6OTR3cZQJQkYRfG3w2WySDggjL96BaFo7sxKw=
 github.com/camdenorrb/minecraftPackets/primitive v1.0.4 h1:+gUdjZmHAoDxPB3oHky6fw38EPmh7y8t4yjrZTUoa/o=
 github.com/camdenorrb/minecraftPackets/primitive v1.0.4/go.mod h1:jy3gsY0PRdK80rc+hDJKz2CFjJhovwAFa/pGcMW1tqE=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
