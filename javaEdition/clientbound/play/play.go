@@ -447,6 +447,7 @@ type Login struct {
 	IsDebug             bool
 	IsFlat              bool
 	HasDeathLocation    bool
+	DoLimitCrafting     bool
 	DeathDimension      *primitive.Identifier
 	DeathLocation       *common.BlockPosition
 	PortalCooldown      primitive.VarInt
