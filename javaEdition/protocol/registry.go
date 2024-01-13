@@ -2,7 +2,7 @@ package protocol
 
 import (
 	"github.com/camdenorrb/minecraftPackets/javaEdition/protocol/common"
-	"github.com/camdenorrb/minecraftPackets/javaEdition/protocol/version119"
+	"github.com/camdenorrb/minecraftPackets/javaEdition/protocol/version1193"
 	"github.com/camdenorrb/minecraftPackets/javaEdition/protocol/version120"
 	"github.com/camdenorrb/minecraftPackets/javaEdition/protocol/version1202"
 )
@@ -27,8 +27,8 @@ func (r RegistryCache) RegistryFor(bound common.Bound, version common.Version) c
 func RegistryFor(bound common.Bound, version common.Version) common.PacketRegistry {
 
 	switch version {
-	case common.Version_1_19, common.Version_1_19_2, common.Version_1_19_3, common.Version_1_19_4:
-		return version119.Registry(bound)
+	case /*common.Version_1_19, common.Version_1_19_2,*/ common.Version_1_19_3: //, common.Version_1_19_4: Other versions need their own unfortunately
+		return version1193.Registry(bound)
 	case common.Version_1_20: // 1.20.1 has same protocol as 1.20
 		return version120.Registry(bound)
 	case common.Version_1_20_2:
