@@ -53,6 +53,12 @@ const Version_Latest = Version_1_20_2
 
 // TODO: Version.HasNettySupport
 
-func (v Version) IsConfigStateSupported() bool {
+// HasConfigState represents that the server expects to go through the config state before login state
+func (v Version) HasConfigState() bool {
+	return v >= Version_1_20_2
+}
+
+// HasNetworkNBT represents that the server expects nameless nbt data https://wiki.vg/NBT#Network_NBT_.28Java_Edition.29
+func (v Version) HasNetworkNBT() bool {
 	return v >= Version_1_20_2
 }
