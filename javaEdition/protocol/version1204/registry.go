@@ -1,4 +1,4 @@
-package version1202
+package version1204
 
 import (
 	"github.com/camdenorrb/minecraftPackets/javaEdition/protocol/common"
