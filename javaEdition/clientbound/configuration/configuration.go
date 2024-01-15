@@ -61,7 +61,7 @@ type ResourcePack struct {
 }
 
 func (*ResourcePack) PacketType() string {
-	return string(common2.ClientBoundConfigurationResourcePack)
+	return string(common2.ClientBoundConfigurationAddResourcePack)
 }
 
 type FeatureFlags struct {
