@@ -33,6 +33,8 @@ func RegistryFor(bound common.Bound, version common.Version) common.PacketRegist
 		return version120.Registry(bound)
 	case common.Version_1_20_2:
 		return version1202.Registry(bound)
+	case common.Version_1_20_4: // 1.20.3 has same protocol as 1.20.4
+		return version1202.Registry(bound)
 	}
 
 	return nil

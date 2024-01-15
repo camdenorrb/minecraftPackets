@@ -46,10 +46,12 @@ const (
 	Version_1_20   Version = 763
 	Version_1_20_1 Version = 763
 	Version_1_20_2 Version = 764
+	Version_1_20_3 Version = 765
+	Version_1_20_4 Version = 765
 )
 
 //goland:noinspection GoUnusedConst,GoSnakeCaseUsage
-const Version_Latest = Version_1_20_2
+const Version_Latest = Version_1_20_4
 
 // TODO: Version.HasNettySupport
 
