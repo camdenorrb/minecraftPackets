@@ -1,9 +1,12 @@
+github.com/MisterKaiou/go-functional v1.6.0 h1:v6b0gkQV3MUDtHArqpkj6Ne7gKmp2hU9kYBLiucfxP8=
+github.com/MisterKaiou/go-functional v1.6.0/go.mod h1:hSBCdGX/FsBBR5ODTy31OGL8wVwAbgpFyH8nPdpVp68=
 github.com/camdenorrb/minecraftPackets/nbt v1.0.8 h1:9US2KepQZucpuU8QVl6lg4DtSKnGkkzjYiLQbpQyqIk=
 github.com/camdenorrb/minecraftPackets/nbt v1.0.8/go.mod h1:qKtvmT6OTR3cZQJQkYRfG3w2WySDggjL96BaFo7sxKw=
 github.com/camdenorrb/minecraftPackets/primitive v1.0.4 h1:+gUdjZmHAoDxPB3oHky6fw38EPmh7y8t4yjrZTUoa/o=
 github.com/camdenorrb/minecraftPackets/primitive v1.0.4/go.mod h1:jy3gsY0PRdK80rc+hDJKz2CFjJhovwAFa/pGcMW1tqE=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/google/go-cmp v0.5.5 h1:Khx7svrCpmxxtHBq5j2mp/xVjsi8hQMfNLvJFAlrGgU=
 github.com/google/uuid v1.5.0 h1:1p67kYwdtXjb0gL0BPiP1Av9wiZPo5A8z2cWkTZ+eyU=
 github.com/google/uuid v1.5.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/joomcode/errorx v1.1.1 h1:/LFG/qSk1gUTuZjs+qlyOJEpcVjD9DXgBNFhdZkQrjY=
@@ -12,4 +15,7 @@ github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZb
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
+golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543 h1:E7g+9GITq07hpfrRu66IVDexMakfv52eLZ2CXBWiKr4=
+google.golang.org/protobuf v1.32.0 h1:pPC6BG5ex8PDFnkbrGU3EixyhKcQ2aDuBS36lqK/C7I=
+google.golang.org/protobuf v1.32.0/go.mod h1:c6P6GXX6sHbq/GpV6MGZEdwhWPcYBgnhAHhKbcUYpos=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
