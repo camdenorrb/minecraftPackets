@@ -1,5 +1,6 @@
 package palette
 
+/*
 type Attachment string
 
 const (
@@ -248,3 +249,4 @@ const (
 	WestUp    West = "up"
 	WestSide  West = "side"
 )
+*/

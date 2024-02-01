@@ -4,11 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/camdenorrb/minecraftPackets/javaEdition/palette"
-	proto2 "github.com/camdenorrb/minecraftPackets/javaEdition/palette/proto"
 	"github.com/joomcode/errorx"
 	"google.golang.org/protobuf/proto"
 	"os"
-	"reflect"
 	"sort"
 	"strings"
 )
@@ -17,7 +15,7 @@ type blocksJSON map[string]map[string]any
 
 func main() {
 
-	file, err := os.ReadFile("palette/proto/testdata/blocks1_20_4.json")
+	file, err := os.ReadFile("palette/testdata/blocks1_20_4.json")
 	if err != nil {
 		panic(errorx.Panic(err))
 	}
@@ -29,11 +27,9 @@ func main() {
 
 	fmt.Println(len(blocks))
 
-	/*
-		for _, block := range blocks {
-			fmt.Printf("%+v\n", block)
-		}
-	*/
+	for _, block := range blocks {
+		fmt.Printf("%+v\n", block)
+	}
 
 	//stateMap := blocks.AsStateMap()
 
@@ -41,18 +37,7 @@ func main() {
 	//fmt.Println(key, id)
 	//}
 
-	printOutPaletteProperties("palette/proto/testdata/blocks1_20_4.json")
-
-	// Write proto file
-	blockProto, err := proto2.FromBlockPalette(blocks)
-	if err != nil {
-		panic(errorx.Panic(err))
-	}
-
-	_, err = blockProto.AsJSONStruct()
-	if err != nil {
-		panic(errorx.Panic(err))
-	}
+	//printOutPaletteProperties("palette/testdata/blocks1_20_4.json")
 
 	blockProtoFile, err := os.Create("palette/blocks1_20_4.proto.bin")
 	if err != nil {
@@ -60,7 +45,7 @@ func main() {
 	}
 	defer blockProtoFile.Close()
 
-	marshalled, err := proto.Marshal(blockProto)
+	marshalled, err := proto.Marshal(blocks.AsBlockPalette())
 	if err != nil {
 		panic(errorx.Panic(err))
 	}
@@ -69,16 +54,7 @@ func main() {
 		panic(errorx.Panic(err))
 	}
 
-	jsonStruct, err := blockProto.AsJSONStruct()
-	if err != nil {
-		panic(errorx.Panic(err))
-	}
-
-	// Make sure equal
-	if !reflect.DeepEqual(jsonStruct, blocks) {
-		panic("not equal")
-	}
-
+	//fmt.Println(size.Of(jsonStruct.AsStateMap()))
 	//printOutPaletteMaterials("palette/blocks1_20_4.json", true)
 }
 
