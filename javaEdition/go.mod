@@ -17,6 +17,6 @@ require (
 
 require (
 	github.com/camdenorrb/minecraftPackets/nbt v1.0.8
-	github.com/joomcode/errorx v1.1.1
+	github.com/joomcode/errorx v1.2.0
 	github.com/mitchellh/hashstructure/v2 v2.0.2
 )
